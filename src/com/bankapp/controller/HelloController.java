@@ -19,7 +19,7 @@ public class HelloController {
 	@Autowired
 	 UserService userService;
 	
-	@RequestMapping(value = { "/", "/login" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "/"}, method = RequestMethod.GET)
 	public ModelAndView welcomePage() {
 		System.out.println("coming");
 		ModelAndView model = new ModelAndView();
@@ -78,5 +78,11 @@ public class HelloController {
 	  List<UserModel> userList = userService.getUserList();
 	  return new ModelAndView("userList", "userList", userList);
 	 }
+	 
+	 @RequestMapping("/governmentUser")
+	 public ModelAndView getGovernmentRequests() {
+	  List<UserModel> userList = userService.getUserList();
+	  return new ModelAndView("userList", "userList", userList);
+	 } 
 
 }
