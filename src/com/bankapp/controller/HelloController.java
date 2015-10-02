@@ -1,14 +1,24 @@
 package com.bankapp.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.bankapp.model.UserModel;
+import com.bankapp.services.UserService;
+
 @Controller
 public class HelloController {
 
+	@Autowired
+	 UserService userService;
+	
 	@RequestMapping(value = { "/", "/login" }, method = RequestMethod.GET)
 	public ModelAndView welcomePage() {
 		System.out.println("coming");
@@ -49,5 +59,24 @@ public class HelloController {
 		return model;
 
 	}
+
+
+	 @RequestMapping("/register")
+	 public ModelAndView registerUser(@ModelAttribute("user") UserModel user) {
+	  return new ModelAndView("register");
+	 }
+
+	 @RequestMapping("/insert")
+	 public String inserData(@ModelAttribute("user") UserModel user) {
+	  if (user != null)
+	   userService.insertData(user);
+	  return "redirect:/getList";
+	 }
+	 
+	 @RequestMapping("/getList")
+	 public ModelAndView getUserLIst() {
+	  List<UserModel> userList = userService.getUserList();
+	  return new ModelAndView("userList", "userList", userList);
+	 }
 
 }
