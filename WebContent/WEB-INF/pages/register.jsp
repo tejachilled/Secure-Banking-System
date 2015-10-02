@@ -32,7 +32,7 @@ td {
   
  
  
- <b>Being Java Guys | Registration Form </b> 
+ <b>RichieRich | Dummy Insert Form </b> 
 
   
 
