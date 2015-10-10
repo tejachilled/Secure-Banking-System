@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.bankapp.model.GovtRequestsModel;
 import com.bankapp.model.UserModel;
+import com.bankapp.services.GovtRequestsService;
 import com.bankapp.services.UserService;
 
 @Controller
@@ -18,6 +20,8 @@ public class HelloController {
 
 	@Autowired
 	 UserService userService;
+	@Autowired
+	 GovtRequestsService govtRequestsService;
 	
 	@RequestMapping(value = { "/"}, method = RequestMethod.GET)
 	public ModelAndView welcomePage() {
@@ -83,7 +87,9 @@ public class HelloController {
 	 public ModelAndView getGovernmentRequests() {
 			ModelAndView model = new ModelAndView();
 			model.addObject("title", "Government User Here");
-			model.setViewName("govt");
+			model.setViewName("govt");			
+			List<GovtRequestsModel> govtRequestsList = govtRequestsService.getGovtRequestsList();
+			model.addObject("govtRequestsList", govtRequestsList);
 			return model;
 	 }
 

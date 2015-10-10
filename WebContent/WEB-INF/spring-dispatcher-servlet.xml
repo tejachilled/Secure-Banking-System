@@ -39,9 +39,11 @@
   <property name="username" value="ssdb" />
   <property name="password" value="ssdb" />
  </bean>
-	
+
 	<bean id="userDAO" class="com.bankapp.dao.UserDAOImpl"/>
+	<bean id="govtRequestsDAO" class="com.bankapp.dao.GovtRequestsDAOImpl"/>
 	<bean id="userService" class="com.bankapp.services.UserServiceImpl" />
+	<bean id="govtRequestsService" class="com.bankapp.services.GovtRequestsServiceImpl" />
 	<!-- web.servlet.view.ResourceBundleViewResolver -->
  
 </beans>

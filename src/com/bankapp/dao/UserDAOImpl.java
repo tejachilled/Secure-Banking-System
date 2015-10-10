@@ -27,7 +27,6 @@ public class UserDAOImpl implements UserDAO {
 	  jdbcTemplate.update(
 	    sql,
 	    new Object[] { user.getFirstName(), user.getLastName()});
-
 	 }
 
 	 public List<UserModel> getUserList() {
