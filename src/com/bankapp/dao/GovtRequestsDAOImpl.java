@@ -19,7 +19,7 @@ public class GovtRequestsDAOImpl implements GovtRequestsDAO {
 
 	 public List<GovtRequestsModel> getGovtRequestsList() {
 		  List govtRequestsList = new ArrayList<GovtRequestsModel>();
-		  String query = "SELECT * FROM tbl_authorizations_government";
+		  String query = "SELECT external_username, internal_username, status FROM tbl_authorizations_government";
 		  JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		  govtRequestsList = jdbcTemplate.query(query, new GovtRequestRowMapper());
 		  return govtRequestsList;

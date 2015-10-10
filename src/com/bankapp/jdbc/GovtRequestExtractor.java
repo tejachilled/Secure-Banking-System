@@ -16,9 +16,9 @@ public class GovtRequestExtractor implements ResultSetExtractor<GovtRequestsMode
 	 public GovtRequestsModel extractData(ResultSet resultSet) throws SQLException, DataAccessException {
 		 
 	  GovtRequestsModel govtRequest = new GovtRequestsModel();
-	  govtRequest.setStatus(resultSet.getString(1).charAt(0));
-	  govtRequest.setExternalUserName(resultSet.getString(2));
-	  govtRequest.setInternalUserName(resultSet.getString(3));
+	  govtRequest.setStatus(resultSet.getString(3).charAt(0));
+	  govtRequest.setExternalUserName(resultSet.getString(1));
+	  govtRequest.setInternalUserName(resultSet.getString(2));
 	  return govtRequest;
 	 
 	 }

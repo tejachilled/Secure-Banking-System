@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.bankapp.model.GovtRequestsModel;
 import com.bankapp.model.UserModel;
 import com.bankapp.services.GovtRequestsService;
+import com.bankapp.services.GovtRequestsServiceImpl;
 import com.bankapp.services.UserService;
 
 @Controller
@@ -21,7 +22,7 @@ public class HelloController {
 	@Autowired
 	 UserService userService;
 	@Autowired
-	 GovtRequestsService govtRequestsService;
+	 GovtRequestsServiceImpl govtRequestsService;
 	
 	@RequestMapping(value = { "/"}, method = RequestMethod.GET)
 	public ModelAndView welcomePage() {
