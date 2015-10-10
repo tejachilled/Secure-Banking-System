@@ -4,7 +4,7 @@
 <body>
 	<h1>Title : ${title}</h1>
 	<h1>Message : ${message}</h1>
-	<c:url value="/j_spring_security_logout" var="logoutUrl" />
+	<c:url value="/logout" var="logoutUrl" />
 	<form action="${logoutUrl}" method="post" id="logoutForm">
 		<input type="hidden" name="${_csrf.parameterName}"
 			value="${_csrf.token}" />
@@ -14,8 +14,6 @@
 			document.getElementById("logoutForm").submit();
 		}
 	</script>
-
-
 
 </body>
 </html>
