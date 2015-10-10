@@ -1,3 +1,4 @@
+
 package com.bankapp.dao;
 
 import java.util.ArrayList;
@@ -31,12 +32,10 @@ public class UserDAOImpl implements UserDAO {
 
 	 public List<UserModel> getUserList() {
 		  List userList = new ArrayList();
-
 		  String sql = "select * from test_table ";
-
 		  JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		  userList = jdbcTemplate.query(sql, new UserRowMapper());
 		  return userList;
-		 }
+	 }
 
 }

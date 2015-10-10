@@ -37,13 +37,13 @@ public class HelloController {
 		model.addObject("title", "Spring Security Custom Login Form");
 		model.addObject("message", "This is protected page!");
 		model.setViewName("admin");
-
 		return model;
 
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ModelAndView login(@RequestParam(value = "error", required = false) String error,
+	public ModelAndView login(
+			@RequestParam(value = "error", required = false) String error,
 			@RequestParam(value = "logout", required = false) String logout) {
 
 		ModelAndView model = new ModelAndView();
@@ -79,10 +79,12 @@ public class HelloController {
 	  return new ModelAndView("userList", "userList", userList);
 	 }
 	 
-	 @RequestMapping("/governmentUser")
+	 @RequestMapping("/govt")
 	 public ModelAndView getGovernmentRequests() {
-	  List<UserModel> userList = userService.getUserList();
-	  return new ModelAndView("userList", "userList", userList);
-	 } 
+			ModelAndView model = new ModelAndView();
+			model.addObject("title", "Government User Here");
+			model.setViewName("govt");
+			return model;
+	 }
 
 }
