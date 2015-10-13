@@ -17,12 +17,20 @@ public class GovtRequestsDAOImpl implements GovtRequestsDAO {
 	@Autowired
 	 DataSource dataSource;
 
+	@Override
 	 public List<GovtRequestsModel> getGovtRequestsList() {
-		  List govtRequestsList = new ArrayList<GovtRequestsModel>();
+		  List<GovtRequestsModel> govtRequestsList = new ArrayList<GovtRequestsModel>();
 		  String query = "SELECT external_username, internal_username, status FROM tbl_authorizations_government";
 		  JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		  govtRequestsList = jdbcTemplate.query(query, new GovtRequestRowMapper());
 		  return govtRequestsList;
+	 }
+	 
+	@Override
+	 public void updateGovtAction(String internalUserName, String externalUserName, String status){
+		  String query = "UPDATE tbl_authorizations_government SET status ='" + status.charAt(0) + "' WHERE external_username='" + externalUserName + "' AND internal_username='" + internalUserName + "'";
+		  JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		  jdbcTemplate.execute(query);		 
 	 }
 
 }

@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.bankapp.model.GovtActionModel;
 import com.bankapp.model.GovtRequestsModel;
 import com.bankapp.model.UserModel;
-import com.bankapp.services.GovtRequestsService;
 import com.bankapp.services.GovtRequestsServiceImpl;
 import com.bankapp.services.UserService;
 
@@ -82,6 +82,16 @@ public class HelloController {
 	 public ModelAndView getUserLIst() {
 	  List<UserModel> userList = userService.getUserList();
 	  return new ModelAndView("userList", "userList", userList);
+	 }
+	 
+	 @RequestMapping("/govtAction")
+	 public ModelAndView govtAction(@ModelAttribute("govtAction") GovtActionModel govtActionModel) {
+		 /*
+		  * get which button has been clicked here and call it 
+		  */
+		 
+		 govtRequestsService.update(govtActionModel, "a");
+		 return new ModelAndView("govt");
 	 }
 	 
 	 @RequestMapping("/govt")

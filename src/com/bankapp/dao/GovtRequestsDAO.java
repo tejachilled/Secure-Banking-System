@@ -11,5 +11,6 @@ import com.bankapp.model.GovtRequestsModel;
 public interface GovtRequestsDAO {
 
 	public List<GovtRequestsModel> getGovtRequestsList();
+	void updateGovtAction(String internalUserName, String externalUserName, String status);	
 
 }
