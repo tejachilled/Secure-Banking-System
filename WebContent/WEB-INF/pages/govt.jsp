@@ -30,6 +30,9 @@ th {
 		<br> <br> <br>
 		<h2>PII Request History and Status</h2>
 		<br> <br> <br>
+		<c:if test="${error}">
+			Updation Error
+		</c:if>
 		<table>
 			<tr>
 				<td></td>
@@ -38,37 +41,25 @@ th {
 				<td><b>STATUS</b></td>
 			</tr>
 
-			<form:form method="post" action="/RichirichBank/govtAction"
+			<form:form method="post" action="/RichirichBank/acceptRequests"
 				modelAttribute="govtAction">
+
 				<c:forEach var="govtRequest" items="${govtRequestsList}">
 					<tr>
-						<td><form:checkbox path="checkboxList" 
-						
-						checkboxList must be in govtRequestsModel !!
-						
-								id="${govtRequest.internalUserName}_${govtRequest.externalUserName}" />
-						</td>
+						<td><form:checkbox path="checkboxList" value="${govtRequest}" /></td>
 						<td>${govtRequest.internalUserName}</td>
 						<td>${govtRequest.externalUserName}</td>
 						<c:if test="${govtRequest.status eq 'a'.charAt(0)}">
 							<td>Accepted</td>
-						</c:if>
-						<c:if test="${govtRequest.status eq 'r'.charAt(0)}">
-							<td>Rejected</td>
 						</c:if>
 						<c:if test="${govtRequest.status eq 'p'.charAt(0)}">
 							<td>Pending</td>
 						</c:if>
 					</tr>
 				</c:forEach>
-
 				<tr>
-					<td><a href="govtAction"><img src="img/a.png"></a> <input
-						type="button" name="accept" value="Accept Request(s)" /></td>
-				</tr>
-				<tr>
-					<td><input type="button" name="reject"
-						value="Reject Request(s)" /></td>
+					<td><input type="submit" name="accept"
+						value="Accept Request(s)" /></td>
 				</tr>
 			</form:form>
 		</table>

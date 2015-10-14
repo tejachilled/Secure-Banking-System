@@ -26,4 +26,8 @@ public class GovtRequestsModel {
 	public void setStatus(char status) {
 		this.status = status;
 	}
+	
+	public String toString(){
+		return externalUserName+" "+internalUserName;
+	}
 }

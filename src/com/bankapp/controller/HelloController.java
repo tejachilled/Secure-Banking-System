@@ -20,11 +20,9 @@ import com.bankapp.services.UserService;
 public class HelloController {
 
 	@Autowired
-	 UserService userService;
-	@Autowired
-	 GovtRequestsServiceImpl govtRequestsService;
-	
-	@RequestMapping(value = { "/"}, method = RequestMethod.GET)
+	UserService userService;
+
+	@RequestMapping(value = { "/" }, method = RequestMethod.GET)
 	public ModelAndView welcomePage() {
 		System.out.println("coming");
 		ModelAndView model = new ModelAndView();
@@ -47,8 +45,7 @@ public class HelloController {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ModelAndView login(
-			@RequestParam(value = "error", required = false) String error,
+	public ModelAndView login(@RequestParam(value = "error", required = false) String error,
 			@RequestParam(value = "logout", required = false) String logout) {
 
 		ModelAndView model = new ModelAndView();
@@ -65,43 +62,21 @@ public class HelloController {
 
 	}
 
+	@RequestMapping("/register")
+	public ModelAndView registerUser(@ModelAttribute("user") UserModel user) {
+		return new ModelAndView("register");
+	}
 
-	 @RequestMapping("/register")
-	 public ModelAndView registerUser(@ModelAttribute("user") UserModel user) {
-	  return new ModelAndView("register");
-	 }
+	@RequestMapping("/insert")
+	public String inserData(@ModelAttribute("user") UserModel user) {
+		if (user != null)
+			userService.insertData(user);
+		return "redirect:/getList";
+	}
 
-	 @RequestMapping("/insert")
-	 public String inserData(@ModelAttribute("user") UserModel user) {
-	  if (user != null)
-	   userService.insertData(user);
-	  return "redirect:/getList";
-	 }
-	 
-	 @RequestMapping("/getList")
-	 public ModelAndView getUserLIst() {
-	  List<UserModel> userList = userService.getUserList();
-	  return new ModelAndView("userList", "userList", userList);
-	 }
-	 
-	 @RequestMapping("/govtAction")
-	 public ModelAndView govtAction(@ModelAttribute("govtAction") GovtActionModel govtActionModel) {
-		 /*
-		  * get which button has been clicked here and call it 
-		  */
-		 
-		 govtRequestsService.update(govtActionModel, "a");
-		 return new ModelAndView("govt");
-	 }
-	 
-	 @RequestMapping("/govt")
-	 public ModelAndView getGovernmentRequests() {
-			ModelAndView model = new ModelAndView();
-			model.addObject("title", "Government User Here");
-			model.setViewName("govt");			
-			List<GovtRequestsModel> govtRequestsList = govtRequestsService.getGovtRequestsList();
-			model.addObject("govtRequestsList", govtRequestsList);
-			return model;
-	 }
-
+	@RequestMapping("/getList")
+	public ModelAndView getUserLIst() {
+		List<UserModel> userList = userService.getUserList();
+		return new ModelAndView("userList", "userList", userList);
+	}
 }
