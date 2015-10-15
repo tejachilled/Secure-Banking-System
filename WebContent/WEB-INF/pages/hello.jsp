@@ -14,7 +14,7 @@
 				value="${_csrf.token}" />
 		</form>
 		<script>
-			function formSubmit() {
+			function formSubmit(){
 				document.getElementById("logoutForm").submit();
 			}
 		</script>

@@ -36,8 +36,8 @@
 </style>
 </head>
 <body onload='document.loginForm.username.focus();'>
-
-	<h1>Spring Security Login Form (Database Authentication)</h1>
+<header>RichiRich Bank</header>
+	<h1>Spring Security Login Form</h1>
 
 	<div id="login-box">
 
