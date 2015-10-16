@@ -5,7 +5,6 @@ package com.bankapp.model;
  */
 public class GovtActionModel {
 
-
 	String[] checkboxList;
 
 	public String[] getCheckboxList() {
@@ -16,6 +15,4 @@ public class GovtActionModel {
 		this.checkboxList = checkboxList;
 	}
 	
-	
-
 }

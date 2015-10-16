@@ -18,13 +18,6 @@ public class GovtRequestsController {
 	@Autowired
 	GovtRequestsServiceImpl govtRequestsService;
 
-	/*
-	 * @RequestMapping("/govtAction") public ModelAndView
-	 * govtAction(@ModelAttribute("govtAction") GovtActionModel govtActionModel)
-	 * { govtRequestsService.update(govtActionModel, "a"); return new
-	 * ModelAndView("govt"); }
-	 */
-
 	@RequestMapping("/govt")
 	public ModelAndView getGovernmentRequests(@ModelAttribute("govtAction") GovtActionModel govtActionModel) {
 		ModelAndView model = new ModelAndView();
@@ -32,7 +25,6 @@ public class GovtRequestsController {
 		model.setViewName("govt");
 		List<GovtRequestsModel> govtRequestsList = govtRequestsService.getGovtRequestsList();
 		model.addObject("govtRequestsList", govtRequestsList);
-		//govtActionModel.setCheckboxList(govtRequestsList);
 		return model;
 	}
 
