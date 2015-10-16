@@ -15,9 +15,6 @@ public class GovtRequestsServiceImpl implements GovtRequestsService {
 	@Autowired
 	GovtRequestsDAO govtRequestsDAO;
 	
-	@Autowired
-	OTPServiceImpl otpServiceImpl;
-	
 	@Override
 	public List<GovtRequestsModel> getGovtRequestsList() {
 		return govtRequestsDAO.getGovtRequestsList();
@@ -25,9 +22,7 @@ public class GovtRequestsServiceImpl implements GovtRequestsService {
 
 	@Override
 	public boolean update(String[] govtActionModel, String type) {
-		
-//		otpServiceImpl.sendOTP("", "");
-		
+				
 		try{
 		for (int i=0;i<govtActionModel.length;i++) {
 			String[] temp = govtActionModel[i].split(" ");

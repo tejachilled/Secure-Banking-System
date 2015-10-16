@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.bankapp.model.GovtActionModel;
-import com.bankapp.model.GovtRequestsModel;
 import com.bankapp.model.UserModel;
-import com.bankapp.services.GovtRequestsServiceImpl;
 import com.bankapp.services.UserService;
 
 @Controller
