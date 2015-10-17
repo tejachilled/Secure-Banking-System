@@ -29,7 +29,7 @@ public class HomeController {
 
 	 @RequestMapping("/insert")
 	 public String inserData(@ModelAttribute("user") UserInfo user) {
-	  if (user != null)
+	  if (user != null) 
 	   userService.insertData(user);
 	  return "redirect:/getList";
 	 }
