@@ -20,9 +20,9 @@ public class UserDAOImpl implements UserDAO {
 
 	@Autowired
 	DataSource dataSource;
-	private static final String INTERNAL_USER = "ROLE_I"; 
-	private static final String EXTERNAL_USER = "ROLE_E"; 
-	private static final String INTERNAL_MERCHANT = "ROLE_M";
+	private static final String INTERNAL_USER = "I"; 
+	private static final String EXTERNAL_USER = "E"; 
+	private static final String INTERNAL_MERCHANT = "M";
 	
 	public void insert(UserInfo user){
  

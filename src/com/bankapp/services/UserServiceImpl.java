@@ -39,7 +39,6 @@ public class UserServiceImpl implements UserService {
 		account.setUsername(UserInfo.getUserName());
 		UserInfo.setRole(role);
 		return userdao.registerNewUserAccount(UserInfo,account);
-
 	}	
 
 }

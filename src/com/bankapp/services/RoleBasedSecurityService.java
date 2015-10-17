@@ -41,7 +41,7 @@ public class RoleBasedSecurityService implements AuthenticationSuccessHandler{
 			for(GrantedAuthority auth:list)
 			{
 				if(flag){
-					if(auth.getAuthority().equals("ROLE_SA") || auth.getAuthority().equals("ROLE_RE"))
+					if(auth.getAuthority().equals("ROLE_SM") || auth.getAuthority().equals("ROLE_RE"))
 					{
 						redirect.sendRedirect(request, response, "/intHome");
 					}
