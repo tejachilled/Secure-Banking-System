@@ -2,9 +2,15 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 xmlns="http://java.sun.com/xml/ns/javaee" 
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
-  <display-name>Secure Bank</display-name>
+  <display-name>Secure Bank Application</display-name>
+      <session-config>
+
+       <session-timeout>5</session-timeout>
+
+    </session-config>
   <welcome-file-list>
-    <welcome-file>/login</welcome-file>
+    <welcome-file>/login.jsp</welcome-file>
+    
 </welcome-file-list>
   <servlet>
      <servlet-name>spring-dispatcher</servlet-name>
@@ -34,6 +40,7 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
     <filter-mapping>
       <filter-name>springSecurityFilterChain</filter-name>
       <url-pattern>/*</url-pattern>
+       <url-pattern>/login.jsp</url-pattern> 
     </filter-mapping> 
  
 	<listener>

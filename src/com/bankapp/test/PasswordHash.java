@@ -9,6 +9,6 @@ public class PasswordHash {
 	{
 		BCryptPasswordEncoder encoder=new BCryptPasswordEncoder();
 		String password=encoder.encode("teja");
-		System.out.println(password);
+	//	System.out.println(password);
 	}
 }
