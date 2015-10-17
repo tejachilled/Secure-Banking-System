@@ -2,9 +2,14 @@ package com.bankapp.services;
 
 import java.util.List;
 
-import com.bankapp.model.UserModel;
+iimport org.springframework.stereotype.Service;
 
+import com.bankapp.model.UserInfo;
+
+@Service("userService")
 public interface UserService {
-	public void insertData(UserModel user);
-	 public List<UserModel> getUserList();  
+	
+	public void insertData(UserInfo user);
+	 public List<UserInfo> getUserList(); 
+	 public int addNewExternalUuser(UserInfo userInfo,String role);
 }
