@@ -6,7 +6,7 @@ package com.bankapp.bean;
 */
 public class Transaction {
 
-	private long transactionNumber;
+	private long transactionID;
 	private long accountId;
 	private String type;
 	private Double amount;
@@ -14,17 +14,18 @@ public class Transaction {
 	private String dateInitiated;
 	private String dataApproved;
 	
+	
 	/**
-	 * @return the transactionNumber
+	 * @return the transactionID
 	 */
-	public long getTransactionNumber() {
-		return transactionNumber;
+	public long getTransactionID() {
+		return transactionID;
 	}
 	/**
-	 * @param transactionNumber the transactionNumber to set
+	 * @param transactionID the transactionID to set
 	 */
-	public void setTransactionNumber(long transactionNumber) {
-		this.transactionNumber = transactionNumber;
+	public void setTransactionID(long transactionID) {
+		this.transactionID = transactionID;
 	}
 	/**
 	 * @return the accountId
