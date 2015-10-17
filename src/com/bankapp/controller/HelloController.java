@@ -17,9 +17,9 @@ import com.bankapp.services.UserService;
 public class HelloController {
 
 	@Autowired
-	 UserService userService;
-	
-	@RequestMapping(value = { "/", "/login" }, method = RequestMethod.GET)
+	UserService userService;
+
+	@RequestMapping(value = { "/" }, method = RequestMethod.GET)
 	public ModelAndView welcomePage() {
 		System.out.println("coming");
 		ModelAndView model = new ModelAndView();
@@ -37,7 +37,6 @@ public class HelloController {
 		model.addObject("title", "Spring Security Custom Login Form");
 		model.addObject("message", "This is protected page!");
 		model.setViewName("admin");
-
 		return model;
 
 	}
@@ -60,23 +59,21 @@ public class HelloController {
 
 	}
 
+	@RequestMapping("/register")
+	public ModelAndView registerUser(@ModelAttribute("user") UserModel user) {
+		return new ModelAndView("register");
+	}
 
-	 @RequestMapping("/register")
-	 public ModelAndView registerUser(@ModelAttribute("user") UserModel user) {
-	  return new ModelAndView("register");
-	 }
+	@RequestMapping("/insert")
+	public String inserData(@ModelAttribute("user") UserModel user) {
+		if (user != null)
+			userService.insertData(user);
+		return "redirect:/getList";
+	}
 
-	 @RequestMapping("/insert")
-	 public String inserData(@ModelAttribute("user") UserModel user) {
-	  if (user != null)
-	   userService.insertData(user);
-	  return "redirect:/getList";
-	 }
-	 
-	 @RequestMapping("/getList")
-	 public ModelAndView getUserLIst() {
-	  List<UserModel> userList = userService.getUserList();
-	  return new ModelAndView("userList", "userList", userList);
-	 }
-
+	@RequestMapping("/getList")
+	public ModelAndView getUserLIst() {
+		List<UserModel> userList = userService.getUserList();
+		return new ModelAndView("userList", "userList", userList);
+	}
 }
