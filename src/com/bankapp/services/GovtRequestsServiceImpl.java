@@ -6,34 +6,34 @@ package com.bankapp.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.bankapp.dao.GovtRequestsDAO;
 import com.bankapp.model.GovtRequestsModel;
 
+@Service
 public class GovtRequestsServiceImpl implements GovtRequestsService {
 
 	@Autowired
 	GovtRequestsDAO govtRequestsDAO;
-	
+
 	@Override
 	public List<GovtRequestsModel> getGovtRequestsList() {
 		return govtRequestsDAO.getGovtRequestsList();
 	}
 
 	@Override
-	public boolean update(String[] govtActionModel, String type) {
-				
-		try{
-		for (int i=0;i<govtActionModel.length;i++) {
-			String[] temp = govtActionModel[i].split(" ");
-			govtRequestsDAO.updateGovtAction(temp[1].trim(),
-					temp[0].trim(), type);
+	public boolean update(String[] govtActionModel) {
+
+		try {
+			for (int i = 0; i < govtActionModel.length; i++) {
+				String[] temp = govtActionModel[i].split(" ");
+				govtRequestsDAO.updateGovtAction(temp[1].trim(), temp[0].trim());
+			}
+		} catch (Exception e) {
+			return true;
 		}
-		}
-		catch(Exception ex){
-			return false;
-		}
-		return true;
+		return false;
 	}
 
 }

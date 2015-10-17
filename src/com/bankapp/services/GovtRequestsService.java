@@ -7,6 +7,7 @@ import com.bankapp.model.GovtRequestsModel;
 public interface GovtRequestsService {
 
 	List<GovtRequestsModel> getGovtRequestsList();
-	boolean update(String[] govtActionModel,String type);
+
+	boolean update(String[] govtActionModel);
 
 }

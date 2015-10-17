@@ -14,5 +14,5 @@ public class GovtActionModel {
 	public void setCheckboxList(String[] checkboxList) {
 		this.checkboxList = checkboxList;
 	}
-	
+
 }
