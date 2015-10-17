@@ -37,6 +37,10 @@
 		<property name="password" value="ssdb" />
 	</bean>
 
+	<bean id="transactionDAO" class="com.bankapp.dao.TransactionDAOImpl"/>
+	<bean id="transactionService" class="com.bankapp.services.TransactionServiceImpl"/>
+	<bean id="transaction" class="com.bankapp.bean.Transaction"/>
+	
 	<bean id="userDAO" class="com.bankapp.dao.UserDAOImpl" />
 	<bean id="userService" class="com.bankapp.services.UserServiceImpl" />
 	<!-- web.servlet.view.ResourceBundleViewResolver -->
