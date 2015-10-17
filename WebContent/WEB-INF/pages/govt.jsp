@@ -7,31 +7,25 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Welcome Govt User!</title>
+<title>${title}</title>
 <style>
 table {
 	width: 100%;
 }
 
-td, th {
+td {
 	border: 1px black solid;
 	padding: 10px;
-}
-
-th {
-	font-weight: bold;
-}
 }
 </style>
 </head>
 <body>
-	<h1>${bank_name}</h1>
 	<div style="width: 100%; text-align: center">
-		<br> <br> <br>
+		<h1>${bank_name}</h1>
 		<h2>PII Request History and Status</h2>
 		<br> <br> <br>
 		<c:if test="${error}">
-			Updation Error
+			<p>Please try again!</p>
 		</c:if>
 		<table>
 			<tr>

@@ -18,25 +18,33 @@ public class GovtRequestsController {
 	@Autowired
 	GovtRequestsServiceImpl govtRequestsService;
 
+	/*
+	 * Home page and the only page of a Govt user. It displays the list of
+	 * requests from Internal Users for viewing the SSN of External Users.
+	 */
 	@RequestMapping("/govt")
 	public ModelAndView getGovernmentRequests(@ModelAttribute("govtAction") GovtActionModel govtActionModel) {
 		ModelAndView model = new ModelAndView();
-		model.addObject("title", "Government User Here");
+		model.addObject("title", "Welcome Govt User!");
+		model.addObject("bank_name", "Richie Rich Bank");
 		model.setViewName("govt");
 		List<GovtRequestsModel> govtRequestsList = govtRequestsService.getGovtRequestsList();
 		model.addObject("govtRequestsList", govtRequestsList);
 		return model;
 	}
 
+	/*
+	 * Called when a Govt User wants to accept one or more of the requests.
+	 */
 	@RequestMapping("/acceptRequests")
 	public ModelAndView acceptedRequests(@ModelAttribute("govtAction") GovtActionModel govtActionModel,
 			ModelAndView model) {
 		model.setViewName("redirect:/govt");
-		if (govtRequestsService.update(govtActionModel.getCheckboxList(), "a")) {
-			model.getModelMap().addAttribute("error", false);
+		if (govtRequestsService.update(govtActionModel.getCheckboxList())) {
+			model.addObject("error", false);
 			return model;
 		}
-		model.getModelMap().addAttribute("error", true);
+		model.addObject("error", true);
 		return model;
 	}
 }

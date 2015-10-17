@@ -10,7 +10,19 @@ import com.bankapp.model.GovtRequestsModel;
 
 public interface GovtRequestsDAO {
 
+	/**
+	 * This function gets the list of all PII requests from the database and
+	 * gives it as a @return List<GovtRequestsModel> object.
+	 */
 	public List<GovtRequestsModel> getGovtRequestsList();
-	void updateGovtAction(String internalUserName, String externalUserName, String status);	
+
+	/**
+	 * 
+	 * This function sets updates the status as accepted ('a') for the row with
+	 * internal user name @param internalUserName and external username @param
+	 * externalUserName
+	 * 
+	 */
+	void updateGovtAction(String internalUserName, String externalUserName);
 
 }
