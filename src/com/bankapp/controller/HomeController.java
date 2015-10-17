@@ -26,7 +26,6 @@ public class HomeController {
 		return "internalHome";
 	}
 
-
 	 @RequestMapping("/insert")
 	 public String inserData(@ModelAttribute("user") UserInfo user) {
 	  if (user != null) 
