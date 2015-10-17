@@ -8,19 +8,19 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.bankapp.model.UserModel;
+import com.bankapp.model.UserInfo;
 
 /**
  * @author manikandan_eshwar
  *
  */
-public class UserRowMapper implements RowMapper<UserModel> {
+public class UserRowMapper implements RowMapper<UserInfo> {
 
-	 @Override
-	 public UserModel mapRow(ResultSet resultSet, int line) throws SQLException {
-	  UserExtractor userExtractor = new UserExtractor();
-	  return userExtractor.extractData(resultSet);
-	 }
-
+	@Override
+	public UserInfo mapRow(ResultSet resultSet, int line) throws SQLException {
+		UserInfoExtracter userExtractor = new UserInfoExtracter();
+		return userExtractor.extractData(resultSet);
 	}
+
+}
 
