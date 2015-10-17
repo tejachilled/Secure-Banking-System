@@ -2,9 +2,12 @@ package com.bankapp.controller;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.bankapp.model.UserInfo;
@@ -61,5 +64,34 @@ public class HomeController {
 		   return "internalHome";
 		else 
 			return "login";
+	}
+	@RequestMapping(value="/forgotpassword",method=RequestMethod.GET)
+	public String forgotPasswordClicked(Model model)
+	{
+		System.out.println("in forgot password");
+		return "forgotPassword";
+	}
+
+
+	@RequestMapping(value="/forgotpassword",method=RequestMethod.POST)
+	public ModelAndView forgotPasswordNextClicked(@RequestParam("usernamegiven") String usernamegiven)
+	{
+		System.out.println("in forgot password Post"+" "+usernamegiven);
+		ModelAndView model = null;
+//
+//		if(check if present in db - usernamegiven))
+//		{
+//		//	otpService.generateOTP(usernamegiven);
+//			ModelAndView model1 = new ModelAndView("forgotPassword");
+//			model1.addObject("type", "forgotpassword");
+//			model1.addObject("username", usernamegiven);
+//			model1.setViewName("otpVerify");
+//		}
+//		else
+//		{
+//			model.addObject("errorMessage", "Username is not valid!");
+//		}
+
+		return model;
 	}
 }
