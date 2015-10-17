@@ -12,13 +12,10 @@
         http://www.springframework.org/schema/util 
         http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
-	<!-- <util:properties id="nodeProperty" location="/WEB-INF/constants.properties" 
-		/> <context:property-placeholder properties-ref="nodeProperty"/> -->
 	<context:annotation-config />
 	<context:component-scan base-package="com.bankapp.*" />
 	<mvc:annotation-driven />
-	<mvc:resources mapping="/js/**" location="/js/" />
-	<mvc:resources mapping="/resources/**" location="/resources/" />
+	<mvc:resources mapping="/resources/**" location="/resources/theme/" />
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">
@@ -39,6 +36,13 @@
 
 	<bean id="userDAO" class="com.bankapp.dao.UserDAOImpl" />
 	<bean id="userService" class="com.bankapp.services.UserServiceImpl" />
+	<bean id="userValidator" class="com.bankapp.services.UserValidator"></bean>
 	<!-- web.servlet.view.ResourceBundleViewResolver -->
+
+	
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basename" value="classpath:message"></property>
+		<property name="defaultEncoding" value="UTF-8"></property>
+	</bean>
 
 </beans>

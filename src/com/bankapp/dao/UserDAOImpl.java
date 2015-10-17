@@ -10,11 +10,11 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.bankapp.jdbc.UserRowMapper;
 import com.bankapp.model.UserInfo;
+import com.bankapp.model.Useraccounts;
 
 public class UserDAOImpl implements UserDAO {
 
@@ -22,8 +22,10 @@ public class UserDAOImpl implements UserDAO {
 	DataSource dataSource;
 	private static final String INTERNAL_USER = "ROLE_I"; 
 	private static final String EXTERNAL_USER = "ROLE_E"; 
-	public void insert(UserInfo user) {
-
+	private static final String INTERNAL_MERCHANT = "ROLE_M";
+	
+	public void insert(UserInfo user){
+ 
 		String sql = "INSERT INTO test_table "
 				+ "(firstname,lastname) VALUES (?, ?)";
 
@@ -61,7 +63,7 @@ public class UserDAOImpl implements UserDAO {
 				user = new UserInfo(
 					rs.getString("user_name"),
 					password = rs.getString("pwd_hash"), 
-					"ROLE_"+rs.getString("user_type")
+					rs.getString("user_type")
 				);
 			}
 			ps.close();
@@ -77,7 +79,7 @@ public class UserDAOImpl implements UserDAO {
 			}
 		}
 		
-		if(user!=null && user.getRole().equalsIgnoreCase(INTERNAL_USER)){
+		if(user!=null && ( user.getRole().equalsIgnoreCase(INTERNAL_USER) ||  user.getRole().equalsIgnoreCase(INTERNAL_MERCHANT))){
 			sql = "select * from internal_users where user_name= ?";
 			user = (UserInfo)jdbcTemplate.queryForObject(sql, new Object[] { username },
 					new UserRowMapper());
@@ -90,6 +92,14 @@ public class UserDAOImpl implements UserDAO {
 		}
 		System.out.println(user);
 		return user;
+	}
+
+	@Override
+	public int registerNewUserAccount(UserInfo userInfo, Useraccounts account) {
+		String sql = "Insert into login";
+		
+		
+		return 0;
 	}
 
 }

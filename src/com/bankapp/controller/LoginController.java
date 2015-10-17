@@ -1,17 +1,14 @@
 package com.bankapp.controller;
 
 import java.security.Principal;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.bankapp.model.UserInfo;
 import com.bankapp.services.UserService;
 
 @Controller
@@ -19,7 +16,7 @@ public class LoginController {
 
 	@Autowired
 	 UserService userService;
-	
+	 
 	@RequestMapping(value = { "/welcome"}, method = RequestMethod.GET)
 	public ModelAndView welcomePage() {
 		System.out.println("coming");
@@ -60,8 +57,8 @@ public class LoginController {
 	@RequestMapping(value="/loginFailed", method=RequestMethod.GET)
 	public String loginFailed(ModelMap model, Principal user)
 	{
-
-		model.addAttribute("error", "true");
+		System.out.println("login failed");
+		model.addAttribute("error", "Invalid credentials");
 		return "login";
 	}
 

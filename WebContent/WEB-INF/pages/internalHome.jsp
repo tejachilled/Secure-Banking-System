@@ -7,15 +7,14 @@
 <html>
 <head>
 
-<link href="<c:url value="/resources/css/theme.css"/>"
-	rel="stylesheet">
+<link href="<c:url value="/resources/css/theme.css"/>" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>	
 <script type="text/javascript" src="<c:url value="/resources/js/bootstrap.js"/>"></script>
 
 <title>Home</title>
 </head>
 <body>
-<jsp:include page="navBar.jsp"></jsp:include>
+<jsp:include page="head.jsp"></jsp:include>
 <div class="btn-group btn-group-justified">
     <a href="/UserAccountManagement" class="btn btn-default">View</a>
   	<a href="/EditExtProfile" class="btn btn-default">Edit</a>

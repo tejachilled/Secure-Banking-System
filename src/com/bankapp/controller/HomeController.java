@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Controller
 public class HomeController {
 	
-	@Autowired
+	@Autowired 
 	UserService userService;
 
 	@RequestMapping(value="/intHome")
@@ -46,7 +46,7 @@ public class HomeController {
 	 public ModelAndView getGovernmentRequests() {
 	  List<UserInfo> userList = userService.getUserList();
 	  return new ModelAndView("userList", "userList", userList);
-	 } 
+	 }
 
 	@RequestMapping(value="/register")
 	public String registerAUser(ModelMap model)
@@ -60,18 +60,18 @@ public class HomeController {
 	{
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		String ur = "";//userService.getUserRoleType(username);
-		if(ur.equals("ROLE_ADMIN")||ur.equals("ROLE_EMPLOYEE"))
+		if(ur.equals("ROLE_SA")||ur.equals("ROLE_RE"))
 		   return "internalHome";
 		else 
 			return "login";
 	}
+	
 	@RequestMapping(value="/forgotpassword",method=RequestMethod.GET)
 	public String forgotPasswordClicked(Model model)
 	{
 		System.out.println("in forgot password");
 		return "forgotPassword";
 	}
-
 
 	@RequestMapping(value="/forgotpassword",method=RequestMethod.POST)
 	public ModelAndView forgotPasswordNextClicked(@RequestParam("usernamegiven") String usernamegiven)
