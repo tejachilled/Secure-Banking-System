@@ -42,7 +42,7 @@
 
 	<bean id="transactionDAO" class="com.bankapp.dao.TransactionDAOImpl"/>
 	<bean id="transactionService" class="com.bankapp.services.TransactionServiceImpl"/>
-	<bean id="transaction" class="com.bankapp.bean.Transaction"/>
+	<bean id="transaction" class="com.bankapp.model.Transaction"/>
 	
 
 
