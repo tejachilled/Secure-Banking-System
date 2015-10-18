@@ -14,9 +14,9 @@ import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Service;
+import com.bankapp.services.UserService;
 
-
-@Service("roleBasedControl")
+@Service("roleBasedControl") 
 public class RoleBasedSecurityService implements AuthenticationSuccessHandler{
 
 	@Autowired

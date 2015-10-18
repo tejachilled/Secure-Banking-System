@@ -2,7 +2,7 @@ package com.bankapp.services;
 
 import java.util.List;
 
-iimport org.springframework.stereotype.Service;
+import org.springframework.stereotype.Service;
 
 import com.bankapp.model.UserInfo;
 
