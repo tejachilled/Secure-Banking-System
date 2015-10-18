@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
-import com.bankapp.bean.Transaction;
+import com.bankapp.model.Transaction;
 
 /**
  * @author manikandan_eshwar

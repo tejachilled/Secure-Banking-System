@@ -5,7 +5,7 @@ package com.bankapp.dao;
 
 import java.util.List;
 
-import com.bankapp.bean.Transaction;
+import com.bankapp.model.Transaction;
 
 /**
  * @author manikandan_eshwar

@@ -9,7 +9,7 @@ import java.util.List;
  * @author manikandan_eshwar
  *
  */
-import com.bankapp.bean.Transaction;
+import com.bankapp.model.Transaction;
 
 public interface TransactionService {
     
