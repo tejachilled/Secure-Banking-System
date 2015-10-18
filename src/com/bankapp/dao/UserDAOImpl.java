@@ -49,7 +49,7 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public UserInfo findUserByUsername(String username) {
-		String sql = "select * from login where user_name= ?";
+		String sql = "select * from tbl_login where user_name= ?";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		Connection conn = null;
 		UserInfo user = null;
@@ -80,12 +80,12 @@ public class UserDAOImpl implements UserDAO {
 		}
 		
 		if(user!=null && ( user.getRole().equalsIgnoreCase(INTERNAL_USER) ||  user.getRole().equalsIgnoreCase(INTERNAL_MERCHANT))){
-			sql = "select * from internal_users where user_name= ?";
+			sql = "select * from tbl_internal_users where user_name= ?";
 			user = (UserInfo)jdbcTemplate.queryForObject(sql, new Object[] { username },
 					new UserRowMapper());
 			user.setPassword(password);
 		}else if(user!=null && user.getRole().equalsIgnoreCase(EXTERNAL_USER)){
-			sql = "select * from external_users where user_name= ?";
+			sql = "select * from tbl_external_users where user_name= ?";
 			user = (UserInfo)jdbcTemplate.queryForObject(sql, new Object[] { username },
 					new UserRowMapper());
 			user.setPassword(password);
