@@ -28,8 +28,10 @@
 		<intercept-url pattern="/register" access="hasRole('ROLE_SM')" />
 		<intercept-url pattern="/addExtUser" access="hasRole('ROLE_SM')" />
  
-		<!-- User Pages -->
+		<!-- User and Merchant Pages -->
 		<intercept-url pattern="/extHome" access="hasRole('ROLE_U')" />
+		<intercept-url pattern="/merchHome" access="hasRole('ROLE_M')"/>
+		
 
 		<form-login login-page="/login" authentication-failure-url="/loginFailed"
 			authentication-success-handler-ref="roleBasedControl" />
