@@ -22,7 +22,7 @@ public class UserDAOImpl implements UserDAO {
 	DataSource dataSource;
 	private static final String INTERNAL_USER = "I"; 
 	private static final String EXTERNAL_USER = "U"; 
-	private static final String INTERNAL_MERCHANT = "M";
+	private static final String MERCHANT = "M";
 	
 	public void insert(UserInfo user){
 		String sql = "INSERT INTO test_table "
@@ -37,7 +37,7 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	public List<UserInfo> getUserList() {
-		List userList = new ArrayList();
+		List<UserInfo> userList = new ArrayList<>();
 
 		String sql = "select * from test_table ";
 
@@ -78,12 +78,13 @@ public class UserDAOImpl implements UserDAO {
 			}
 		}
 		
-		if(user!=null && ( user.getRole().equalsIgnoreCase(INTERNAL_USER) ||  user.getRole().equalsIgnoreCase(INTERNAL_MERCHANT))){
+		if(user!=null && ( user.getRole().equalsIgnoreCase(INTERNAL_USER))){
 			sql = "select * from tbl_internal_users where user_name= ?";
 			user = (UserInfo)jdbcTemplate.queryForObject(sql, new Object[] { username },
 					new UserRowMapper());
 			user.setPassword(password);
-		}else if(user!=null && user.getRole().equalsIgnoreCase(EXTERNAL_USER)){
+		}else if(user!=null && user.getRole().equalsIgnoreCase(EXTERNAL_USER) 
+				||  user.getRole().equalsIgnoreCase(MERCHANT)){
 			sql = "select * from tbl_external_users where user_name= ?";
 			user = (UserInfo)jdbcTemplate.queryForObject(sql, new Object[] { username },
 					new UserRowMapper());
