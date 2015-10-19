@@ -25,7 +25,7 @@ import com.bankapp.services.UserService;
 import com.bankapp.services.UserValidator;
 
 @Controller
-public class UserController {
+public class InternalUserController {
 	@Autowired
 	UserService userService;
 
