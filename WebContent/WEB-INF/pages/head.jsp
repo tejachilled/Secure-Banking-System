@@ -43,21 +43,6 @@
 						</ul></li>
 				</sec:authorize>
 
-				<sec:authorize access="hasRole('ROLE_SA')">
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown">Internal Account Management<b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<sec:authorize access="hasRole('ROLE_SA')">
-								<li><a href="/RichirichBank/addInternalUserAccount">Add a new internal account</a></li>
-							</sec:authorize>
-							<sec:authorize access="hasRole('ROLE_SA')">
-								<li><a href="/RichirichBank/ViewInternalEmpProfile">View internal Emp</a></li>
-							</sec:authorize>
-							<sec:authorize access="hasRole('ROLE_SA')">
-								<li><a href="/RichirichBank/EditInternalEmpProfile">Edit internal Emp</a></li>
-							</sec:authorize>
-						</ul></li>
-				</sec:authorize>
 
 				<sec:authorize access="hasRole('ROLE_SM')">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
@@ -69,35 +54,55 @@
 						</ul></li>
 				</sec:authorize>
 
-				<li ><a href="/home">Home</a></li>
-				<sec:authorize access="hasRole('ROLE_SM')"><li class="dropdown"><a href="#" class="dropdown-toggle"
-					data-toggle="dropdown">Account Management<b class="caret"></b></a>
-					<ul class="dropdown-menu">
-						<sec:authorize access="hasRole('ROLE_SM')"><li><a href="/RichirichBank/register">Add a new account</a></li></sec:authorize>
-						<sec:authorize access="hasRole('ROLE_SM')"><li><a href="/RichirichBank/ViewEmpProfile">View Emp</a></li></sec:authorize>
-                        <sec:authorize access="hasRole('ROLE_SM')"><li><a href="/RichirichBank/EditEmpProfile">Edit Emp</a></li></sec:authorize>
-						
-					</ul></li></sec:authorize>
-								<sec:authorize access="hasRole('ROLE_SM')"><li class="dropdown"><a href="#" class="dropdown-toggle"
-					data-toggle="dropdown">Transaction Management<b class="caret"></b></a>
-					<ul class="dropdown-menu">
-						    <sec:authorize access="hasRole('ROLE_SM')"><li><a href="/ReviewPIIChange">PII Change Req</a></li></sec:authorize>
-					</ul></li></sec:authorize>
-					
-					<sec:authorize access="hasRole('ROLE_U')">
+
+				<sec:authorize access="hasRole('ROLE_U')">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-					data-toggle="dropdown">Account Management<b class="caret"></b></a>
-					<ul class="dropdown-menu">
-						<sec:authorize access="hasRole('ROLE_U')"><li><a href="/RichirichBank/myAccountDetails">View Account Details</a></li></sec:authorize>
-					</ul></li></sec:authorize>
-								<sec:authorize access="hasRole('ROLE_U')"><li class="dropdown"><a href="#" class="dropdown-toggle"
-					data-toggle="dropdown">Transaction Management<b class="caret"></b></a>
-					<ul class="dropdown-menu">
-						    <sec:authorize access="hasRole('ROLE_U')"><li><a href="/RichirichBank/viewUserTransactions">Transactions History</a></li></sec:authorize>
-						     <sec:authorize access="hasRole('ROLE_U')"><li><a href="/RichirichBank/userPendingTransactions">Pending Transactions</a></li></sec:authorize>
-					</ul></li>
-					</sec:authorize>
+						data-toggle="dropdown">Account Management<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<sec:authorize access="hasRole('ROLE_U')">
+								<li><a href="/RichirichBank/myAccountDetails">View
+										Account Details</a></li>
+							</sec:authorize>
+						</ul></li>
+				</sec:authorize>
+				<sec:authorize access="hasRole('ROLE_U')">
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown">Transaction Management<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<sec:authorize access="hasRole('ROLE_U')">
+								<li><a href="/RichirichBank/viewUserTransactions">Transactions
+										History</a></li>
+							</sec:authorize>
+							<sec:authorize access="hasRole('ROLE_U')">
+								<li><a href="/RichirichBank/userPendingTransactions">Pending
+										Transactions</a></li>
+							</sec:authorize>
+						</ul></li>
+				</sec:authorize>
+
+
+				<sec:authorize access="hasRole('ROLE_SA')">
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown">Internal Account Management<b
+							class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<sec:authorize access="hasRole('ROLE_SA')">
+								<li><a href="/RichirichBank/addInternalUserAccount">Add
+										a new internal account</a></li>
+							</sec:authorize>
+							<sec:authorize access="hasRole('ROLE_SA')">
+								<li><a href="/RichirichBank/ViewInternalEmpProfile">View
+										internal Emp</a></li>
+							</sec:authorize>
+							<sec:authorize access="hasRole('ROLE_SA')">
+								<li><a href="/RichirichBank/EditInternalEmpProfile">Edit
+										internal Emp</a></li>
+							</sec:authorize>
+						</ul></li>
+				</sec:authorize>
 			</ul>
+
+
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="/RichirichBank/logout">Logout</a></li>
 			</ul>

@@ -21,6 +21,7 @@ public class UserInfo {
 	private String state;
 	private Integer zipcode;
 	private String role;
+	private String ssn;
 	
 	public UserInfo(){
 		
@@ -198,6 +199,18 @@ public class UserInfo {
 	 */
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	/**
+	 * @return the ssn
+	 */
+	public String getSsn() {
+		return ssn;
+	}
+	/**
+	 * @param ssn the ssn to set
+	 */
+	public void setSsn(String ssn) {
+		this.ssn = ssn;
 	}
 	
 }

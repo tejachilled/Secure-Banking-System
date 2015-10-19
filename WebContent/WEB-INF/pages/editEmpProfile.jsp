@@ -8,13 +8,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>View Employee Profile</title>
+<title>Edit Employee Profile</title>
 </head>
 <body>
    <jsp:include page="internalHome.jsp"></jsp:include>
-   <form:form class="form-horizontal" commandName="accessInfo" method="post" action="/RichirichBank/ViewEmpProfile">
+    <form:form class="form-horizontal" commandName="accessInfo" method="post" action="/RichirichBank/EditEmpProfile">
     <fieldset>
-    <legend>Enter User Credentials to Access Account Details</legend>
+    <legend>Enter User Credentials to Edit Account Details</legend>
     <div>
       <div class="col-lg-10">
            <form:input path="userName" class="form-control" id="usernameid" placeholder="User Name" />
@@ -29,30 +29,37 @@
   </fieldset>
    </form:form>
    <div>
+   <h4>Please note that only the Address information is editable</h4>
+	<form:form commandName="accessInfo" action="/RichirichBank/EditEmpProfile" method="post">
 		<div class="panel panel-default">
 			<div class="panel-heading">First Name</div>
-			<div class="panel-body">${accessInfo.firstName}</div>
+			<form:input path="firstName" readonly="true"/>
 		</div>
 		<div class="panel panel-default">
 			<div class="panel-heading">Last Name</div>
-			<div class="panel-body">${accessInfo.lastName}</div>
+			<form:input path="lastName" readonly="true"/>
 		</div>
 		<div class="panel panel-default">
 			<div class="panel-heading">User Name</div>
-			<div class="panel-body">${accessInfo.userName}</div>
+			<form:input path="userName" readonly="true"/>
 		</div>
 		<div class="panel panel-default">
-			<div class="panel-heading">Email ID</div>
-			<div class="panel-body">${accessInfo.emaiID}</div>
+			<div class="panel-heading">Modified Email ID</div>
+			<form:input path="emaiID" readonly="true"/>
 		</div>
 		<div class="panel panel-default">
-			<div class="panel-heading">Address line 1</div>
-			<div class="panel-body">${accessInfo.address1}</div>
+			<div class="panel-heading">Address line1</div>
+			<form:input path="address1" />
+			<label style="color:red">${addresserror}</label>
 	   </div>
-	   <div class="panel panel-default">
+	   		<div class="panel panel-default">
 			<div class="panel-heading">Address line 2</div>
-			<div class="panel-body">${accessInfo.address2}</div>
+			<form:input path="address2" />
+			<label style="color:red">${addresserror}</label>
 	   </div>
+	   <input type="submit" value="Update Details" />
+     </form:form>
    </div>
+
 </body>
 </html>
