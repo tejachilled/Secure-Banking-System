@@ -9,7 +9,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.bankapp.bean.Transaction;
+import com.bankapp.model.Transaction;
 
 /**
  * @author manikandan_eshwar

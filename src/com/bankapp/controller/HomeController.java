@@ -28,10 +28,17 @@ public class HomeController {
 	{
 		return "internalHome";
 	}
+
 	@RequestMapping(value="/adminHome")
 	public String adminHomePage(ModelMap model)
 	{
 		return "adminHome";
+	}
+	
+	@RequestMapping(value="/extHome")
+	public String exthomePage(ModelMap model)
+	{
+		return "extHome";
 	}
 
 	 @RequestMapping("/insert")

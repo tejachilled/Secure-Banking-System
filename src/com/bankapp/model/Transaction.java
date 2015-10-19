@@ -1,4 +1,4 @@
-package com.bankapp.bean;
+package com.bankapp.model;
 
 /**
 * @author manikandan_eshwar
