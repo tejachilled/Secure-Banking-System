@@ -16,10 +16,20 @@
 		<!-- Admin Roles -->
 		<intercept-url pattern="/adminHome" access="hasRole('ROLE_SA')" />
 		<intercept-url pattern="/addInternalUserAccount" access="hasRole('ROLE_SA')" />
+		<intercept-url pattern="/EditInternalEmpProfile" access="hasRole('ROLE_SA')" />
+		<intercept-url pattern="/ViewInternalEmpProfile" access="hasRole('ROLE_SA')" />
+
+		<!-- Manager Roles --> 
+		<intercept-url pattern="/addExternalUserAccount" access="hasRole('ROLE_SM')" />
+		<intercept-url pattern="/DeleteEmpProfile" access="hasRole('ROLE_SM')" />
+		<intercept-url pattern="/ViewEmpProfile" access="hasRole('ROLE_SM')" />
+		<intercept-url pattern="/EditEmpProfile" access="hasRole('ROLE_SM')" />
 		<intercept-url pattern="/intHome" access="hasAnyRole('ROLE_SM','ROLE_RE')" />
 		<intercept-url pattern="/register" access="hasRole('ROLE_SM')" />
-		<intercept-url pattern="/addExtUser" access="hasRole('ROLE_SM')"/>
-		<intercept-url pattern="/extHome" access="hasRole('ROLE_U')"/>
+		<intercept-url pattern="/addExtUser" access="hasRole('ROLE_SM')" />
+ 
+		<!-- User Pages -->
+		<intercept-url pattern="/extHome" access="hasRole('ROLE_U')" />
 
 		<form-login login-page="/login" authentication-failure-url="/loginFailed"
 			authentication-success-handler-ref="roleBasedControl" />
