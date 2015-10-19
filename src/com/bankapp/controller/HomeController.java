@@ -28,6 +28,12 @@ public class HomeController {
 	{
 		return "internalHome";
 	}
+
+	@RequestMapping(value="/adminHome")
+	public String adminHomePage(ModelMap model)
+	{
+		return "adminHome";
+	}
 	
 	@RequestMapping(value="/extHome")
 	public String exthomePage(ModelMap model)
@@ -65,8 +71,8 @@ public class HomeController {
 	public String home(ModelMap model)
 	{
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		String ur = "";//userService.getUserRoleType(username);
-		if(ur.equals("ROLE_SA")||ur.equals("ROLE_RE"))
+		String ur = userService.getUserRoleType(username);
+		if(ur.equals("ROLE_SM")||ur.equals("ROLE_RE"))
 		   return "internalHome";
 		else 
 			return "login";
