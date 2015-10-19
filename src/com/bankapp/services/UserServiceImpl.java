@@ -6,6 +6,7 @@ package com.bankapp.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.bankapp.dao.UserDAO;
 import com.bankapp.model.UserInfo;
@@ -39,6 +40,40 @@ public class UserServiceImpl implements UserService {
 		account.setUsername(UserInfo.getUserName());
 		UserInfo.setRole(role);
 		return userdao.registerNewUserAccount(UserInfo,account);
-	}	
+	}
 
+	@Override
+	//get user role type
+	@Transactional
+	public String getUserRoleType(String username)
+	{   
+		return userdao.findUserRoleType(username);
+	}
+
+	@Override
+	@Transactional
+	public UserInfo getUserInfobyUserName(String username)
+	{   
+		UserInfo ui = userdao.findUserByUsername(username);
+		if(ui != null)
+		{ 
+			return ui;
+		}
+		return null;
+	}
+
+	@Override
+	//update address or emailID of user with given values
+		@Transactional
+		public void updateUserInfo(UserInfo userInfo)
+		{   
+		userdao.updateUserInfo(userInfo);
+		}
+
+	@Override
+	@Transactional
+	public void deleteUserInfo(UserInfo userInfo)
+	{   
+		userdao.deleteUserInfo(userInfo);
+	}
 }

@@ -25,7 +25,6 @@ public class UserDAOImpl implements UserDAO {
 	private static final String INTERNAL_MERCHANT = "M";
 	
 	public void insert(UserInfo user){
- 
 		String sql = "INSERT INTO test_table "
 				+ "(firstname,lastname) VALUES (?, ?)";
 
@@ -98,8 +97,25 @@ public class UserDAOImpl implements UserDAO {
 	public int registerNewUserAccount(UserInfo userInfo, Useraccounts account) {
 		String sql = "Insert into login";
 		
-		
 		return 0;
+	}
+
+	@Override
+	public String findUserRoleType(String username) {
+		
+		return null;
+	}
+
+	@Override
+	public void updateUserInfo(UserInfo userInfo) {
+		
+		
+	}
+
+	@Override
+	public void deleteUserInfo(UserInfo userInfo) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

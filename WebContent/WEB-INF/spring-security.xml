@@ -14,6 +14,8 @@
 		<intercept-url pattern="/changePassword" access="permitAll" />
 
 		<!-- Admin Roles -->
+		<intercept-url pattern="/adminHome" access="hasRole('ROLE_SA')" />
+		<intercept-url pattern="/addInternalUserAccount" access="hasRole('ROLE_SA')" />
 		<intercept-url pattern="/intHome" access="hasAnyRole('ROLE_SM','ROLE_RE')" />
 		<intercept-url pattern="/register" access="hasRole('ROLE_SM')" />
 		<intercept-url pattern="/addExtUser" access="hasRole('ROLE_SM')"/>
