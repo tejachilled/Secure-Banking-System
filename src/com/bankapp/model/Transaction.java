@@ -13,7 +13,7 @@ public class Transaction {
 	private String isCritical;
 	private String dateInitiated;
 	private String dataApproved;
-	
+	private String remark;
 	
 	/**
 	 * @return the transactionID
@@ -99,6 +99,18 @@ public class Transaction {
 	 */
 	public void setAmount(Double amount) {
 		this.amount = amount;
+	}
+	/**
+	 * @return the remark
+	 */
+	public String getRemark() {
+		return remark;
+	}
+	/**
+	 * @param remark the remark to set
+	 */
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 	
 	
