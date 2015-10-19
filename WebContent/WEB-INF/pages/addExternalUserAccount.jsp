@@ -20,8 +20,19 @@
 	<div style="width: 70%;">
 		<div class="panel panel-default">
 			<div class="panel-body">
-				<form:form class="form-horizontal" action="/RichirichBank/addExtUser"
-					method="post" commandName="extUser" name="f">
+
+				<c:if test="${not empty accno }">
+					<div style="width: 40%;">
+						<div class="alert alert-dismissable alert-success">
+							<strong>Your account no ${accno} </strong>
+						</div>
+
+					</div>
+				</c:if>
+
+				<form:form class="form-horizontal"
+					action="/RichirichBank/addExtUser" method="post"
+					commandName="extUser" name="f">
 
 					<fieldset>
 						<legend>New Account</legend>
@@ -85,13 +96,33 @@
 							</div>
 						</div>
 
+						<div class="form-group">
+							<label class="col-lg-2 control-label">Phone Number</label>
+							<div class="col-lg-10">
+								<form:input path="phoneNumber" cssClass="form-control" />
+								<form:errors path="phoneNumber"
+									cssClass="alert alert-dismissable alert-danger"></form:errors>
+							</div>
+						</div>
+
 
 						<div class="form-group">
 							<label for="select" class="col-lg-2 control-label">Role</label>
 							<div class="col-lg-10">
 								<select name="role" class="form-control" id="select">
-									<option value="ROLE_I">Customer</option>
-									<option value="ROLE_M">Merchant</option>
+									<option value="U">Customer</option>
+									<option value="M">Merchant</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="select" class="col-lg-2 control-label">Account
+								Type</label>
+							<div class="col-lg-10">
+								<select name="accountType" class="form-control" id="select">
+									<option value="SAVINGS">Savings Account</option>
+									<option value="CHECKIN">Checkin Account</option>
 								</select>
 							</div>
 						</div>
@@ -123,14 +154,7 @@
 					</fieldset>
 				</form:form>
 
-				<c:if test="${not empty accno }">
-					<div style="width: 30%;">
-						<div class="alert alert-dismissable alert-success">
-							<strong>Your account no ${accno} </strong>
-						</div>
 
-					</div>
-				</c:if>
 
 			</div>
 		</div>

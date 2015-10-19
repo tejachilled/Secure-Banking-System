@@ -17,9 +17,6 @@ public class UserInfo {
 	private Long phoneNumber;
 	private String address1;
 	private String address2;
-	private String city;
-	private String state;
-	private Integer zipcode;
 	private String role;
 	private String ssn;
 	
@@ -103,49 +100,6 @@ public class UserInfo {
 	public void setAddress2(String address2) {
 		this.address2 = address2;
 	}
-
-	/**
-	 * @return the city
-	 */
-	public String getCity() {
-		return city;
-	}
-
-	/**
-	 * @param city the city to set
-	 */
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	/**
-	 * @return the state
-	 */
-	public String getState() {
-		return state;
-	}
-
-	/**
-	 * @param state the state to set
-	 */
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	/**
-	 * @return the zipcode
-	 */
-	public Integer getZipcode() {
-		return zipcode;
-	}
-
-	/**
-	 * @param zipcode the zipcode to set
-	 */
-	public void setZipcode(Integer zipcode) {
-		this.zipcode = zipcode;
-	}
-
 	
 
 	public String getFirstName() {
@@ -181,19 +135,7 @@ public class UserInfo {
 	public void setPhoneNumber(Long phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("UserInfo [userName=").append(userName).append(", password=").append(password)
-				.append(", firstName=").append(firstName).append(", lastName=").append(lastName).append(", emaiID=")
-				.append(emaiID).append(", phoneNumber=").append(phoneNumber).append(", address1=").append(address1)
-				.append(", address2=").append(address2).append(", city=").append(city).append(", state=").append(state)
-				.append(", zipcode=").append(zipcode).append(", role=").append(role).append("]");
-		return builder.toString();
-	}
+
 	/**
 	 * @param password the password to set
 	 */

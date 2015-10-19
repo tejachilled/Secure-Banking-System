@@ -33,11 +33,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int addNewExternalUuser(UserInfo UserInfo,String role)
+	public Long addNewExternalUuser(UserInfo UserInfo,String role,String accountType)
 	{
 		Useraccounts account=new Useraccounts();
 		account.setBalance(500.0);
 		account.setUsername(UserInfo.getUserName());
+		account.setAccountType(accountType);
 		UserInfo.setRole(role);
 		return userdao.registerNewUserAccount(UserInfo,account);
 	}

@@ -18,9 +18,6 @@ public class UserInfoExtracter {
 		user.setPhoneNumber(resultSet.getLong("phone_number"));
 		user.setAddress1(resultSet.getString("add_l1"));
 		user.setAddress2(resultSet.getString("add_l2"));
-		user.setCity(resultSet.getString("city"));
-		user.setState(resultSet.getString("state"));
-		user.setZipcode(resultSet.getInt("zipcode"));
 		user.setRole(resultSet.getString("role").toUpperCase());
 		return user;
 	}

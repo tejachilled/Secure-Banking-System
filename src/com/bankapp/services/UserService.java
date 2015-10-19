@@ -11,7 +11,7 @@ public interface UserService {
 	
 	public void insertData(UserInfo user);
 	 public List<UserInfo> getUserList(); 
-	 public int addNewExternalUuser(UserInfo userInfo,String role);
+	 public Long addNewExternalUuser(UserInfo userInfo,String role,String accountType);
 	public String getUserRoleType(String username);
 	public UserInfo getUserInfobyUserName(String userName);
 	public void updateUserInfo(UserInfo ui);

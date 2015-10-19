@@ -6,7 +6,6 @@
 <html>
 
 <head>
-<jsp:include page="merchHome.jsp"></jsp:include>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Transaction History</title>
 <style>

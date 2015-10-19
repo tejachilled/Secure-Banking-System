@@ -37,7 +37,7 @@ public class EmailServiceImpl implements EmailService {
 				new javax.mail.Authenticator() {
 					protected PasswordAuthentication getPasswordAuthentication() {
 						return new PasswordAuthentication(
-								"tejachilled@gmail.com", "boyaguud");
+								"tejachilled@gmail.com", "thutariteja");
 					}
 				});
 		try {
@@ -72,15 +72,12 @@ public class EmailServiceImpl implements EmailService {
 				new javax.mail.Authenticator() {
 					protected PasswordAuthentication getPasswordAuthentication() {
 						return new PasswordAuthentication(
-								"tejachilled@gmail.com", "boyaguud");
+								"tejachilled@gmail.com", "thutariteja");
 					}
 				});
 		
 		try {
-
-			
 			  MimeMessage message = new MimeMessage(session);
-
 		         message.setFrom(new InternetAddress("tejachilled@gmail.com"));
 		         message.addRecipient(Message.RecipientType.TO,
 		                                  new InternetAddress(emailId));

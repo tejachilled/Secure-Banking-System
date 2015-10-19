@@ -1,9 +1,6 @@
 package com.bankapp.controller;
 
-import java.util.ArrayList;
-import java.util.Map;
 import java.util.UUID;
-
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,7 +26,6 @@ import com.bankapp.services.UserValidator;
 
 @Controller
 public class UserController {
-
 	@Autowired
 	UserService userService;
 
@@ -54,6 +50,7 @@ public class UserController {
 	public String submitForm(ModelMap model, @ModelAttribute ("extUser") @Validated UserInfo UserInfo, BindingResult result, SessionStatus status, HttpServletRequest request, HttpServletResponse response,ServletRequest servletRequest) throws Exception
 	{
 		String role=request.getParameter("role").toString();
+		String accountType  = request.getParameter("accountType").toString();
 		userValidator.validate(UserInfo, result);
 
 		if(result.hasErrors())
@@ -65,11 +62,11 @@ public class UserController {
 		String decodedPwd = emailService.generatePassword();
 		UserInfo.setPassword(encoder.encode(decodedPwd));
 
-		int accno=userService.addNewExternalUuser(UserInfo,role);
+		Long accno=userService.addNewExternalUuser(UserInfo,role,accountType);
 
 		UUID uniqueToken =UUID.randomUUID();
 	//	pkiService.generateKeyPairAndToken(UserInfo.getUserName(),uniqueToken.toString());
-		emailService.sendEmailWithAttachment(UserInfo.getEmaiID(),UserInfo.getUserName(),decodedPwd,uniqueToken.toString());
+		//emailService.sendEmailWithAttachment(UserInfo.getEmaiID(),UserInfo.getUserName(),decodedPwd,uniqueToken.toString());
 		model.addAttribute("accno", accno);
 		return "addExternalUserAccount";
 	}

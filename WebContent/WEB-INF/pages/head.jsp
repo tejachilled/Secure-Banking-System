@@ -25,8 +25,13 @@
 		</div>
 		<div class="navbar-collapse collapse navbar-inverse-collapse">
 			<ul class="nav navbar-nav">
+				<sec:authorize access="hasAnyRole('ROLE_SM','ROLE_RE')">
+					<li><a href="/RichirichBank/intHome">Home</a></li>
+				</sec:authorize>
+				<sec:authorize access="hasRole('ROLE_SA')">
+					<li><a href="/RichirichBank/adminHome">Home</a></li>
+				</sec:authorize>
 
-				<li><a href="/home">Home</a></li>
 				<sec:authorize access="hasRole('ROLE_SM')">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown">Account Management<b class="caret"></b></a>
@@ -54,31 +59,6 @@
 						</ul></li>
 				</sec:authorize>
 
-
-				<sec:authorize access="hasRole('ROLE_U')">
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown">Account Management<b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<sec:authorize access="hasRole('ROLE_U')">
-								<li><a href="/RichirichBank/myAccountDetails">View
-										Account Details</a></li>
-							</sec:authorize>
-						</ul></li>
-				</sec:authorize>
-				<sec:authorize access="hasRole('ROLE_U')">
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown">Transaction Management<b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<sec:authorize access="hasRole('ROLE_U')">
-								<li><a href="/RichirichBank/viewUserTransactions">Transactions
-										History</a></li>
-							</sec:authorize>
-							<sec:authorize access="hasRole('ROLE_U')">
-								<li><a href="/RichirichBank/userPendingTransactions">Pending
-										Transactions</a></li>
-							</sec:authorize>
-						</ul></li>
-				</sec:authorize>
 
 
 				<sec:authorize access="hasRole('ROLE_SA')">

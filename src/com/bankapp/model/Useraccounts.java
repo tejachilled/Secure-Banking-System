@@ -10,10 +10,9 @@ public class Useraccounts {
 
 	private Integer accountno;
 	private String username;
-	private String routingno;
-	private String wiringno;
 	private Date accountopendate;
 	private double balance;
+	private String accountType;
 
 	public Useraccounts() {
 	}
@@ -22,14 +21,12 @@ public class Useraccounts {
 		this.accountno = accountno;
 	}
 
-	public Useraccounts(Integer accountno, String username, String routingno,
-			String wiringno, Date accountopendate, double balance) {
+	public Useraccounts(Integer accountno, String username, Date accountopendate, double balance, String accountType) {
 		this.accountno = accountno;
 		this.username = username;
-		this.routingno = routingno;
-		this.wiringno = wiringno;
 		this.accountopendate = accountopendate;
 		this.balance = balance;
+		this.accountType = accountType;
 
 	}
 
@@ -40,22 +37,6 @@ public class Useraccounts {
 
 	public void setAccountno(Integer accountno) {
 		this.accountno = accountno;
-	}
-
-	public String getRoutingno() {
-		return this.routingno;
-	}
-
-	public void setRoutingno(String routingno) {
-		this.routingno = routingno;
-	}
-
-	public String getWiringno() {
-		return this.wiringno;
-	}
-
-	public void setWiringno(String wiringno) {
-		this.wiringno = wiringno;
 	}
 
 	public Date getAccountopendate() {
@@ -79,6 +60,20 @@ public class Useraccounts {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	/**
+	 * @return the accountType
+	 */
+	public String getAccountType() {
+		return accountType;
+	}
+
+	/**
+	 * @param accountType the accountType to set
+	 */
+	public void setAccountType(String accountType) {
+		this.accountType = accountType;
 	}
 
 	
