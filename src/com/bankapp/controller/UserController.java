@@ -42,6 +42,13 @@ public class UserController {
 	@Autowired
 	EmailService emailService;
 	
+
+	@RequestMapping(value="/atFirstLogin")
+	public String userAtFirstLogin(Model model){
+		return "changePassword";
+	}
+	
+	
 	@Transactional
 	@RequestMapping(value="/addExtUser",method=RequestMethod.POST)
 	public String submitForm(ModelMap model, @ModelAttribute ("extUser") @Validated UserInfo UserInfo, BindingResult result, SessionStatus status, HttpServletRequest request, HttpServletResponse response,ServletRequest servletRequest) throws Exception
@@ -57,7 +64,6 @@ public class UserController {
 		System.out.println(UserInfo.getFirstName());
 		String decodedPwd = emailService.generatePassword();
 		UserInfo.setPassword(encoder.encode(decodedPwd));
-	//	UserInfo.setEnable(false);
 
 		int accno=userService.addNewExternalUuser(UserInfo,role);
 
@@ -66,8 +72,9 @@ public class UserController {
 		emailService.sendEmailWithAttachment(UserInfo.getEmaiID(),UserInfo.getUserName(),decodedPwd,uniqueToken.toString());
 		model.addAttribute("accno", accno);
 		return "addExternalUserAccount";
-
 	}
+	
+	
 	@Transactional
 	@RequestMapping(value="/addInternalUserAccount",method=RequestMethod.POST)
 	public String addInternalUser(ModelMap model, @ModelAttribute ("extUser") @Validated UserInfo UserInfo, BindingResult result, SessionStatus status, HttpServletRequest request, HttpServletResponse response,ServletRequest servletRequest) throws Exception
@@ -94,17 +101,59 @@ public class UserController {
 
 	}
 
-	@RequestMapping(value="/atFirstLogin")
-	public String userAtFirstLogin(Model model){
-		return "changePassword";
-	}
-	
 	// Manager functionalities
 	@RequestMapping(value="/ViewEmpProfile",method=RequestMethod.GET)
 	public String viewEmpProfile(Model model)
 	{
 		model.addAttribute("accessInfo", new UserInfo());
 		return "viewEmpProfile";
+	}
+	
+	@RequestMapping(value="/ViewEmpProfile",method=RequestMethod.POST)
+	public String viewEmpProfile(@ModelAttribute ("accessInfo") @Validated UserInfo userInfo, BindingResult result, SessionStatus status,Model model)
+	{
+		//add objects to model
+		model.addAttribute("accessInfo", userInfo);
+		model.addAttribute("usernameerror",null);
+		//validate input format
+		if(userInfo.getUserName()!=null)
+		{
+			if(!(userInfo.getUserName()).matches("^[a-z0-9_-]{3,16}$"))
+			{
+				model.addAttribute("usernameerror","Please enter a valid username");
+				return "viewEmpProfile";
+			}
+			else
+			{
+				//validate if reasonable request and username exists
+				if(userService.getUserInfobyUserName(userInfo.getUserName())==null)
+				{
+					model.addAttribute("usernameerror","Specified username does not exist");
+					return "viewEmpProfile";
+				}
+				else
+				{
+					UserInfo ui = userService.getUserInfobyUserName(userInfo.getUserName());
+					//check if the user is an external user
+					String ur = userService.getUserRoleType(ui.getUserName());
+					if(ur.equals("ROLE_EMPLOYEE"))
+					{
+						model.addAttribute("accessInfo", ui);
+						return "viewEmpProfile";
+					}
+					else
+					{
+						model.addAttribute("usernameerror", "Not a valid employee");
+						return "viewEmpProfile";
+					}
+				}
+			}
+		}
+		else
+		{
+			model.addAttribute("usernameerror","Please enter the username");
+			return "viewEmpProfile";
+		}
 	}
 	
 	//Edit Employees
@@ -183,8 +232,6 @@ public class UserController {
 				model.addAttribute("usernameerror","Please enter the username");
 				return "viewEmpProfile";
 			}
-
-
 		}
 
 		//Delete Employees
@@ -256,7 +303,7 @@ public class UserController {
 	public String viewInternalEmpProfile(Model model)
 	{
 		model.addAttribute("accessInfo", new UserInfo());
-		return "ViewInternalEmpProfile";
+		return "viewInternalEmpProfile";
 	}
 	
 	
