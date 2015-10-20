@@ -92,8 +92,8 @@ public class UserDAOImpl implements UserDAO {
 			sql = "select * from tbl_internal_users where user_name= ?";
 			user = getInternalUser(user.getUserName());
 			user.setPassword(password);
-		}else if(user!=null && user.getRole().equalsIgnoreCase(EXTERNAL_USER) 
-				||  user.getRole().equalsIgnoreCase(MERCHANT)){
+		}else if(user!=null && (user.getRole().equalsIgnoreCase(EXTERNAL_USER) 
+				||  user.getRole().equalsIgnoreCase(MERCHANT))){
 			user = getExternalUser(user.getUserName());
 			user.setPassword(password);
 		}

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.bankapp.model;
 
 /**
@@ -8,7 +5,6 @@ package com.bankapp.model;
  *
  */
 public class UserInfo {
-
 	private String userName;
 	private String password;
 	private String firstName;
@@ -70,8 +66,6 @@ public class UserInfo {
 	public void setEmaiID(String emaiID) {
 		this.emaiID = emaiID;
 	}
-
-
 
 	/**
 	 * @return the address1
