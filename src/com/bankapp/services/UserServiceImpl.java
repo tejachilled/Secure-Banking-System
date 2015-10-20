@@ -11,6 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bankapp.dao.UserDAO;
 import com.bankapp.model.UserInfo;
 import com.bankapp.model.Useraccounts;
+import com.bankapp.userexceptions.CustomException;
+import com.bankapp.userexceptions.UserAccountExist;
+import com.bankapp.userexceptions.UserNameExists;
 
 /**
  * @author manikandan_eshwar
@@ -27,13 +30,13 @@ public class UserServiceImpl implements UserService {
 	 }
 
 	@Override
-	public List<UserInfo> getUserList() {
+	public List<UserInfo> getExternalUserList() {
 		// TODO Auto-generated method stub
-		return userdao.getUserList();
+		return userdao.getExternalUserList();
 	}
 
 	@Override
-	public Long addNewExternalUuser(UserInfo UserInfo,String role,String accountType)
+	public Long addNewExternalUuser(UserInfo UserInfo,String role,String accountType) throws UserAccountExist, UserNameExists, CustomException
 	{
 		Useraccounts account=new Useraccounts();
 		account.setBalance(500.0);

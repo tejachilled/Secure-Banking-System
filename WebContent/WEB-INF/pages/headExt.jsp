@@ -28,7 +28,6 @@
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Fund Management <b class="caret"></b></a>
 					<ul class="dropdown-menu">
-
 						<li><a href="/RichirichBank/Deposit">Debit</a></li>
 						<li><a href="/RichirichBank/Withdraw">Credit</a></li>
 						<li><a href="/RichirichBank/Transfer">Transfer</a></li>

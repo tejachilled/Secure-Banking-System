@@ -1,5 +1,6 @@
 package com.bankapp.dao;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,19 +15,25 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.util.StringUtils;
+import org.springframework.util.SystemPropertyUtils;
 
 import com.bankapp.jdbc.UserRowMapper;
 import com.bankapp.model.UserInfo;
 import com.bankapp.model.Useraccounts;
+import com.bankapp.userexceptions.CustomException;
+import com.bankapp.userexceptions.UserAccountExist;
+import com.bankapp.userexceptions.UserNameExists;
 
 public class UserDAOImpl implements UserDAO {
 
 	@Autowired
 	DataSource dataSource;
+	private Connection conn = null;
 	private static final String INTERNAL_USER = "I"; 
 	private static final String EXTERNAL_USER = "U"; 
 	private static final String MERCHANT = "M";
-	
+
 	public void insert(UserInfo user){
 		String sql = "INSERT INTO test_table "
 				+ "(firstname,lastname) VALUES (?, ?)";
@@ -38,22 +45,22 @@ public class UserDAOImpl implements UserDAO {
 				new Object[] { user.getFirstName(), user.getLastName()});
 
 	}
-
-	public List<UserInfo> getUserList() {
+	@Override
+	public List<UserInfo> getExternalUserList() {
 		List<UserInfo> userList = new ArrayList<>();
 
-		String sql = "select * from test_table ";
+		String sql = "select * from tbl_external_users";
 
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		userList = jdbcTemplate.query(sql, new UserRowMapper());
 		return userList;
 	}
 
+
 	@Override
 	public UserInfo findUserByUsername(String username) {
 		String sql = "select * from tbl_login where user_name= ?";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		Connection conn = null;
 		UserInfo user = null;
 		String password = "";
 		try {
@@ -63,16 +70,16 @@ public class UserDAOImpl implements UserDAO {
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				user = new UserInfo(
-					rs.getString("user_name"),
-					password = rs.getString("pwd_hash"), 
-					rs.getString("user_type")
-				);
+						rs.getString("user_name"),
+						password = rs.getString("pwd_hash"), 
+						rs.getString("user_type")
+						);
 			}
 			ps.close();
- 
+
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
- 
+
 		} finally {
 			if (conn != null) {
 				try {
@@ -80,17 +87,14 @@ public class UserDAOImpl implements UserDAO {
 				} catch (SQLException e) {}
 			}
 		}
-		
+
 		if(user!=null && ( user.getRole().equalsIgnoreCase(INTERNAL_USER))){
 			sql = "select * from tbl_internal_users where user_name= ?";
-			user = (UserInfo)jdbcTemplate.queryForObject(sql, new Object[] { username },
-					new UserRowMapper());
+			user = getInternalUser(user.getUserName());
 			user.setPassword(password);
 		}else if(user!=null && user.getRole().equalsIgnoreCase(EXTERNAL_USER) 
 				||  user.getRole().equalsIgnoreCase(MERCHANT)){
-			sql = "select * from tbl_external_users where user_name= ?";
-			user = (UserInfo)jdbcTemplate.queryForObject(sql, new Object[] { username },
-					new UserRowMapper());
+			user = getExternalUser(user.getUserName());
 			user.setPassword(password);
 		}
 		System.out.println(user);
@@ -98,8 +102,128 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Override
-	public Long registerNewUserAccount(UserInfo userInfo, Useraccounts account) {
-		Connection conn = null;
+	public Long registerNewUserAccount(UserInfo userInfo, Useraccounts account) throws UserAccountExist, UserNameExists, CustomException {
+		/*
+		 * 1 = successfully updated
+		 * 2 = duplicate entry
+		 * 3 = some other error
+		 * */
+		int val = insertToLoginTable(userInfo);
+		System.out.println("Inser to login table value : "+val);
+		try{
+			switch(val){
+			case 1:{
+				insertToExternalUserTable(userInfo);
+				Long uniqueAccountNumber =  insertToAccountsTable(userInfo,account);
+				return uniqueAccountNumber;
+			}
+			case 2:{
+				if(checkIfUserSame(userInfo)){
+					String accountType = getAccountType(userInfo.getUserName());
+					if(!accountType.equalsIgnoreCase(account.getAccountType())) {
+						Long uniqueAccountNumber =  insertToAccountsTable(userInfo,account);
+						return uniqueAccountNumber;			
+					}else{
+						throw new UserAccountExist("This user already have the account you are trying to create");
+					}
+				}
+			}
+			case 3:
+				throw new CustomException("Error! Please try again");
+			}
+			Default: throw new CustomException("Error! Please try again");
+
+		}catch(UserAccountExist exp){
+			throw exp;
+		}catch(SQLException exp){
+			throw new CustomException(exp);
+		} catch (UserNameExists exp) {
+			// TODO Auto-generated catch block
+			throw exp;
+		}
+	}
+
+
+
+
+	private String getAccountType(String userName) throws SQLException, UserAccountExist {
+		String sql = "select * from tbl_accounts where user_name= ?";
+		String accountType = ""; int count= 0;
+		try {
+			conn = dataSource.getConnection();
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, userName);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				accountType = rs.getString("type");
+				count++;
+			}
+			ps.close();
+
+		} catch (SQLException e) {
+			throw  e;
+
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {throw e;}
+			}
+		}
+		if(count==1){
+			return accountType;
+		}else {
+			throw new UserAccountExist("This user already have the account you are trying to create");
+		}
+
+	}
+	private boolean checkUserAccountExist(String string) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	private boolean checkIfUserSame(UserInfo user1) throws UserNameExists {
+		UserInfo user2 = getExternalUser(user1.getUserName());	
+		if(user2!=null && checkUsers(user1,user2)){
+			return true;
+		}else{
+			throw new UserNameExists("User name exists. Please choose another user name");
+		}
+
+	}
+
+	private boolean checkUsers(UserInfo user1, UserInfo user2) {
+		System.out.println("user1 : "+user1.toString());
+		System.out.println("user2 : "+user2.toString());
+		boolean flag = false;
+		if(user1.getFirstName().equalsIgnoreCase(user2.getFirstName()) && user1.getUserName().equalsIgnoreCase(user2.getUserName()) && user1.getLastName().equalsIgnoreCase(user2.getLastName()) && user1.getAddress1().equalsIgnoreCase(user2.getAddress1())
+			&& user1.getAddress2().equalsIgnoreCase(user2.getAddress2()) && user1.getEmaiID().equalsIgnoreCase(user2.getEmaiID()) && user1.getPhoneNumber().equals(user2.getPhoneNumber())
+			&& user2.getRole().equalsIgnoreCase("ROLE_"+user1.getRole())	){
+			flag = true;
+		}
+		System.out.println("user1 == user2 ? "+ flag);
+		return flag;
+	}
+	@Override
+	public String findUserRoleType(String username) {
+		SimpleDateFormat simpleDateFormat =
+				new SimpleDateFormat("MMddkkmmss");	
+		return  simpleDateFormat.format(getTodaysDate());
+	}
+
+	@Override
+	public void updateUserInfo(UserInfo userInfo) {
+
+
+	}
+
+	@Override
+	public void deleteUserInfo(UserInfo userInfo) {
+		// TODO Auto-generated method stub
+
+	}
+
+	private int insertToLoginTable(UserInfo userInfo){
+
 		String sql = "Insert into tbl_login(user_name, pwd_hash, user_type, first_time) values(?,?,?,?)";
 		try
 		{
@@ -112,13 +236,22 @@ public class UserDAOImpl implements UserDAO {
 			ps.executeUpdate();
 		}
 		catch (SQLIntegrityConstraintViolationException e) {
-		    // Duplicate entry
+			return 2;
 		}
 		catch (SQLException e) {
-			throw new RuntimeException(e);
- 
+			return 3;
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+
+				} catch (SQLException e) {}
+			}
 		}
-		sql = "insert into tbl_external_users(user_name, first_name, last_name, email_id, phone_number, add_l1, add_l2, role) values(?,?,?,?,?,?,?,?)";
+		return 1;
+	}
+	private void insertToExternalUserTable(UserInfo userInfo) {
+		String sql = "insert into tbl_external_users(user_name, first_name, last_name, email_id, phone_number, add_l1, add_l2, role) values(?,?,?,?,?,?,?,?)";
 		try
 		{
 			conn = dataSource.getConnection();
@@ -131,18 +264,32 @@ public class UserDAOImpl implements UserDAO {
 			ps.setString(6, userInfo.getAddress1());
 			ps.setString(7, userInfo.getAddress2());
 			if(userInfo.getRole().equalsIgnoreCase(EXTERNAL_USER)){
-			ps.setString(8, "ROLE_U");
+				ps.setString(8, "ROLE_U");
 			}else if(userInfo.getRole().equalsIgnoreCase(MERCHANT)){
 				ps.setString(8, "ROLE_M");
 			}
 			ps.executeUpdate();
 		}
+		catch (SQLIntegrityConstraintViolationException e) {
+
+		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);
- 
+
+		}finally {
+			if (conn != null) {
+				try {
+					conn.close();
+
+				} catch (SQLException e) {}
+			}
 		}
+
+	}
+	private Long insertToAccountsTable(UserInfo userInfo, Useraccounts account) {
+		// TODO Auto-generated method stub
 		Long uniqueAccountNumber = getUniqueAccountNumber();
-		sql = "insert into tbl_accounts(account_id, user_name, type, balance, account_open_date) values(?,?,?,?,?)";
+		String sql = "insert into tbl_accounts(account_id, user_name, type, balance, account_open_date) values(?,?,?,?,?)";
 		try
 		{
 			conn = dataSource.getConnection();
@@ -156,21 +303,36 @@ public class UserDAOImpl implements UserDAO {
 		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);
- 
+
 		} finally {
 			if (conn != null) {
 				try {
 					conn.close();
-					
+
 				} catch (SQLException e) {}
 			}
 		}
 		return uniqueAccountNumber;
 	}
-	
+	public UserInfo getExternalUser(String username) {
+		String sql = "select * from tbl_external_users where user_name= ?";
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		List<UserInfo> user = jdbcTemplate.query(sql, new Object[] { username },
+				new UserRowMapper());
+		if(user.size()==0) return null;
+		return user.get(0);
+	}
+	public UserInfo getInternalUser(String username) {
+		String sql = "select * from tbl_internal_users where user_name= ?";
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		List<UserInfo> user = jdbcTemplate.query(sql, new Object[] { username },
+				new UserRowMapper());
+		if(user.size()==0) return null;
+		return user.get(0);
+	}
 	private Long getUniqueAccountNumber() {
-		 SimpleDateFormat simpleDateFormat =
-		            new SimpleDateFormat("MMddkkmmss");
+		SimpleDateFormat simpleDateFormat =
+				new SimpleDateFormat("MMddkkmmss");
 		String dateAsString = simpleDateFormat.format(new java.sql.Timestamp(getTodaysDate().getTime()));
 		return Long.valueOf(dateAsString).longValue();
 	}
@@ -179,24 +341,4 @@ public class UserDAOImpl implements UserDAO {
 		java.util.Date today = new java.util.Date();
 		return  new java.sql.Timestamp(today.getTime());
 	}
-
-	@Override
-	public String findUserRoleType(String username) {
-		SimpleDateFormat simpleDateFormat =
-	            new SimpleDateFormat("MMddkkmmss");	
-		return  simpleDateFormat.format(getTodaysDate());
-	}
-
-	@Override
-	public void updateUserInfo(UserInfo userInfo) {
-		
-		
-	}
-
-	@Override
-	public void deleteUserInfo(UserInfo userInfo) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

@@ -43,14 +43,11 @@
 	<bean id="transactionDAO" class="com.bankapp.dao.TransactionDAOImpl"/>
 	<bean id="transactionService" class="com.bankapp.services.TransactionServiceImpl"/>
 	<bean id="transaction" class="com.bankapp.model.Transaction"/>
-	
-
 
 	<bean id="userDAO" class="com.bankapp.dao.UserDAOImpl" />
 	<bean id="userService" class="com.bankapp.services.UserServiceImpl" />
 	<bean id="userValidator" class="com.bankapp.services.UserValidator"></bean>
 	<!-- web.servlet.view.ResourceBundleViewResolver -->
-
 	
 	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<property name="basename" value="classpath:message"></property>

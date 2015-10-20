@@ -33,16 +33,13 @@ public class UserValidator implements Validator {
 			arg1.rejectValue("lastName", "UserInfo.lastName");
 		}
 					
-		if(password !=null && !password.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$"))
+		if(password !=null && !password.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,10}$"))
 		{
+			System.out.println("cmg here");
 			arg1.rejectValue("password", "UserInfo.password");
 			 
 		}
 			
-		if(username!=null && !username.matches("^[a-z0-9_-]{3,16}$"))
-		{
-			arg1.rejectValue("userName", "UserInfo.userName");
-		}
 		if(username!=null && !username.matches("^[a-z0-9_-]{3,16}$"))
 		{
 			arg1.rejectValue("userName", "UserInfo.userName");

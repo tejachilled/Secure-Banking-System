@@ -154,5 +154,18 @@ public class UserInfo {
 	public void setSsn(String ssn) {
 		this.ssn = ssn;
 	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("UserInfo [userName=").append(userName).append(", password=").append(password)
+				.append(", firstName=").append(firstName).append(", lastName=").append(lastName).append(", emaiID=")
+				.append(emaiID).append(", phoneNumber=").append(phoneNumber).append(", address1=").append(address1)
+				.append(", address2=").append(address2).append(", role=").append(role).append(", ssn=").append(ssn)
+				.append("]");
+		return builder.toString();
+	}
 	
 }

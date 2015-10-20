@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Controller
 public class HomeController {
 	
-	@Autowired 
+	@Autowired  
 	UserService userService;
 
 	@RequestMapping(value="/intHome")
@@ -50,13 +50,13 @@ public class HomeController {
 	 
 	 @RequestMapping("/getList")
 	 public ModelAndView getUserLIst() {
-	  List<UserInfo> userList = userService.getUserList();
+	  List<UserInfo> userList = userService.getExternalUserList();
 	  return new ModelAndView("userList", "userList", userList);
 	 }
 	 
 	 @RequestMapping("/governmentUser")
 	 public ModelAndView getGovernmentRequests() {
-	  List<UserInfo> userList = userService.getUserList();
+	  List<UserInfo> userList = userService.getExternalUserList();
 	  return new ModelAndView("userList", "userList", userList);
 	 }
 

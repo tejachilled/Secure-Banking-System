@@ -21,20 +21,31 @@
 		<div class="panel panel-default">
 			<div class="panel-body">
 
-				<c:if test="${not empty accno }">
-					<div style="width: 40%;">
-						<div class="alert alert-dismissable alert-success">
-							<strong>Your account no ${accno} </strong>
-						</div>
-
-					</div>
-				</c:if>
 
 				<form:form class="form-horizontal"
 					action="/RichirichBank/addExtUser" method="post"
 					commandName="extUser" name="f">
 
+
 					<fieldset>
+					
+					<c:if test="${not empty accno }">
+							<div style="width: 40%;">
+								<div class="alert alert-dismissable alert-success">
+									<strong>Your account no ${accno} </strong>
+								</div>
+
+							</div>
+						</c:if>
+
+						<c:if test="${not empty exception}">
+							<div style="width: 40%;">
+								<div class="alert alert-dismissable alert-danger">
+									<strong> ${exception}</strong>
+								</div>
+							</div>
+						</c:if>
+					
 						<legend>New Account</legend>
 						<div class="form-group">
 							<label class="col-lg-2 control-label">Firstname</label>
@@ -143,7 +154,7 @@
 							</div>
 						</c:if>
 
-
+						
 
 						<div class="form-group">
 							<div class="col-lg-10 col-lg-offset-2">
