@@ -37,7 +37,7 @@ public class MerchantController {
 	}
 	
 	@RequestMapping(value="/transactionHistoryM",method=RequestMethod.GET)
-	public ModelAndView transactionHistoryM(@ModelAttribute("transactionHistory") Transaction merchTransaction){
+	public ModelAndView transactionHistoryM(){
 		ModelAndView model = new ModelAndView();
 		//TODO:- hard-coded as of now
 		Integer accountId= 654321;

@@ -6,20 +6,24 @@
 <html>
 
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Transaction History</title>
-<style>
-table {
-	width: 100%;
-}
+	<link href="<c:url value="/resources/css/theme.css"/>" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript"
+		src="<c:url value="/resources/js/bootstrap.js"/>"></script>
+	<title>Transaction History</title>
+	<style>
+	table {
+		width: 100%;
+	}
 
-td {
-	border: 1px black solid;
-	padding: 10px;
-}
-</style>
+	td {
+		border: 1px black solid;
+		padding: 10px;
+	}
+	</style>
 </head>
 <body>
+	<jsp:include page="headExt.jsp"></jsp:include>
 	<table>
 			<tr>
 				<td><b>CUSTOMER ACCOUNT NUMBER</b></td>
