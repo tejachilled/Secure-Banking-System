@@ -106,15 +106,5 @@ public class HomeController {
 
 		return model;
 	}
-	
-	/**
-	 * 
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value="/merchHome")
-	public String mercHomePage(ModelMap model)
-	{
-		return "merchHome";
-	}
+
 }
