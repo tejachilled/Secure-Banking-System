@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
  
 /*
+ * Usage : Set the file name using setFilePah() and then invoke the controller
  * Reference : http://www.codejava.net/frameworks/spring/spring-mvc-sample-application-for-downloading-files
  */
 
