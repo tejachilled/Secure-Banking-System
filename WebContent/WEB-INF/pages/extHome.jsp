@@ -25,11 +25,13 @@
 			class="btn btn-default">Review Transactions Request</a>
 	</sec:authorize>
 	<sec:authorize access="hasRole('ROLE_M')">
-		<a href="/RichirichBank/viewMyProfile" class="btn btn-default">View</a>
-		<a href="/RichirichBank/requestEdit" class="btn btn-default">Edit
-			Request</a> <a href="/RichirichBank/transactionHistoryM"
-			class="btn btn-default">Review Transactions Request</a>
+		<a href="/RichirichBank/newMerchantRequest" class="btn btn-default">Initiate Credit-Debit Request</a>
+		<a href="/RichirichBank/merchTransactionHistory"
+			class="btn btn-default">View Transaction History</a>
 	</sec:authorize>
 	</div>
+		<c:if test="${not empty merchantTxnMsg}">
+   			<c:out value="${merchantTxnMsg}"/>
+		</c:if>
 </body>
 </html>

@@ -58,6 +58,10 @@
 	<bean id="userDAO" class="com.bankapp.dao.UserDAOImpl" />
 	<bean id="userService" class="com.bankapp.services.UserServiceImpl" />
 	<bean id="userValidator" class="com.bankapp.services.UserValidator"></bean>
+	
+	<bean id="merchantDAO" class="com.bankapp.dao.MerchantDAOImpl" />
+	<bean id="merchantService" class="com.bankapp.services.MerchantServiceImpl" />
+
 	<!-- web.servlet.view.ResourceBundleViewResolver -->
 
 	<bean id="messageSource"
