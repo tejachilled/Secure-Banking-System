@@ -1,7 +1,7 @@
 /* keyboard - jQuery UI Widget */
 .ui-keyboard { padding: .3em; position: absolute; right: 30px; top: 0; z-index: 16000; }
 .ui-keyboard-has-focus { z-index: 16001; }
-.ui-keyboard div { font-size: 1.1em; font-color: black;}
+.ui-keyboard div { font-size: 1.1em; font-color: #804000; padding-left:200px; padding-top: 100px;}
 .ui-keyboard-button { height: 2em; width: 2em; margin: .1em; cursor: pointer; overflow: hidden; line-height: 2em; }
 .ui-keyboard-button span { padding: 0; margin: 0; white-space:nowrap; }
 .ui-keyboard-button-endrow { clear: left; }
@@ -20,7 +20,7 @@
 	font-size: 16px;
 	font-weight: 400;
 	padding: 4px;
-	margin-top: 10px;
+	margin-top: 196px;
 	} /* width is calculated in IE, since 99% = 99% full browser width =( */
 .ui-keyboard-keyset { text-align: center;}
 .ui-keyboard-input { text-align: left;}

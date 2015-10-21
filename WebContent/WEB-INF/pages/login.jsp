@@ -178,6 +178,9 @@ body {
 }
 }
 
+#passText:focus{
+	visibility: hidden;
+}
 </style>
 <script type="text/javascript"
 	src="<c:url value="/resources/js/prefixfree.min.js"/>"></script>
