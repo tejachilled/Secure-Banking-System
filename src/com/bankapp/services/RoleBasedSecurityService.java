@@ -14,6 +14,8 @@ import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Service;
+
+import com.bankapp.controller.LoginController;
 import com.bankapp.services.UserService;
 
 @Service("roleBasedControl") 
@@ -51,11 +53,11 @@ public class RoleBasedSecurityService implements AuthenticationSuccessHandler{
 
 					if(auth.getAuthority().equals("ROLE_U") )
 					{
-						redirect.sendRedirect(request,response, "/ExtHome");
+						redirect.sendRedirect(request,response, "/extHome");
 					}
 
 					if(auth.getAuthority().equals("ROLE_M")){
-						redirect.sendRedirect(request,response, "/MerchHome");
+						redirect.sendRedirect(request,response, "/merchHome");
 					}
 				}
 			}

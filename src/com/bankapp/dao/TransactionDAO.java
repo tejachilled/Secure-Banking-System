@@ -6,6 +6,7 @@ package com.bankapp.dao;
 import java.util.List;
 
 import com.bankapp.model.Transaction;
+import com.bankapp.model.Useraccounts;
 
 /**
  * @author manikandan_eshwar
@@ -33,6 +34,12 @@ public interface TransactionDAO {
 		public Boolean approveTransaction(Transaction transaction);
 		
 		
-		public Boolean insertNewTransaction(Transaction transaction);
+		public Boolean insertNewTransaction(Transaction transaction, Useraccounts userAccounts);
+		
+		public Useraccounts getUserAccountsInfoByUserName(String UserName);
+		
+		public Boolean updateBalance(Useraccounts userAccounts);
+		
+		public void deleteTransaction(Transaction transaction);
 		
 }

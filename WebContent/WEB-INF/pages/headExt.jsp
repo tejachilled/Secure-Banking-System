@@ -20,7 +20,8 @@
 				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="#">Welcome</a>
+			<a class="navbar-brand" href="#">Welcome <sec:authentication
+					property="name" /></a>
 		</div>
 		<div class="navbar-collapse collapse navbar-inverse-collapse">
 			<ul class="nav navbar-nav">
@@ -28,8 +29,8 @@
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Fund Management <b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li><a href="/RichirichBank/Deposit">Debit</a></li>
-						<li><a href="/RichirichBank/Withdraw">Credit</a></li>
+						<li><a href="/RichirichBank/Debit">Debit</a></li>
+						<li><a href="/RichirichBank/Credit">Credit</a></li>
 						<li><a href="/RichirichBank/Transfer">Transfer</a></li>
 						<sec:authorize access="hasRole('ROLE_U')">
 							<li><a href="paymentsFromMerchant">Payments from

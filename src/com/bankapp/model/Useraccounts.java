@@ -6,9 +6,12 @@ package com.bankapp.model;
 
 import java.util.Date;
 
+import org.springframework.context.annotation.Scope;
+
+@Scope("sessions")
 public class Useraccounts {
 
-	private Integer accountno;
+	private long accountno;
 	private String username;
 	private Date accountopendate;
 	private double balance;
@@ -31,11 +34,11 @@ public class Useraccounts {
 	}
 
 
-	public Integer getAccountno() {
+	public long getAccountno() {
 		return this.accountno;
 	}
 
-	public void setAccountno(Integer accountno) {
+	public void setAccountno(long accountno) {
 		this.accountno = accountno;
 	}
 

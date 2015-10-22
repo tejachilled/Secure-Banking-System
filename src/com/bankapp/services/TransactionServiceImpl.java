@@ -3,7 +3,12 @@ package com.bankapp.services;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.bankapp.dao.TransactionDAO;
 import com.bankapp.model.Transaction;
+import com.bankapp.model.UserInfo;
+import com.bankapp.model.Useraccounts;
 
 /**
  * @author manikandan_eshwar
@@ -11,12 +16,8 @@ import com.bankapp.model.Transaction;
  */
 public class TransactionServiceImpl implements TransactionService {
 
-	/**
-	 * 
-	 */
-	public TransactionServiceImpl() {
-		// TODO Auto-generated constructor stub
-	}
+	@Autowired
+	TransactionDAO transactionDAO;
 
 	/* (non-Javadoc)
 	 * @see com.bankapp.services.TransactionService#getPendingTransactionsForRE()
@@ -77,9 +78,27 @@ public class TransactionServiceImpl implements TransactionService {
 	 * @see com.bankapp.services.TransactionService#insertNewTransaction(com.bankapp.bean.Transaction)
 	 */
 	@Override
-	public Boolean insertNewTransaction(Transaction transaction) {
-		// TODO Auto-generated method stub
-		return null;
+	public Boolean insertNewTransaction(Transaction transaction, Useraccounts userAccounts) {
+		return transactionDAO.insertNewTransaction(transaction, userAccounts);
 	}
+
+	@Override
+	public Useraccounts getUserAccountsInfoByUserName(String UserName) {
+		//returns the Useraccounts object based on the username
+		return transactionDAO.getUserAccountsInfoByUserName(UserName);
+	}
+
+	@Override
+	public Boolean updateBalance(Useraccounts userAccounts) {
+		// TODO Auto-generated method stub
+		return transactionDAO.updateBalance(userAccounts);
+	}
+
+	@Override
+	public void deleteTransaction(Transaction transaction) {
+		transactionDAO.deleteTransaction(transaction);
+		
+	}
+
 
 }

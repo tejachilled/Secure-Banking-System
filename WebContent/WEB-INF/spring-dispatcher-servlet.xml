@@ -54,6 +54,9 @@
 	<bean id="transactionDAO" class="com.bankapp.dao.TransactionDAOImpl" />
 	<bean id="transactionService" class="com.bankapp.services.TransactionServiceImpl" />
 	<bean id="transaction" class="com.bankapp.model.Transaction" />
+	<bean id="transfer" class="com.bankapp.model.Transfer"/>
+	<bean id="userAccounts" class="com.bankapp.model.Useraccounts"/>
+	<bean id="userAccountsExtractor" class="com.bankapp.jdbc.UseraccountsExtracter"/>
 
 	<bean id="userDAO" class="com.bankapp.dao.UserDAOImpl" />
 	<bean id="userService" class="com.bankapp.services.UserServiceImpl" />

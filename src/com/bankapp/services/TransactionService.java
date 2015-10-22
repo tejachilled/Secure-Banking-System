@@ -5,11 +5,16 @@ package com.bankapp.services;
 
 import java.util.List;
 
+
+
+
 /**
  * @author manikandan_eshwar
  *
  */
 import com.bankapp.model.Transaction;
+import com.bankapp.model.UserInfo;
+import com.bankapp.model.Useraccounts;
 
 public interface TransactionService {
     
@@ -32,7 +37,11 @@ public interface TransactionService {
 	public Boolean approveTransaction(Transaction transaction);
 	
 	
-	public Boolean insertNewTransaction(Transaction transaction);
+	public Boolean insertNewTransaction(Transaction transaction, Useraccounts userAccounts);
 	
+	public Useraccounts getUserAccountsInfoByUserName(String UserName);
 	
+	public Boolean updateBalance(Useraccounts userAccounts);
+	
+	public void deleteTransaction(Transaction transaction);
 }

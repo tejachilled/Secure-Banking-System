@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.bankapp.model.Transaction;
 import com.bankapp.model.UserInfo;
 import com.bankapp.services.UserService;
 
@@ -35,11 +36,6 @@ public class HomeController {
 		return "adminHome";
 	}
 	
-	@RequestMapping(value="/extHome")
-	public String exthomePage(ModelMap model)
-	{
-		return "extHome";
-	}
 
 	 @RequestMapping("/insert")
 	 public String inserData(@ModelAttribute("user") UserInfo user) {
@@ -106,5 +102,15 @@ public class HomeController {
 
 		return model;
 	}
-
+	
+	/**
+	 * 
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value="/merchHome")
+	public String mercHomePage(ModelMap model)
+	{
+		return "merchHome";
+	}
 }

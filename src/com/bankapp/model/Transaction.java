@@ -1,30 +1,32 @@
 package com.bankapp.model;
 
+import java.util.Date;
+
 /**
 * @author manikandan_eshwar
 *
 */
 public class Transaction {
 
-	private long transactionID;
+	private String transactionID;
 	private long accountId;
 	private String type;
 	private Double amount;
 	private String isCritical;
-	private String dateInitiated;
-	private String dataApproved;
+	private Date dateInitiated;
+	private Date dataApproved;
 	private String remark;
 	
 	/**
 	 * @return the transactionID
 	 */
-	public long getTransactionID() {
+	public String getTransactionID() {
 		return transactionID;
 	}
 	/**
 	 * @param transactionID the transactionID to set
 	 */
-	public void setTransactionID(long transactionID) {
+	public void setTransactionID(String transactionID) {
 		this.transactionID = transactionID;
 	}
 	/**
@@ -55,25 +57,25 @@ public class Transaction {
 	/**
 	 * @return the dateInitiated
 	 */
-	public String getDateInitiated() {
+	public Date getDateInitiated() {
 		return dateInitiated;
 	}
 	/**
 	 * @param dateInitiated the dateInitiated to set
 	 */
-	public void setDateInitiated(String dateInitiated) {
+	public void setDateInitiated(Date dateInitiated) {
 		this.dateInitiated = dateInitiated;
 	}
 	/**
 	 * @return the dataApproved
 	 */
-	public String getDataApproved() {
+	public Date getDataApproved() {
 		return dataApproved;
 	}
 	/**
 	 * @param dataApproved the dataApproved to set
 	 */
-	public void setDataApproved(String dataApproved) {
+	public void setDataApproved(Date dataApproved) {
 		this.dataApproved = dataApproved;
 	}
 	/**

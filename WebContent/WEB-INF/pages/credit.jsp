@@ -27,13 +27,20 @@
 		<div class="navbar-collapse collapse navbar-inverse-collapse">
 			<ul class="nav navbar-nav">
 				<li class="active"><a href="extHome">Home</a></li>
-			</ul>		
+				<li class="dropdown"><a href="#" class="dropdown-toggle"
+					data-toggle="dropdown">Fund Management <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><a href="/RichirichBank/Debit">Debit</a></li>
+						<li><a href="/RichirichBank/Credit">Credit</a></li>
+						<li><a href="/RichirichBank/Transfer">Transfer</a></li>
+			</ul>	</li>
+			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="/logout">Logout</a></li>
+				<li><a href="/RichirichBank/logout">Logout</a></li>
 			</ul>
 		</div>
 	</div>
-				<form:form action="credit" class="form-horizontal"
+				<form:form action="/RichirichBank/initiateCredit" class="form-horizontal"
 				method="post" commandName="credit" name="credit" ModelAttribute="credit">
 				<fieldset>
 					<legend>${errorMessage}</legend>
@@ -41,7 +48,7 @@
 					<div class="form-group">
 						<label for="amtInvolved" class="col-lg-2 control-label">Amount to Credit</label>
 						<div class="col-lg-10">
-							<form:input path="amtInvolved" />	
+							<form:input path="amount" />	
 						</div>
 					</div>
 					<div class="form-group">
@@ -51,6 +58,11 @@
 						</div>
 					</div>
 				</fieldset>
+				<input type="hidden" name="${_csrf.parameterName}"
+			value="${_csrf.token}" />
 			</form:form>
+			<c:if test="${not empty msg}">
+   			<c:out value="${msg}"/>
+		</c:if>
 </body>
 </html>

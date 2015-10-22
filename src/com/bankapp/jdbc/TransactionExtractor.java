@@ -21,12 +21,12 @@ public class TransactionExtractor implements ResultSetExtractor<Transaction>{
 	public Transaction extractData(ResultSet rs) throws SQLException,
 			DataAccessException {
 		Transaction trans = new Transaction();
-		trans.setTransactionID(rs.getLong(1));
+		trans.setTransactionID(rs.getString(1));
 		trans.setAccountId(rs.getLong(2));
 		trans.setType(rs.getString(3));
 		trans.setIsCritical(rs.getString(4));
-		trans.setDateInitiated(rs.getString(5));
-		trans.setDataApproved(rs.getString(6));
+		trans.setDateInitiated(rs.getDate(5));
+		trans.setDataApproved(rs.getDate(6));
 		return trans;
 	}
 
