@@ -135,25 +135,24 @@ public class InternalUserController {
 			}
 			else
 			{
+				UserInfo ui = userService.getUserInfobyUserName(userInfo.getUserName());
 				//validate if reasonable request and username exists
-				if(userService.getUserInfobyUserName(userInfo.getUserName())==null)
+				if(ui==null)
 				{
 					model.addAttribute("usernameerror","Specified username does not exist");
 					return "viewEmpProfile";
 				}
 				else
 				{
-					UserInfo ui = userService.getUserInfobyUserName(userInfo.getUserName());
-					//check if the user is an external user
-					String ur = userService.getUserRoleType(ui.getUserName());
-					if(ur.equals("ROLE_EMPLOYEE"))
+
+					if(ui.getUserName().equals("ROLE_U") || ui.getUserName().equals("ROLE_M"))
 					{
 						model.addAttribute("accessInfo", ui);
 						return "viewEmpProfile";
 					}
 					else
 					{
-						model.addAttribute("usernameerror", "Not a valid employee");
+						model.addAttribute("usernameerror", "Not a valid customer");
 						return "viewEmpProfile";
 					}
 				}

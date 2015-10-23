@@ -19,6 +19,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.util.SystemPropertyUtils;
 
 import com.bankapp.jdbc.UserRowMapper;
+import com.bankapp.jdbc.UseraccountsRowMapper;
 import com.bankapp.model.UserInfo;
 import com.bankapp.model.Useraccounts;
 import com.bankapp.userexceptions.CustomException;
@@ -55,6 +56,8 @@ public class UserDAOImpl implements UserDAO {
 		userList = jdbcTemplate.query(sql, new UserRowMapper());
 		return userList;
 	}
+	
+
 
 
 	@Override
@@ -89,7 +92,6 @@ public class UserDAOImpl implements UserDAO {
 		}
 
 		if(user!=null && ( user.getRole().equalsIgnoreCase(INTERNAL_USER))){
-			sql = "select * from tbl_internal_users where user_name= ?";
 			user = getInternalUser(user.getUserName());
 			user.setPassword(password);
 		}else if(user!=null && (user.getRole().equalsIgnoreCase(EXTERNAL_USER) 
@@ -221,6 +223,13 @@ public class UserDAOImpl implements UserDAO {
 		// TODO Auto-generated method stub
 
 	}
+	@Override
+	public UserInfo getUserAndAccuntInfobyUserName(String userName) {
+		UserInfo userInfo = getExternalUser(userName);
+		List<Useraccounts> userAccounts= getAccountsInfobyUserName(userName);
+		userInfo.setAccount(userAccounts);
+		return userInfo;
+	}
 
 	private int insertToLoginTable(UserInfo userInfo){
 
@@ -341,4 +350,14 @@ public class UserDAOImpl implements UserDAO {
 		java.util.Date today = new java.util.Date();
 		return  new java.sql.Timestamp(today.getTime());
 	}
+	public List<Useraccounts> getAccountsInfobyUserName(String userName) {
+		List<Useraccounts> userAccounts = new ArrayList<>();
+
+		String sql = "select * from tbl_accounts where user_name = ?";
+
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		userAccounts = jdbcTemplate.query(sql, new Object[] { userName }, new UseraccountsRowMapper());
+		return userAccounts;
+	}
+
 }

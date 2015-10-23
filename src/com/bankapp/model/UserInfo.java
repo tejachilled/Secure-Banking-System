@@ -1,5 +1,7 @@
 package com.bankapp.model;
 
+import java.util.List;
+
 /**
  * @author ravi
  *
@@ -15,6 +17,7 @@ public class UserInfo {
 	private String address2;
 	private String role;
 	private String ssn;
+	private List<Useraccounts> account;
 	
 	public UserInfo(){
 		
@@ -160,6 +163,18 @@ public class UserInfo {
 				.append(", address2=").append(address2).append(", role=").append(role).append(", ssn=").append(ssn)
 				.append("]");
 		return builder.toString();
+	}
+	/**
+	 * @return the account
+	 */
+	public List<Useraccounts> getAccount() {
+		return account;
+	}
+	/**
+	 * @param account the account to set
+	 */
+	public void setAccount(List<Useraccounts> account) {
+		this.account = account;
 	}
 	
 }

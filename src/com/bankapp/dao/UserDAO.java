@@ -23,4 +23,5 @@ public interface UserDAO {
 	public String findUserRoleType(String username);
 	public void updateUserInfo(UserInfo userInfo);
 	public void deleteUserInfo(UserInfo userInfo);
+	public UserInfo getUserAndAccuntInfobyUserName(String userName);
 }

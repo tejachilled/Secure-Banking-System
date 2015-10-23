@@ -34,20 +34,12 @@
 			<div class="panel-body">${accessInfo.firstname}</div>
 		</div>
 		<div class="panel panel-default">
-			<div class="panel-heading">Middle Name</div>
-			<div class="panel-body">${accessInfo.middlename}</div>
-		</div>
-		<div class="panel panel-default">
 			<div class="panel-heading">Last Name</div>
 			<div class="panel-body">${accessInfo.lastname}</div>
 		</div>
 		<div class="panel panel-default">
 			<div class="panel-heading">User Name</div>
 			<div class="panel-body">${accessInfo.username}</div>
-		</div>
-		<div class="panel panel-default">
-			<div class="panel-heading">Identification ID</div>
-			<div class="panel-body">${accessInfo.identificationid}</div>
 		</div>
 		<div class="panel panel-default">
 			<div class="panel-heading">Email ID</div>

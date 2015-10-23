@@ -19,4 +19,5 @@ public interface UserService {
 	public UserInfo getUserInfobyUserName(String userName);
 	public void updateUserInfo(UserInfo ui);
 	public void deleteUserInfo(UserInfo ui);
+	public UserInfo getUserAndAccuntInfobyUserName(String userName);
 }

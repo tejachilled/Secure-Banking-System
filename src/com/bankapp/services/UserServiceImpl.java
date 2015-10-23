@@ -80,4 +80,10 @@ public class UserServiceImpl implements UserService {
 	{   
 		userdao.deleteUserInfo(userInfo);
 	}
+
+	@Override
+	public UserInfo getUserAndAccuntInfobyUserName(String userName) {
+		// TODO Auto-generated method stub
+		return userdao.getUserAndAccuntInfobyUserName(userName);
+	}
 }
