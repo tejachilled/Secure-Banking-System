@@ -16,7 +16,7 @@
 	<form:form class="form-horizontal" commandName="accessInfo"
 		method="post" action="/RichirichBank/EditEmpProfile">
 		<fieldset>
-			<legend>Enter User Credentials to Edit Account Details</legend>
+			<legend>Enter User name to Edit Account Details</legend>
 			<div>
 				<div class="col-lg-10">
 					<form:input path="userName" class="form-control" id="usernameid"
@@ -32,9 +32,15 @@
 		</fieldset>
 	</form:form>
 	<div>
-		<h4>Please note that only the Address information, Phone number and email id is editable</h4>
+		<h4>Please note that only the Address information, Phone number
+			and email id is editable</h4>
 		<form:form commandName="accessInfo"
 			action="/RichirichBank/EditEmpProfile" method="post">
+			
+			<div class="panel panel-default">
+				<div class="panel-heading">User Name</div>
+				<form:input path="userName" readonly="true" />
+			</div>
 			<div class="panel panel-default">
 				<div class="panel-heading">First Name</div>
 				<form:input path="firstName" readonly="true" />
@@ -43,10 +49,7 @@
 				<div class="panel-heading">Last Name</div>
 				<form:input path="lastName" readonly="true" />
 			</div>
-			<div class="panel panel-default">
-				<div class="panel-heading">User Name</div>
-				<form:input path="userName" readonly="true" />
-			</div>
+
 			<div class="panel panel-default">
 				<div class="panel-heading">Modified Email ID</div>
 				<form:input path="emaiID" />

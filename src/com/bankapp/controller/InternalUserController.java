@@ -77,39 +77,12 @@ public class InternalUserController {
 		} catch (UserNameExists exception) {
 			model.addAttribute("exception", exception.getMessage());
 		}
-		UUID uniqueToken =UUID.randomUUID();
-		//	pkiService.generateKeyPairAndToken(UserInfo.getUserName(),uniqueToken.toString());
-		//emailService.sendEmailWithAttachment(UserInfo.getEmaiID(),UserInfo.getUserName(),decodedPwd,uniqueToken.toString());
 
 		return "addExternalUserAccount";
 	}
 
 
-	@Transactional
-	@RequestMapping(value="/addInternalUserAccount",method=RequestMethod.POST)
-	public String addInternalUser(ModelMap model, @ModelAttribute ("extUser") @Validated UserInfo UserInfo, BindingResult result, SessionStatus status, HttpServletRequest request, HttpServletResponse response,ServletRequest servletRequest) throws Exception
-	{
-		String role=request.getParameter("role").toString();
-		userValidator.validate(UserInfo, result);
-
-		if(result.hasErrors())
-		{
-			System.out.println("error");
-			return "addInternalUserAccount";
-		}
-		System.out.println(UserInfo.getFirstName());
-		String decodedPwd = emailService.generatePassword();
-		UserInfo.setPassword(encoder.encode(decodedPwd));
-		//	UserInfo.setEnable(false);
-
-
-		UUID uniqueToken =UUID.randomUUID();
-		//	pkiService.generateKeyPairAndToken(UserInfo.getUserName(),uniqueToken.toString());
-		emailService.sendEmailWithAttachment(UserInfo.getEmaiID(),UserInfo.getUserName(),decodedPwd,uniqueToken.toString());
-
-		return "addInternalUserAccount";
-
-	}
+	
 
 	// Manager functionalities
 	@RequestMapping(value="/ViewEmpProfile",method=RequestMethod.GET)
@@ -223,7 +196,7 @@ public class InternalUserController {
 					UserInfo ui = userService.getUserInfobyUserName(UserInfo.getUserName());
 					//check if the user is an external user
 					String ur = userService.getUserRoleType(ui.getUserName());
-					if(ur.equals("ROLE_EMPLOYEE"))
+					if(ur.equals("ROLE_U") || ur.equals("ROLE_M"))
 					{
 						model.addAttribute("accessInfo", ui);
 						return "editEmpProfile";
@@ -307,13 +280,7 @@ public class InternalUserController {
 
 
 	}
-	// Admin functionalities
-	@RequestMapping(value="/ViewInternalEmpProfile",method=RequestMethod.GET)
-	public String viewInternalEmpProfile(Model model)
-	{
-		model.addAttribute("accessInfo", new UserInfo());
-		return "viewInternalEmpProfile";
-	}
+	
 
 
 

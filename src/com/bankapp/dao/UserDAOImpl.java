@@ -56,9 +56,6 @@ public class UserDAOImpl implements UserDAO {
 		userList = jdbcTemplate.query(sql, new UserRowMapper());
 		return userList;
 	}
-	
-
-
 
 	@Override
 	public UserInfo findUserByUsername(String username) {
@@ -146,6 +143,66 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 
+	@Override
+	public String findUserRoleType(String username) {
+		SimpleDateFormat simpleDateFormat =
+				new SimpleDateFormat("MMddkkmmss");	
+		return  simpleDateFormat.format(getTodaysDate());
+	}
+
+	@Override
+	public void updateUserInfo(UserInfo userInfo) {
+
+		String sql = "UPDATE tbl_external_users SET user_name = ? "
+				                  + " WHERE email_id = ? and phone_number = ? and add_l1 = ? and add_l2 = ?";
+		PreparedStatement preparedStatement = null;
+
+		try {
+			conn = dataSource.getConnection();
+			preparedStatement= conn.prepareStatement(sql);
+
+			preparedStatement.setString(1, userInfo.getUserName());
+			preparedStatement.setString(2, userInfo.getEmaiID());
+			preparedStatement.setLong(3, userInfo.getPhoneNumber());
+			preparedStatement.setString(4, userInfo.getAddress1());
+			preparedStatement.setString(5, userInfo.getAddress2());
+			// execute update SQL stetement
+			preparedStatement.executeUpdate();
+
+			System.out.println("Record is updated to DBUSER table!");
+			preparedStatement.close();
+		} catch (SQLException e) {
+
+			System.out.println(e.getMessage());
+
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+		}
+
+
+	}
+
+	@Override
+	public void deleteUserInfo(UserInfo userInfo) {
+		// TODO Auto-generated method stub
+
+	}
+	@Override
+	public UserInfo getUserAndAccuntInfobyUserName(String userName) {
+		UserInfo userInfo = getExternalUser(userName);
+		List<Useraccounts> userAccounts= getAccountsInfobyUserName(userName);
+		userInfo.setAccount(userAccounts);
+		return userInfo;
+	}
+
 
 
 	private String getAccountType(String userName) throws SQLException, UserAccountExist {
@@ -204,31 +261,6 @@ public class UserDAOImpl implements UserDAO {
 		}
 		System.out.println("user1 == user2 ? "+ flag);
 		return flag;
-	}
-	@Override
-	public String findUserRoleType(String username) {
-		SimpleDateFormat simpleDateFormat =
-				new SimpleDateFormat("MMddkkmmss");	
-		return  simpleDateFormat.format(getTodaysDate());
-	}
-
-	@Override
-	public void updateUserInfo(UserInfo userInfo) {
-
-
-	}
-
-	@Override
-	public void deleteUserInfo(UserInfo userInfo) {
-		// TODO Auto-generated method stub
-
-	}
-	@Override
-	public UserInfo getUserAndAccuntInfobyUserName(String userName) {
-		UserInfo userInfo = getExternalUser(userName);
-		List<Useraccounts> userAccounts= getAccountsInfobyUserName(userName);
-		userInfo.setAccount(userAccounts);
-		return userInfo;
 	}
 
 	private int insertToLoginTable(UserInfo userInfo){
@@ -358,5 +390,6 @@ public class UserDAOImpl implements UserDAO {
 		userAccounts = jdbcTemplate.query(sql, new Object[] { userName }, new UseraccountsRowMapper());
 		return userAccounts;
 	}
+
 
 }
