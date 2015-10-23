@@ -56,7 +56,7 @@ public class LogRecords {
 		try {
 			java.util.Date date= new java.util.Date();
 			String timeStamp = new Timestamp(date.getTime()).toString();
-			fw.write(System.lineSeparator());
+			//fw.write(System.lineSeparator());
 			fw.write(String.format("[%s] <%s %s> logged in", timeStamp,usertype, username));
 			fw.close();
 			System.out.println("log file closed");
@@ -76,7 +76,7 @@ public class LogRecords {
 		try {
 			java.util.Date date= new java.util.Date();
 			String timeStamp = new Timestamp(date.getTime()).toString();
-			fw.write(System.lineSeparator());
+			//fw.write(System.lineSeparator());
 			fw.write(String.format("[%s] <%s %s> logged out", timeStamp,usertype, username));
 			fw.close();
 			System.out.println("log file closed");
@@ -96,7 +96,7 @@ public class LogRecords {
 		try {
 			java.util.Date date= new java.util.Date();
 			String timeStamp = new Timestamp(date.getTime()).toString();
-			fw.write(System.lineSeparator());
+			//fw.write(System.lineSeparator());
 			fw.write(String.format("[%s] <%s %s> created <%s %s>", timeStamp,usertype, username, createdusertype, createdUsername));
 			fw.close();
 			System.out.println("log file closed");
@@ -116,7 +116,7 @@ public class LogRecords {
 		try {
 			java.util.Date date= new java.util.Date();
 			String timeStamp = new Timestamp(date.getTime()).toString();
-			fw.write(System.lineSeparator());
+			//fw.write(System.lineSeparator());
 			fw.write(String.format("[%s] <%s %s> modified <%s %s>", timeStamp,usertype, username, modifiedUsertype, modifiedUsername));
 			fw.close();
 			System.out.println("log file closed");
@@ -136,7 +136,7 @@ public class LogRecords {
 		try {
 			java.util.Date date= new java.util.Date();
 			String timeStamp = new Timestamp(date.getTime()).toString();
-			fw.write(System.lineSeparator());
+			//fw.write(System.lineSeparator());
 			fw.write(String.format("[%s] <%s %s> deleted <%s %s>", timeStamp,usertype, username, deletedUsertype, deletedUsername));
 			fw.close();
 			System.out.println("log file closed");
@@ -157,7 +157,7 @@ public class LogRecords {
 		try {
 			java.util.Date date= new java.util.Date();
 			String timeStamp = new Timestamp(date.getTime()).toString();
-			fw.write(System.lineSeparator());
+			//fw.write(System.lineSeparator());
 			fw.write(String.format("[%s] <%s %s> created transaction <%s> (%s)", timeStamp,usertype, username, transactionNo, describtion));
 			fw.close();
 			System.out.println("log file closed");
@@ -178,7 +178,7 @@ public class LogRecords {
 		try {
 			java.util.Date date= new java.util.Date();
 			String timeStamp = new Timestamp(date.getTime()).toString();
-			fw.write(System.lineSeparator());
+			//fw.write(System.lineSeparator());
 			fw.write(String.format("[%s] <%s %s> modified transaction # <%s> (%s)", timeStamp,usertype, username, transactionNo, describtion));
 			fw.close();
 			System.out.println("log file closed");
@@ -198,7 +198,7 @@ public class LogRecords {
 		try {
 			java.util.Date date= new java.util.Date();
 			String timeStamp = new Timestamp(date.getTime()).toString();
-			fw.write(System.lineSeparator());
+			//fw.write(System.lineSeparator());
 			fw.write(String.format("[%s] <%s %s> deleted transaction # <%s> (%s)", timeStamp,usertype, username, transactionNo, describtion));
 			fw.close();
 			System.out.println("log file closed");
@@ -219,7 +219,7 @@ public class LogRecords {
 		try {
 			java.util.Date date= new java.util.Date();
 			String timeStamp = new Timestamp(date.getTime()).toString();
-			fw.write(System.lineSeparator());
+			//fw.write(System.lineSeparator());
 			fw.write(String.format("[%s] <%s %s> approved transaction # <%s> (%s)", timeStamp,usertype, username, transactionNo, describtion));
 			fw.close();
 			System.out.println("log file closed");
@@ -239,7 +239,7 @@ public class LogRecords {
 		try {
 			java.util.Date date= new java.util.Date();
 			String timeStamp = new Timestamp(date.getTime()).toString();
-			fw.write(System.lineSeparator());
+			//fw.write(System.lineSeparator());
 			fw.write(String.format("[%s] <%s %s> sent authorization request # <%s> (%s)", timeStamp,usertype, username, autoNo, describtion));
 			fw.close();
 			System.out.println("log file closed");
@@ -259,7 +259,7 @@ public class LogRecords {
 		try {
 			java.util.Date date= new java.util.Date();
 			String timeStamp = new Timestamp(date.getTime()).toString();
-			fw.write(System.lineSeparator());
+			//fw.write(System.lineSeparator());
 			fw.write(String.format("[%s] <%s %s> pocessed authorization request # <%s> (%s)", timeStamp,usertype, username, autoNo, describtion));
 			fw.close();
 			System.out.println("log file closed");
@@ -279,7 +279,7 @@ public class LogRecords {
 		try {
 			java.util.Date date= new java.util.Date();
 			String timeStamp = new Timestamp(date.getTime()).toString();
-			fw.write(System.lineSeparator());
+			//fw.write(System.lineSeparator());
 			fw.write(String.format("[%s] <%s %s> resetted his/her password ", timeStamp,usertype,username));
 			fw.close();
 			System.out.println("log file closed");
