@@ -293,7 +293,6 @@ public class UserDAOImpl implements UserDAO {
 				} catch (SQLException e) {}
 			}
 		}
-
 	}
 	private Long insertToAccountsTable(UserInfo userInfo, Useraccounts account) {
 		// TODO Auto-generated method stub

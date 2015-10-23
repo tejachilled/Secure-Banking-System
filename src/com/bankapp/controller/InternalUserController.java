@@ -64,8 +64,8 @@ public class InternalUserController {
 			return "addExternalUserAccount";
 		}
 		System.out.println(UserInfo.getFirstName());
-		String decodedPwd = emailService.generatePassword();
-		UserInfo.setPassword(encoder.encode(decodedPwd));
+		//String decodedPwd = emailService.generatePassword();
+		UserInfo.setPassword(encoder.encode(UserInfo.getPassword()));
 		Long accno= 0L ;
 		try{
 			accno=userService.addNewExternalUuser(UserInfo,role,accountType);

@@ -67,7 +67,7 @@
 							class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<sec:authorize access="hasRole('ROLE_SA')">
-								<li><a href="/RichirichBank/addInternalUserAccount">Add
+								<li><a href="/RichirichBank/registerInternalUser">Add
 										a new internal account</a></li>
 							</sec:authorize>
 							<sec:authorize access="hasRole('ROLE_SA')">
