@@ -9,8 +9,8 @@
 	height: 15px;
 	background: transparent;
 	background-color: #FFBABA;
-	border: 1px solid rgba(255, 255, 255, 0.6);
-	border-radius: 3px;
+	border: 2px solid rgba(255, 255, 255, 0.6);
+	border-radius: 1px;
 	color: #D8000C;
 	font-family: 'Exo', sans-serif;
 	font-size: 16px;
@@ -19,7 +19,7 @@
 }
 
 .msg {
-	padding: 15px;
+	padding: 30px;
 	margin-bottom: 20px;
 	border: 5px solid transparent;
 	border-radius: 4px;
@@ -175,14 +175,39 @@ body {
 }
 }
 </style>
+<!-- Bootstrap Core CSS -->
+<link href="<c:url value="/resources/css/bootstrap.min.css"/>"
+	rel="stylesheet">
+<!-- Custom CSS -->
+<link href="<c:url value="/resources/css/grayscale.css"/>"
+	rel="stylesheet">
 <script type="text/javascript"
 	src="<c:url value="/resources/js/prefixfree.min.js"/>"></script>
 <link href="<c:url value="/resources/css/keyboard.css"/>"
 	rel="stylesheet">
+
 </head>
-<body onload='document.loginForm.username.focus();'>
- 
-	<form name='loginForm' action="<c:url value='/login' />" method='POST'>
+<script type="text/javascript"
+	src="<c:url value="/resources/js/jquery.js"/>"></script>
+<script>
+jQuery(document).ready(function(){
+	$("#password").keydown(false);
+});
+</script>
+<script>
+	document.onmousedown = disableclick;
+	status = "Right Click Disabled";
+	function disableclick(event) {
+		if (event.button == 2) {
+			alert(status);
+			return false;
+		}
+	}
+</script>
+<body>
+
+	<form name='loginForm' action="<c:url value='/login' />" method='POST'
+		autocomplete="off">
 
 		<div class="body"></div>
 		<div class="grad"></div>
@@ -200,17 +225,25 @@ body {
 		<div class="login">
 
 			<c:if test="${not empty error}">
-				<div class="error">${error }</div>
+				<input type="search" name="error" class="error" value="${error }">
+				<br>
 			</c:if>
-			<input type="text" name="username" placeholder="Username" required><br>
-			<input type="password" name="password" id="password"
-				class="form-control keyboardInput" placeholder="Password" required><br>
-			<input name="submit" type="submit" value="submit" />
+			<input type="text" name="username" placeholder="Username" required
+				autofocus /><br> <input type="password" name="password"
+				id="password" class="form-control keyboardInput"
+				placeholder="Password" required /><br> <input name="submit"
+				type="submit" value="submit" />
 		</div>
-		<script
-			src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
 		<script type="text/javascript"
 			src="<c:url value="/resources/js/keyboard.js"/>"></script>
+		<script
+			src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
+		<!-- Bootstrap Core JavaScript -->
+		<script type="text/javascript"
+			src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
+
 		<!-- Plugin JavaScript -->
 		<script type="text/javascript"
 			src="<c:url value="/resources/js/jquery.easing.min.js"/>"></script>
