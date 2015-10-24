@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bankapp.dao.MerchantDAOImpl;
 import com.bankapp.model.Transaction;
+import com.bankapp.model.Useraccounts;
 
 /**
  * @author sunny
@@ -30,8 +31,11 @@ public class MerchantServiceImpl implements MerchantService {
 	}
 
 	@Override
-	public boolean insertNewTransaction(Long accountId, Double amount, String remark, String type) {
+	public boolean insertNewTransaction(Long accountId, Double amount, String remark, String type, String userName) {
+		
+		Useraccounts userAccounts=null;
 		try{
+			userAccounts = getUserAccountsInfoByUserName(userName);
 			transaction.setAccountId(accountId);
 			transaction.setAmount(amount);
 			transaction.setRemark(remark);
@@ -42,12 +46,18 @@ public class MerchantServiceImpl implements MerchantService {
 			//do logging
 			return false;
 		}
-		return merchantDAO.insertNewTransaction(transaction);
+		return merchantDAO.insertNewTransaction(transaction, userAccounts);
 	}
 
 	@Override
-	public List<Transaction> getTransactionHistory(Long accountId) {
-		return merchantDAO.getTransactionHistory(accountId);
+	public List<Transaction> getTransactionHistory(String userName) {
+		return merchantDAO.getTransactionHistory(userName);
+	}
+
+	@Override
+	public Useraccounts getUserAccountsInfoByUserName(String UserName) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

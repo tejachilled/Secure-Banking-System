@@ -39,10 +39,10 @@
 						<td>${merchTransactionHistory.accountId}</td>
 						<td>${merchTransactionHistory.amount}</td>
 						
-						<c:if test="${merchTransactionHistory.type eq 'c'}">
+						<c:if test="${merchTransactionHistory.type eq 'C'}">
 							<td>Credit</td>
 						</c:if>
-						<c:if test="${merchTransactionHistory.type eq 'd'}">
+						<c:if test="${merchTransactionHistory.type eq 'D'}">
 							<td>Debit</td>
 						</c:if>
 						<td>${merchTransactionHistory.remark}</td>
