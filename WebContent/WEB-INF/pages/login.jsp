@@ -16,12 +16,10 @@
 	font-size: 16px;
 	font-weight: 200;
 	padding: 6px;
-
-
 }
 
 .msg {
-		padding: 15px;
+	padding: 15px;
 	margin-bottom: 20px;
 	border: 5px solid transparent;
 	border-radius: 4px;
@@ -179,6 +177,8 @@ body {
 </style>
 <script type="text/javascript"
 	src="<c:url value="/resources/js/prefixfree.min.js"/>"></script>
+<link href="<c:url value="/resources/css/keyboard.css"/>"
+	rel="stylesheet">
 </head>
 <body onload='document.loginForm.username.focus();'>
 
@@ -190,28 +190,30 @@ body {
 			<div>
 				<span>Sun</span>Devil<span>Bank</span>
 			</div>
-		
+
 		</div>
-		
+
 		<c:if test="${not empty msg}">
 			<div class="msg">${msg}</div>
 		</c:if>
 
 		<div class="login">
-			
-		<c:if test="${not empty error}">
-			<div class="error">${error }</div>
-		</c:if>
-			<input type="text" name="username"><br> <input
-				type="password" name="password"><br> <input
-				name="submit" type="submit" value="submit" />
+
+			<c:if test="${not empty error}">
+				<div class="error">${error }</div>
+			</c:if>
+			<input type="text" name="username" placeholder="Username" required><br>
+			<input type="password" name="password" id="password"
+				class="form-control keyboardInput" placeholder="Password" required><br>
+			<input name="submit" type="submit" value="submit" />
 		</div>
 		<script
 			src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-
-		<h1>RichieRich Bank</h1>
-
-
+		<script type="text/javascript"
+			src="<c:url value="/resources/js/keyboard.js"/>"></script>
+		<!-- Plugin JavaScript -->
+		<script type="text/javascript"
+			src="<c:url value="/resources/js/jquery.easing.min.js"/>"></script>
 
 		<input type="hidden" name="${_csrf.parameterName}"
 			value="${_csrf.token}" />
