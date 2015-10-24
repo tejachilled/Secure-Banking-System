@@ -3,6 +3,7 @@
 <html>
 <head>
 <title>Login Page</title>
+<link href="<c:url value="/resources/css/theme.css"/>" rel="stylesheet">
 <style>
 .error {
 	width: 200px;
@@ -16,8 +17,6 @@
 	font-size: 16px;
 	font-weight: 200;
 	padding: 6px;
-
-
 }
 
 .msg {
@@ -176,9 +175,11 @@ body {
 	color: rgba(255, 255, 255, 0.6);
 }
 }
+
 </style>
 <script type="text/javascript"
 	src="<c:url value="/resources/js/prefixfree.min.js"/>"></script>
+<link href="<c:url value="/resources/css/keyboard.css"/>" rel="stylesheet">
 </head>
 <body onload='document.loginForm.username.focus();'>
 
@@ -203,21 +204,24 @@ body {
 			<div class="error">${error }</div>
 		</c:if>
 			<input type="text" name="username"><br> <input
-				type="password" name="password"><br> <input
+				type="password" id="passText" name="password" ><br> <input
 				name="submit" type="submit" value="submit" />
 		</div>
 		<script
 			src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.js"></script>
+		<script type="text/javascript"
+	src="<c:url value="/resources/js/jquery.keyboard.js"/>"></script>
 		<h1>RichiRich Bank</h1>
-
-
-
 		<input type="hidden" name="${_csrf.parameterName}"
 			value="${_csrf.token}" />
 
 	</form>
-
+<script>
+$( document ).ready(function() {
+    $("#passText").keyboard();
+});
+</script>
 
 </body>
 </html>
