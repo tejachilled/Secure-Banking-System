@@ -181,7 +181,7 @@ body {
 	rel="stylesheet">
 </head>
 <body onload='document.loginForm.username.focus();'>
-
+ 
 	<form name='loginForm' action="<c:url value='/login' />" method='POST'>
 
 		<div class="body"></div>
