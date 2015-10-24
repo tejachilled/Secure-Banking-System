@@ -1,3 +1,4 @@
+
 /**
  * 
  */
@@ -21,12 +22,15 @@ public class TransactionExtractor implements ResultSetExtractor<Transaction>{
 	public Transaction extractData(ResultSet rs) throws SQLException,
 			DataAccessException {
 		Transaction trans = new Transaction();
-		trans.setTransactionID(rs.getString(1));
-		trans.setAccountId(rs.getLong(2));
-		trans.setType(rs.getString(3));
-		trans.setIsCritical(rs.getString(4));
-		trans.setDateInitiated(rs.getDate(5));
-		trans.setDataApproved(rs.getDate(6));
+		trans.setTransactionID(rs.getString("transaction_id"));
+		trans.setAccountId(rs.getLong("account_id"));
+		trans.setType(rs.getString("transaction_type"));
+		trans.setIsCritical(rs.getString("isCritical"));
+		trans.setAmount(rs.getDouble("amount"));
+	    if(rs.getDate("date_of_transaction_initiation")!=null)
+		trans.setDateInitiated(rs.getDate("date_of_transaction_initiation"));
+	    if(rs.getDate("date_of_transaction_approval")!=null)
+		trans.setDataApproved(rs.getDate("date_of_transaction_approval"));
 		return trans;
 	}
 

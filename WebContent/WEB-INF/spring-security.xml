@@ -25,12 +25,20 @@
 		<intercept-url pattern="/ViewEmpProfile" access="hasRole('ROLE_SM')" />
 		<intercept-url pattern="/EditEmpProfile" access="hasRole('ROLE_SM')" />
 		<intercept-url pattern="/intHome" access="hasAnyRole('ROLE_SM','ROLE_RE')" />
+		<intercept-url pattern="/pendingTransactionsRE" access="hasRole('ROLE_RE')" />
+		<intercept-url pattern="/approveTransactionsRE" access="hasRole('ROLE_RE')" />
+		<intercept-url pattern="/pendingTransactionsSM" access="hasRole('ROLE_SM')" />
+		<intercept-url pattern="/approveTransactionsSM" access="hasRole('ROLE_SM')" />
 		<intercept-url pattern="/register" access="hasRole('ROLE_SM')" />
 		<intercept-url pattern="/addExtUser" access="hasRole('ROLE_SM')" />
  
 		<!-- User and Merchant Pages -->
 		<intercept-url pattern="/extHome" access="hasRole('ROLE_U')" />
-		<intercept-url pattern="/merchHome" access="hasRole('ROLE_M')"/>
+		<intercept-url pattern="/Credit" access="hasAnyRole('ROLE_U','ROLE_M')" />
+		<intercept-url pattern="/Debit" access="hasAnyRole('ROLE_U','ROLE_M')" />
+		<intercept-url pattern="/initiateCredit" access="hasAnyRole('ROLE_U','ROLE_M')" />
+		<intercept-url pattern="/initiateDebit" access="hasAnyRole('ROLE_U','ROLE_M')" />
+		<intercept-url pattern="/merchHome" access="hasAnyRole('ROLE_M')"/>
 		
 
 		<form-login login-page="/login" authentication-failure-url="/loginFailed"

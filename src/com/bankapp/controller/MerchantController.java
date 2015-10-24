@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -29,7 +30,7 @@ public class MerchantController {
 	@Autowired
 	MerchantServiceImpl merchantService;
 	
-	@RequestMapping("/MerchHome")
+	@RequestMapping("/merchHome")
 	public String externalCustomer(Model model,HttpSession session, HttpServletRequest request)
 	{
 		return "extHome";
@@ -44,20 +45,12 @@ public class MerchantController {
 	public ModelAndView merchTransactionHistory(){
 		ModelAndView model = new ModelAndView();
 		//TODO:- hard-coded as of now
-		Long accountId= 654321L;//TODO:- somehow get this
-		
-		/*Transaction transaction= new Transaction();
-		transaction.setAccountId(accountId);
-		transaction.setAmount(Double.valueOf(10000));
-		transaction.setRemark("debit for Ipad purchase");
-		transaction.setType("d");
-		List<Transaction> listTransaction = new ArrayList<>();
-		listTransaction.add(transaction);
-		*/
-		if(accountId==null){
-			System.out.println("account is null. requires logger");
+		String merchantUserName= SecurityContextHolder.getContext().getAuthentication().getName();
+		if(merchantUserName==null){
+			System.out.println("username is null. requires logger");
 		} else{
-			List<Transaction> listTransaction= merchantService.getTransactionHistory(accountId);
+			merchantUserName= "mani";
+			List<Transaction> listTransaction= merchantService.getTransactionHistory(merchantUserName);
 			model.addObject("TransactionList", listTransaction);
 		}
 		model.setViewName("merchTransactionHistory");
@@ -71,7 +64,7 @@ public class MerchantController {
 		ModelAndView modelView = new ModelAndView();
 		String remark= request.getParameter("remark");
 		String type="D";//by default
-
+		
 		Long accountId;
 		Double amountVal;
 		try{
@@ -90,7 +83,8 @@ public class MerchantController {
 	            }
 	        }
 			
-		merchantService.insertNewTransaction(accountId, amountVal, remark, type);
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();	
+		merchantService.insertNewTransaction(accountId, amountVal, remark, type, userName);
 		modelView.addObject("merchantTxnMsg", "Credit/Debit Transaction not Initiated");
 			
 		} else{
