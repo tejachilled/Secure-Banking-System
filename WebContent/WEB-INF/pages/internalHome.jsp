@@ -20,7 +20,12 @@
   	<a href="/EditExtProfile" class="btn btn-default">Edit</a>
 	<a href="/UserAccountManagementActivity" class="btn btn-default">Review Transactions</a>
 	<a href="/ExtUserRequests" class="btn btn-default">External User Requests</a>
-	<a href="/AuthorizeTransactions" class="btn btn-default">Authorize Transactions</a>
+	<sec:authorize access="hasRole('ROLE_RE')">
+	<a href="/RichirichBank/pendingTransactionsRE" class="btn btn-default">Authorize Transactions </a>
+	</sec:authorize>
+	<sec:authorize access="hasRole('ROLE_SM')">
+	<a href="/RichirichBank/pendingTransactionsSM" class="btn btn-default">Authorize Transactions (Critical)</a>
+	</sec:authorize>
 	<a href="/ExtUserProfileViewReq" class="btn btn-default">Profile View Request</a>
  </div>
 </body>

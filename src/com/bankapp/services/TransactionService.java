@@ -34,7 +34,7 @@ public interface TransactionService {
 	public List<Transaction> downloadTransactionHistory(String accountId, String startDate, String endDate);
 	
 	//to approve the transaction
-	public Boolean approveTransaction(Transaction transaction);
+	public Boolean approveTransactions(String[] tIdList, String approvedBy, String Status);
 	
 	
 	public Boolean insertNewTransaction(Transaction transaction, Useraccounts userAccounts);
