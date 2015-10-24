@@ -1,4 +1,5 @@
 
+
 package com.bankapp.services;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public List<Transaction> getPendingTransactionsForRE() {
 		// TODO Auto-generated method stub
-		return null;
+		return transactionDAO.getPendingTransactionsForRE();
 	}
 
 	/* (non-Javadoc)
@@ -34,7 +35,7 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public List<Transaction> getPendingTransactionsForSM() {
 		// TODO Auto-generated method stub
-		return null;
+		return transactionDAO.getPendingTransactionsForSM();
 	}
 
 	/* (non-Javadoc)
@@ -69,9 +70,8 @@ public class TransactionServiceImpl implements TransactionService {
 	 * @see com.bankapp.services.TransactionService#approveTransaction(com.bankapp.bean.Transaction)
 	 */
 	@Override
-	public Boolean approveTransaction(Transaction transaction) {
-		// TODO Auto-generated method stub
-		return null;
+	public Boolean approveTransactions(String[] tIdList, String approvedBy, String status) {
+		return transactionDAO.approveTransactions(tIdList,approvedBy, status);
 	}
 
 	/* (non-Javadoc)

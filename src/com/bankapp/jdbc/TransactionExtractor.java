@@ -1,3 +1,4 @@
+
 /**
  * 
  */
@@ -23,12 +24,13 @@ public class TransactionExtractor implements ResultSetExtractor<Transaction>{
 		Transaction trans = new Transaction();
 		trans.setTransactionID(rs.getString("transaction_id"));
 		trans.setAccountId(rs.getLong("account_id"));
-		trans.setAmount(rs.getDouble("amount"));
 		trans.setType(rs.getString("transaction_type"));
 		trans.setIsCritical(rs.getString("isCritical"));
-		//trans.setRemark(rs.getString("remark")); //alter table
+		trans.setAmount(rs.getDouble("amount"));
+	    if(rs.getDate("date_of_transaction_initiation")!=null)
 		trans.setDateInitiated(rs.getDate("date_of_transaction_initiation"));
-		//trans.setDataApproved(rs.getDate("date_of_transaction_approval")); make value Nullable in db
+	    if(rs.getDate("date_of_transaction_approval")!=null)
+		trans.setDataApproved(rs.getDate("date_of_transaction_approval"));
 		return trans;
 	}
 

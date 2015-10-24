@@ -1,3 +1,4 @@
+
 /**
  * 
  */
@@ -31,7 +32,9 @@ public interface TransactionDAO {
 		public List<Transaction> downloadTransactionHistory(String accountId, String startDate, String endDate);
 		
 		//to approve the transaction
-		public Boolean approveTransaction(Transaction transaction);
+		public Boolean approveTransactions(String[] tId, String approvedBy, String status);
+		
+		public List<Transaction> getTransaction(String tId);
 		
 		
 		public Boolean insertNewTransaction(Transaction transaction, Useraccounts userAccounts);

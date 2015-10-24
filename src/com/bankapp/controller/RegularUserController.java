@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,7 +23,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.bankapp.model.Transaction;
 import com.bankapp.model.Transfer;
-import com.bankapp.model.UserInfo;
 import com.bankapp.model.Useraccounts;
 import com.bankapp.services.TransactionService;
 import com.bankapp.userexceptions.MinimumBalanceException;
