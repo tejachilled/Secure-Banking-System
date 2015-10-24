@@ -47,14 +47,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	//get user role type
-	@Transactional
-	public String getUserRoleType(String username)
-	{   
-		return userdao.findUserRoleType(username);
-	}
-
-	@Override
 	@Transactional
 	public UserInfo getUserInfobyUserName(String username)
 	{   
@@ -85,5 +77,11 @@ public class UserServiceImpl implements UserService {
 	public UserInfo getUserAndAccuntInfobyUserName(String userName) {
 		// TODO Auto-generated method stub
 		return userdao.getUserAndAccuntInfobyUserName(userName);
+	}
+
+	@Override
+	public String getUserRoleType(String username) {
+		// TODO Auto-generated method stub
+		return userdao.getUserRole(username);
 	}
 }

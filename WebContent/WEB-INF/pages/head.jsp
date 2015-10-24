@@ -1,3 +1,4 @@
+
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://www.springframework.org/security/tags"
@@ -40,14 +41,13 @@
 								<li><a href="/RichirichBank/register">Add a new account</a></li>
 							</sec:authorize>
 							<sec:authorize access="hasRole('ROLE_SM')">
-								<li><a href="/RichirichBank/ViewEmpProfile">View/Delete Emp</a></li>
+								<li><a href="/RichirichBank/ViewEmpProfile">View/Delete Customer</a></li>
 							</sec:authorize>
 							<sec:authorize access="hasRole('ROLE_SM')">
-								<li><a href="/RichirichBank/EditEmpProfile">Edit Emp</a></li>
+								<li><a href="/RichirichBank/EditEmpProfile">Edit Customer</a></li>
 							</sec:authorize>
 						</ul></li>
 				</sec:authorize>
-
 
 				<sec:authorize access="hasRole('ROLE_SM')">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"

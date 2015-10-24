@@ -55,7 +55,7 @@ public class InternalUserController {
 	{
 		String role=request.getParameter("role").toString();
 		String accountType  = request.getParameter("accountType").toString();
-		System.out.println("account type :"+ accountType);
+		System.out.println("submitForm: account type :"+ accountType);
 		userValidator.validate(UserInfo, result);
 
 		if(result.hasErrors())
@@ -63,7 +63,7 @@ public class InternalUserController {
 			System.out.println("error");
 			return "addExternalUserAccount";
 		}
-		System.out.println(UserInfo.getFirstName());
+		System.out.println("submitForm: first name"+UserInfo.getFirstName());
 		//String decodedPwd = emailService.generatePassword();
 		UserInfo.setPassword(encoder.encode(UserInfo.getPassword()));
 		Long accno= 0L ;
@@ -82,7 +82,7 @@ public class InternalUserController {
 	}
 
 
-	
+
 
 	// Manager functionalities
 	@RequestMapping(value="/ViewEmpProfile",method=RequestMethod.GET)
@@ -151,13 +151,31 @@ public class InternalUserController {
 	{
 		//add objects to model
 		model.addAttribute("accessInfo", UserInfo);
+		System.out.println("editEmpProfile: "+UserInfo.toString());
 		model.addAttribute("usernameerror",null);
 		model.addAttribute("addresserror",null);
+		model.addAttribute("phoneNumber",null);
+		model.addAttribute("emailid",null);
+
 		//validate input format
 		if(UserInfo.getUserName()!=null)
 		{
-			if(UserInfo.getEmaiID()!=null)
+			if(UserInfo.getFirstName()!=null)
 			{
+				if(UserInfo.getAddress1()==null || UserInfo.getAddress1().length() ==0 ){
+					model.addAttribute("addresserror","Please enter a valid address having characters numbers and #");
+					return "editEmpProfile";
+				}
+				if(UserInfo.getEmaiID()==null ){
+					model.addAttribute("emailid","Please enter a valid email id");
+					return "editEmpProfile";
+				} 
+				String phoneNumber = ""+UserInfo.getPhoneNumber();
+				if(UserInfo.getPhoneNumber()== null || !phoneNumber.matches("\\d{10}")){
+					model.addAttribute("phoneNumber","Please enter a valid 10 digit phone number");
+					return "editEmpProfile";
+				}
+				
 				UserInfo ui = userService.getUserInfobyUserName(UserInfo.getUserName()); 
 				if(ui.getAddress1()!=null){
 					if(!(ui.getAddress1()).matches("^[a-zA-Z0-9_#]*$"))
@@ -166,15 +184,25 @@ public class InternalUserController {
 						return "editEmpProfile";
 					}
 				}
-				if(UserInfo.getAddress1() != ui.getAddress1())
+				if( UserInfo.getAddress1() != ui.getAddress1())
 				{
 					ui.setAddress1(UserInfo.getAddress1());
-				}
+				} 
 				if(UserInfo.getAddress2() != ui.getAddress1())
 				{
 					ui.setAddress2(UserInfo.getAddress2());
 				}
+				if(UserInfo.getEmaiID() != ui.getEmaiID())
+				{
+					ui.setEmaiID(UserInfo.getEmaiID());
+				}
+				if( UserInfo.getPhoneNumber()!= ui.getPhoneNumber())
+				{
+					ui.setPhoneNumber(UserInfo.getPhoneNumber());
+				}
+				System.out.println("editEmpProfile: updating info with "+ui.toString());
 				userService.updateUserInfo(ui);
+				System.out.println("editEmpProfile : updated user info ");
 				model.addAttribute("accessInfo", userService.getUserInfobyUserName(UserInfo.getUserName()));
 				return "editEmpProfile";
 			}
@@ -195,15 +223,14 @@ public class InternalUserController {
 				{
 					UserInfo ui = userService.getUserInfobyUserName(UserInfo.getUserName());
 					//check if the user is an external user
-					String ur = userService.getUserRoleType(ui.getUserName());
-					if(ur.equals("ROLE_U") || ur.equals("ROLE_M"))
+					if(ui.getRole().equals("ROLE_U") || ui.getRole().equals("ROLE_M"))
 					{
 						model.addAttribute("accessInfo", ui);
 						return "editEmpProfile";
 					}
 					else
 					{
-						model.addAttribute("usernameerror", "Not a valid employee");
+						model.addAttribute("usernameerror", "Not a valid customer");
 						return "editEmpProfile";
 					}
 				}
@@ -277,10 +304,8 @@ public class InternalUserController {
 			model.addAttribute("usernameerror","Please enter the username");
 			return "deleteEmpProfile";
 		}
-
-
 	}
-	
+
 
 
 

@@ -27,7 +27,7 @@ import com.bankapp.services.UserValidator;
 public class AdminController {
 	@Autowired
 	UserService userService;
-
+ 
 	@Autowired 
 	PasswordEncoder encoder;
 
