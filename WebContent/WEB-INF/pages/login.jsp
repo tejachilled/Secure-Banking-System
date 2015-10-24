@@ -17,8 +17,6 @@
 	font-size: 16px;
 	font-weight: 200;
 	padding: 6px;
-
-
 }
 
 .msg {
@@ -178,9 +176,6 @@ body {
 }
 }
 
-#passText:focus{
-	visibility: hidden;
-}
 </style>
 <script type="text/javascript"
 	src="<c:url value="/resources/js/prefixfree.min.js"/>"></script>
@@ -209,7 +204,7 @@ body {
 			<div class="error">${error }</div>
 		</c:if>
 			<input type="text" name="username"><br> <input
-				type="password" id="passText" name="password"><br> <input
+				type="password" id="passText" name="password" ><br> <input
 				name="submit" type="submit" value="submit" />
 		</div>
 		<script
