@@ -52,7 +52,8 @@
 
 			<div class="panel panel-default">
 				<div class="panel-heading">Modified Email ID</div>
-				<form:input path="emaiID" />
+				<form:input path="emaiID" /> 
+				<label style="color: red">${emailid}</label>
 			</div>
 			<div class="panel panel-default">
 				<div class="panel-heading">Address line1</div>
@@ -62,7 +63,6 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">Address line 2</div>
 				<form:input path="address2" />
-				<label style="color: red">${addresserror}</label>
 			</div>
 			<div class="panel panel-default">
 				<div class="panel-heading">Phone Number</div>

@@ -79,5 +79,17 @@ public class Useraccounts {
 		this.accountType = accountType;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Useraccounts [accountno=").append(accountno).append(", username=").append(username)
+				.append(", accountopendate=").append(accountopendate).append(", balance=").append(balance)
+				.append(", accountType=").append(accountType).append("]");
+		return builder.toString();
+	}
+
 	
 }

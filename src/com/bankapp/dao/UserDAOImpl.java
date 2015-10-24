@@ -96,7 +96,6 @@ public class UserDAOImpl implements UserDAO {
 			user = getExternalUser(user.getUserName());
 			user.setPassword(password);
 		}
-		System.out.println(user);
 		return user;
 	}
 
@@ -142,34 +141,27 @@ public class UserDAOImpl implements UserDAO {
 		}
 	}
 
-
-	@Override
-	public String findUserRoleType(String username) {
-		SimpleDateFormat simpleDateFormat =
-				new SimpleDateFormat("MMddkkmmss");	
-		return  simpleDateFormat.format(getTodaysDate());
-	}
-
 	@Override
 	public void updateUserInfo(UserInfo userInfo) {
 
-		String sql = "UPDATE tbl_external_users SET user_name = ? "
-				                  + " WHERE email_id = ? and phone_number = ? and add_l1 = ? and add_l2 = ?";
+		String sql = "UPDATE tbl_external_users SET  email_id = ? , phone_number = ? , add_l1 = ? , add_l2 = ?"
+				                  + " WHERE user_name = ?";
 		PreparedStatement preparedStatement = null;
 
 		try {
 			conn = dataSource.getConnection();
 			preparedStatement= conn.prepareStatement(sql);
-
-			preparedStatement.setString(1, userInfo.getUserName());
-			preparedStatement.setString(2, userInfo.getEmaiID());
-			preparedStatement.setLong(3, userInfo.getPhoneNumber());
-			preparedStatement.setString(4, userInfo.getAddress1());
-			preparedStatement.setString(5, userInfo.getAddress2());
+			
+			preparedStatement.setString(5, userInfo.getUserName());
+			preparedStatement.setString(1, userInfo.getEmaiID());
+			preparedStatement.setLong(2, userInfo.getPhoneNumber());
+			preparedStatement.setString(3, userInfo.getAddress1());
+			preparedStatement.setString(4, userInfo.getAddress2());
 			// execute update SQL stetement
+			System.out.println("update statement : "+preparedStatement.toString());
 			preparedStatement.executeUpdate();
 
-			System.out.println("Record is updated to DBUSER table!");
+			System.out.println("Record is updated to External users table table!");
 			preparedStatement.close();
 		} catch (SQLException e) {
 
@@ -202,8 +194,11 @@ public class UserDAOImpl implements UserDAO {
 		userInfo.setAccount(userAccounts);
 		return userInfo;
 	}
-
-
+	@Override
+	public String getUserRole(String username) {
+		
+		return findUserByUsername(username).getRole();
+	}
 
 	private String getAccountType(String userName) throws SQLException, UserAccountExist {
 		String sql = "select * from tbl_accounts where user_name= ?";
@@ -390,6 +385,7 @@ public class UserDAOImpl implements UserDAO {
 		userAccounts = jdbcTemplate.query(sql, new Object[] { userName }, new UseraccountsRowMapper());
 		return userAccounts;
 	}
+
 
 
 }

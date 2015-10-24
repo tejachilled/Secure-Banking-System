@@ -40,14 +40,13 @@
 								<li><a href="/RichirichBank/register">Add a new account</a></li>
 							</sec:authorize>
 							<sec:authorize access="hasRole('ROLE_SM')">
-								<li><a href="/RichirichBank/ViewEmpProfile">View/Delete Emp</a></li>
+								<li><a href="/RichirichBank/ViewEmpProfile">View/Delete Customer</a></li>
 							</sec:authorize>
 							<sec:authorize access="hasRole('ROLE_SM')">
-								<li><a href="/RichirichBank/EditEmpProfile">Edit Emp</a></li>
+								<li><a href="/RichirichBank/EditEmpProfile">Edit Customer</a></li>
 							</sec:authorize>
 						</ul></li>
 				</sec:authorize>
-
 
 				<sec:authorize access="hasRole('ROLE_SM')">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"

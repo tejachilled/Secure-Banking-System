@@ -100,7 +100,7 @@ body {
 	left: calc(50% - 50px);
 	height: 150px;
 	width: 350px;
-	padding: 10px;
+	padding: 30px;
 	z-index: 2;
 }
 
@@ -188,7 +188,7 @@ body {
 		<div class="grad"></div>
 		<div class="header">
 			<div>
-				Richirich<span>Bank</span>
+				<span>Sun</span>Devil<span>Bank</span>
 			</div>
 		
 		</div>
@@ -209,7 +209,7 @@ body {
 		<script
 			src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 
-		<h1>RichiRich Bank</h1>
+		<h1>RichieRich Bank</h1>
 
 
 
