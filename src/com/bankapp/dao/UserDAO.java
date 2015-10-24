@@ -25,4 +25,5 @@ public interface UserDAO {
 	public void updateUserInfo(UserInfo userInfo);
 	public void deleteUserInfo(UserInfo userInfo);
 	public UserInfo getUserAndAccuntInfobyUserName(String userName);
+	public void updateInternalUserInfo(UserInfo userInfo);
 }

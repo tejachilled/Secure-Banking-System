@@ -22,6 +22,8 @@ public class UserValidator implements Validator {
 		String lastname=user.getLastName();
 		String password=user.getPassword();
 		String phoneNumber = ""+user.getPhoneNumber();
+		String emaiID = user.getEmaiID();
+		String address1 = user.getAddress1();
 		
 		if(firstname!= null && !firstname.matches("^[a-zA-Z]{1,12}$"))
 		{
@@ -48,6 +50,13 @@ public class UserValidator implements Validator {
 			arg1.rejectValue("phoneNumber", "UserInfo.phoneNumber");
 		}
 		
+		if (address1 != null && !address1.matches("^[a-zA-Z0-9_#]*$")) {
+			arg1.rejectValue("address1", "UserInfo.address1");
+		}
+		
+		if (emaiID != null && !emaiID.matches("^[a-zA-Z_._@]{1,20}$")) {
+			arg1.rejectValue("emaiID", "UserInfo.emaiID");
+		}
 		
 		System.out.println("in validator");
 	}

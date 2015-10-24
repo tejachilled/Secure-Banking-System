@@ -15,7 +15,7 @@
 
 		<!-- Admin Roles -->
 		<intercept-url pattern="/adminHome" access="hasRole('ROLE_SA')" />
-		<intercept-url pattern="/addInternalUserAccount" access="hasRole('ROLE_SA')" />
+		<intercept-url pattern="/addInternalUser" access="hasRole('ROLE_SA')" />
 		<intercept-url pattern="/EditInternalEmpProfile" access="hasRole('ROLE_SA')" />
 		<intercept-url pattern="/ViewInternalEmpProfile" access="hasRole('ROLE_SA')" />
 

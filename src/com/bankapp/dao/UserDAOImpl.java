@@ -181,6 +181,48 @@ public class UserDAOImpl implements UserDAO {
 
 
 	}
+	
+	@Override
+	public void updateInternalUserInfo(UserInfo userInfo) {
+
+		String sql = "UPDATE tbl_internal_users SET  email_id = ? , phone_number = ? , add_l1 = ? , add_l2 = ?"
+				                  + " WHERE user_name = ?";
+		PreparedStatement preparedStatement = null;
+
+		try {
+			conn = dataSource.getConnection();
+			preparedStatement= conn.prepareStatement(sql);
+			
+			preparedStatement.setString(5, userInfo.getUserName());
+			preparedStatement.setString(1, userInfo.getEmaiID());
+			preparedStatement.setLong(2, userInfo.getPhoneNumber());
+			preparedStatement.setString(3, userInfo.getAddress1());
+			preparedStatement.setString(4, userInfo.getAddress2());
+			// execute update SQL stetement
+			System.out.println("update statement : "+preparedStatement.toString());
+			preparedStatement.executeUpdate();
+
+			System.out.println("Record is updated to External users table table!");
+			preparedStatement.close();
+		} catch (SQLException e) {
+
+			System.out.println(e.getMessage());
+
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+		}
+
+
+	}
+
 
 	@Override
 	public void deleteUserInfo(UserInfo userInfo) {
@@ -303,6 +345,40 @@ public class UserDAOImpl implements UserDAO {
 				ps.setString(8, "ROLE_U");
 			}else if(userInfo.getRole().equalsIgnoreCase(MERCHANT)){
 				ps.setString(8, "ROLE_M");
+			}
+			ps.executeUpdate();
+		}
+		catch (SQLIntegrityConstraintViolationException e) {
+
+		}
+		catch (SQLException e) {
+			throw new RuntimeException(e);
+
+		}finally {
+			if (conn != null) {
+				try {
+					conn.close();
+
+				} catch (SQLException e) {}
+			}
+		}
+	}
+	
+	private void insertToInternalUserTable(UserInfo userInfo) {
+		String sql = "insert into tbl_internal_users(user_name, first_name, last_name, email_id, phone_number, add_l1, add_l2, role) values(?,?,?,?,?,?,?,?)";
+		try
+		{
+			conn = dataSource.getConnection();
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, userInfo.getUserName());
+			ps.setString(2, userInfo.getFirstName());
+			ps.setString(3, userInfo.getLastName());
+			ps.setString(4, userInfo.getEmaiID());
+			ps.setLong(5, userInfo.getPhoneNumber());
+			ps.setString(6, userInfo.getAddress1());
+			ps.setString(7, userInfo.getAddress2());
+			if(userInfo.getRole().equalsIgnoreCase(INTERNAL_USER)){
+				ps.setString(8, "ROLE_RE");
 			}
 			ps.executeUpdate();
 		}

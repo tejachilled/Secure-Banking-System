@@ -62,11 +62,11 @@ public class HomeController {
 		model.addAttribute("extUser", new UserInfo());
 		return "addExternalUserAccount";
 	}
-	@RequestMapping(value="/registerInternalUser")
+	@RequestMapping(value="/addInternalUser")
 	public String registerAInternalUser(ModelMap model)
 	{
-		model.addAttribute("extUser", new UserInfo());
-		return "addExternalUserAccount";
+		model.addAttribute("intUser", new UserInfo());
+		return "addInternalUser";
 	}
 	
 	@RequestMapping(value="/home")
