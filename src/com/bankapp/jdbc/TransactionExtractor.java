@@ -31,6 +31,9 @@ public class TransactionExtractor implements ResultSetExtractor<Transaction>{
 		trans.setDateInitiated(rs.getDate("date_of_transaction_initiation"));
 	    if(rs.getDate("date_of_transaction_approval")!=null)
 		trans.setDataApproved(rs.getDate("date_of_transaction_approval"));
+	    if(rs.getString("remark") !=null){
+	    	trans.setRemark(rs.getString("remark"));
+	    }
 		return trans;
 	}
 

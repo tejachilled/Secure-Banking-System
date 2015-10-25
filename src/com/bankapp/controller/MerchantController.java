@@ -44,12 +44,11 @@ public class MerchantController {
 	@RequestMapping(value="/merchTransactionHistory",method=RequestMethod.GET)
 	public ModelAndView merchTransactionHistory(){
 		ModelAndView model = new ModelAndView();
-		//TODO:- hard-coded as of now
 		String merchantUserName= SecurityContextHolder.getContext().getAuthentication().getName();
 		if(merchantUserName==null){
 			System.out.println("username is null. requires logger");
 		} else{
-			merchantUserName= "mani";
+			//merchantUserName= "mani";
 			List<Transaction> listTransaction= merchantService.getTransactionHistory(merchantUserName);
 			model.addObject("TransactionList", listTransaction);
 		}
@@ -63,7 +62,7 @@ public class MerchantController {
 	{
 		ModelAndView modelView = new ModelAndView();
 		String remark= request.getParameter("remark");
-		String type="D";//by default
+		String type="C";//by default
 		
 		Long accountId;
 		Double amountVal;
@@ -79,13 +78,19 @@ public class MerchantController {
 		if(merchantService.isAccountValid(accountId)){ //TODO:- call appropriate service
 			if(request.getParameter("radios") != null) {
 	            if(request.getParameter("radios").equals("radio2")) {
-	            	type="C";
+	            	type="D";
 	            }
 	        }
 			
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();	
-		merchantService.insertNewTransaction(accountId, amountVal, remark, type, userName);
-		modelView.addObject("merchantTxnMsg", "Credit/Debit Transaction not Initiated");
+		boolean txnStatus= merchantService.insertNewTransaction(accountId, amountVal, 
+				remark, type, userName);//try-clause
+		if(txnStatus){
+			modelView.addObject("merchantTxnMsg", "Credit/Debit Transaction Initiated");
+		} else{
+			modelView.addObject("merchantTxnMsg", "Credit/Debit Transaction not Initiated");
+		}
+		
 			
 		} else{
 			//add some error message

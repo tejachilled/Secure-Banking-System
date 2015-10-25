@@ -10,7 +10,7 @@
 	<script type="text/javascript"
 		src="<c:url value="/resources/js/bootstrap.js"/>"></script>
 <title>Insert title here</title>
-<jsp:include page="headExt.jsp"></jsp:include>
+<jsp:include page="extHome.jsp"></jsp:include>
 </head>
 <body>
 	
