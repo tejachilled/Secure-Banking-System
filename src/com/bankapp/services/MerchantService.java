@@ -19,7 +19,7 @@ public interface MerchantService {
 	 * @param accountId- check it is valid
 	 * @return
 	 */
-	public boolean isAccountValid(Long accountId);
+	public boolean isAccountValid(Long accountId, String userName);
 	
 	/*
 	 * insertNewTransaction

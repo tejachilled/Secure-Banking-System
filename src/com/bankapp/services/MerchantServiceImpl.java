@@ -29,8 +29,10 @@ public class MerchantServiceImpl implements MerchantService {
 	 * @see com.bankapp.services.MerchantService#isAccountValid(java.lang.Long)
 	 */
 	@Override
-	public boolean isAccountValid(Long accountId) {
-		return merchantDAO.getUserName(accountId)!=null;
+	public boolean isAccountValid(Long accountId, String userName) {
+		//merchant cannot put its a/c id for credit/deposit
+		String user= merchantDAO.getUserName(accountId);
+		return (user!=null && !user.equals(userName));
 	}
 
 	@Override
