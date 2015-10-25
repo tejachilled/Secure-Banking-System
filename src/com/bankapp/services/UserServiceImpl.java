@@ -47,6 +47,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public void addNewInternaluser(UserInfo userInfo, String role) throws CustomException, UserNameExists {
+		userdao.registerNewInternalUser(userInfo,role);
+	}
+
+	@Override
 	@Transactional
 	public UserInfo getUserInfobyUserName(String username)
 	{   
@@ -65,6 +70,12 @@ public class UserServiceImpl implements UserService {
 		{   
 		userdao.updateUserInfo(userInfo);
 		}
+	@Override
+	@Transactional
+	public void updateInternalUserInfo(UserInfo ui) {
+		// TODO Auto-generated method stub
+		userdao.updateInternalUserInfo(ui);
+	}
 
 	@Override
 	@Transactional
@@ -84,4 +95,26 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		return userdao.getUserRole(username);
 	}
+
+	@Override
+	public String setRole(String role) {
+		if(role.contains("SA")){
+			role = "Administrator";
+		}else if(role.contains("RE")){
+			role = "Regular employee";
+		}else if(role.contains("SM")){
+			role = "System Manager";
+		}else if(role.contains("U")){
+			role = "Customer";
+		}else if(role.contains("M")){
+			role  = "Merchant";
+		}else{
+			role =  "******";
+		}
+		System.out.println("Role to display : "+role);
+		return role;
+	}
+
+
+
 }

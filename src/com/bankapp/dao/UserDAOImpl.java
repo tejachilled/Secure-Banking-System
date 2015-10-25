@@ -98,6 +98,32 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return user;
 	}
+	@Override
+	public void registerNewInternalUser(UserInfo userInfo,String role) throws CustomException, UserNameExists {
+		/*
+		 * 1 = successfully updated
+		 * 2 = duplicate entry
+		 * 3 = some other error
+		 * */
+		try{
+			userInfo.setRole(INTERNAL_USER);
+			int val = insertToLoginTable(userInfo);
+			System.out.println("registerNewInternalUser return val : "+val);
+			switch(val){
+			case 1:{
+				userInfo.setRole(role);
+				insertToInternalUserTable(userInfo); break;
+			}
+			case 2:{
+				throw new UserNameExists("User name exists. Please choose another user name"); 
+			}
+			}
+		}catch(SQLException exp){
+			throw new CustomException(exp);
+		} catch (UserNameExists exp) {
+			throw exp;
+		}
+	}
 
 	@Override
 	public Long registerNewUserAccount(UserInfo userInfo, Useraccounts account) throws UserAccountExist, UserNameExists, CustomException {
@@ -106,9 +132,11 @@ public class UserDAOImpl implements UserDAO {
 		 * 2 = duplicate entry
 		 * 3 = some other error
 		 * */
-		int val = insertToLoginTable(userInfo);
-		System.out.println("Inser to login table value : "+val);
+		int val = 0;
+
 		try{
+			val = insertToLoginTable(userInfo);
+			System.out.println("registerNewUserAccount Insert to login table value : "+val);
 			switch(val){
 			case 1:{
 				insertToExternalUserTable(userInfo);
@@ -145,13 +173,13 @@ public class UserDAOImpl implements UserDAO {
 	public void updateUserInfo(UserInfo userInfo) {
 
 		String sql = "UPDATE tbl_external_users SET  email_id = ? , phone_number = ? , add_l1 = ? , add_l2 = ?"
-				                  + " WHERE user_name = ?";
+				+ " WHERE user_name = ?";
 		PreparedStatement preparedStatement = null;
 
 		try {
 			conn = dataSource.getConnection();
 			preparedStatement= conn.prepareStatement(sql);
-			
+
 			preparedStatement.setString(5, userInfo.getUserName());
 			preparedStatement.setString(1, userInfo.getEmaiID());
 			preparedStatement.setLong(2, userInfo.getPhoneNumber());
@@ -181,18 +209,17 @@ public class UserDAOImpl implements UserDAO {
 
 
 	}
-	
+
 	@Override
 	public void updateInternalUserInfo(UserInfo userInfo) {
 
 		String sql = "UPDATE tbl_internal_users SET  email_id = ? , phone_number = ? , add_l1 = ? , add_l2 = ?"
-				                  + " WHERE user_name = ?";
+				+ " WHERE user_name = ?";
 		PreparedStatement preparedStatement = null;
 
 		try {
 			conn = dataSource.getConnection();
 			preparedStatement= conn.prepareStatement(sql);
-			
 			preparedStatement.setString(5, userInfo.getUserName());
 			preparedStatement.setString(1, userInfo.getEmaiID());
 			preparedStatement.setLong(2, userInfo.getPhoneNumber());
@@ -201,13 +228,10 @@ public class UserDAOImpl implements UserDAO {
 			// execute update SQL stetement
 			System.out.println("update statement : "+preparedStatement.toString());
 			preparedStatement.executeUpdate();
-
-			System.out.println("Record is updated to External users table table!");
+			System.out.println("Record is updated to Internal users table table!");
 			preparedStatement.close();
 		} catch (SQLException e) {
-
 			System.out.println(e.getMessage());
-
 		} finally {
 			if (conn != null) {
 				try {
@@ -217,10 +241,7 @@ public class UserDAOImpl implements UserDAO {
 					e.printStackTrace();
 				}
 			}
-
 		}
-
-
 	}
 
 
@@ -238,9 +259,11 @@ public class UserDAOImpl implements UserDAO {
 	}
 	@Override
 	public String getUserRole(String username) {
-		
+
 		return findUserByUsername(username).getRole();
 	}
+
+
 
 	private String getAccountType(String userName) throws SQLException, UserAccountExist {
 		String sql = "select * from tbl_accounts where user_name= ?";
@@ -292,8 +315,8 @@ public class UserDAOImpl implements UserDAO {
 		System.out.println("user2 : "+user2.toString());
 		boolean flag = false;
 		if(user1.getFirstName().equalsIgnoreCase(user2.getFirstName()) && user1.getUserName().equalsIgnoreCase(user2.getUserName()) && user1.getLastName().equalsIgnoreCase(user2.getLastName()) && user1.getAddress1().equalsIgnoreCase(user2.getAddress1())
-			&& user1.getAddress2().equalsIgnoreCase(user2.getAddress2()) && user1.getEmaiID().equalsIgnoreCase(user2.getEmaiID()) && user1.getPhoneNumber().equals(user2.getPhoneNumber())
-			&& user2.getRole().equalsIgnoreCase("ROLE_"+user1.getRole())	){
+				&& user1.getAddress2().equalsIgnoreCase(user2.getAddress2()) && user1.getEmaiID().equalsIgnoreCase(user2.getEmaiID()) && user1.getPhoneNumber().equals(user2.getPhoneNumber())
+				&& user2.getRole().equalsIgnoreCase("ROLE_"+user1.getRole())	){
 			flag = true;
 		}
 		System.out.println("user1 == user2 ? "+ flag);
@@ -328,7 +351,7 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return 1;
 	}
-	private void insertToExternalUserTable(UserInfo userInfo) {
+	private void insertToExternalUserTable(UserInfo userInfo) throws  UserNameExists {
 		String sql = "insert into tbl_external_users(user_name, first_name, last_name, email_id, phone_number, add_l1, add_l2, role) values(?,?,?,?,?,?,?,?)";
 		try
 		{
@@ -349,7 +372,7 @@ public class UserDAOImpl implements UserDAO {
 			ps.executeUpdate();
 		}
 		catch (SQLIntegrityConstraintViolationException e) {
-
+			throw new UserNameExists("User name exists. Please choose another user name");
 		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -363,8 +386,8 @@ public class UserDAOImpl implements UserDAO {
 			}
 		}
 	}
-	
-	private void insertToInternalUserTable(UserInfo userInfo) {
+
+	private void insertToInternalUserTable(UserInfo userInfo) throws UserNameExists, SQLException {
 		String sql = "insert into tbl_internal_users(user_name, first_name, last_name, email_id, phone_number, add_l1, add_l2, role) values(?,?,?,?,?,?,?,?)";
 		try
 		{
@@ -377,16 +400,15 @@ public class UserDAOImpl implements UserDAO {
 			ps.setLong(5, userInfo.getPhoneNumber());
 			ps.setString(6, userInfo.getAddress1());
 			ps.setString(7, userInfo.getAddress2());
-			if(userInfo.getRole().equalsIgnoreCase(INTERNAL_USER)){
-				ps.setString(8, "ROLE_RE");
-			}
+			ps.setString(8, userInfo.getRole());
+			System.out.println("insertToInternalUserTable : "+ps.toString());
 			ps.executeUpdate();
 		}
 		catch (SQLIntegrityConstraintViolationException e) {
-
+			throw new UserNameExists("User name exists. Please choose another user name");
 		}
 		catch (SQLException e) {
-			throw new RuntimeException(e);
+			throw  e;
 
 		}finally {
 			if (conn != null) {
@@ -461,6 +483,7 @@ public class UserDAOImpl implements UserDAO {
 		userAccounts = jdbcTemplate.query(sql, new Object[] { userName }, new UseraccountsRowMapper());
 		return userAccounts;
 	}
+
 
 
 

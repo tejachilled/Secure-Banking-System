@@ -48,7 +48,13 @@ public class InternalUserController {
 		return "changePassword";
 	}
 
-
+	@RequestMapping(value="/register")
+	public String registerAUser(ModelMap model)
+	{
+		model.addAttribute("extUser", new UserInfo());
+		return "addExternalUserAccount";
+	}
+	
 	@Transactional
 	@RequestMapping(value="/addExtUser",method=RequestMethod.POST)
 	public String submitForm(ModelMap model, @ModelAttribute ("extUser") @Validated UserInfo UserInfo, BindingResult result, SessionStatus status, HttpServletRequest request, HttpServletResponse response,ServletRequest servletRequest) throws Exception
@@ -57,14 +63,13 @@ public class InternalUserController {
 		String accountType  = request.getParameter("accountType").toString();
 		System.out.println("submitForm: account type :"+ accountType);
 		userValidator.validate(UserInfo, result);
-
 		if(result.hasErrors())
 		{
 			System.out.println("error");
 			return "addExternalUserAccount";
 		}
+		
 		System.out.println("submitForm: first name"+UserInfo.getFirstName());
-		//String decodedPwd = emailService.generatePassword();
 		UserInfo.setPassword(encoder.encode(UserInfo.getPassword()));
 		Long accno= 0L ;
 		try{
@@ -95,10 +100,8 @@ public class InternalUserController {
 	@RequestMapping(value="/ViewEmpProfile",method=RequestMethod.POST)
 	public String viewEmpProfile(@ModelAttribute ("accessInfo") @Validated UserInfo userInfo, BindingResult result, SessionStatus status,Model model)
 	{
-		//add objects to model
 		model.addAttribute("accessInfo", userInfo);
 		model.addAttribute("usernameerror",null);
-		//validate input format
 		if(userInfo.getUserName()!=null)
 		{
 			if(!(userInfo.getUserName()).matches("^[a-z0-9_-]{3,16}$"))
@@ -117,7 +120,6 @@ public class InternalUserController {
 				}
 				else
 				{
-
 					if(ui.getUserName().equals("ROLE_U") || ui.getUserName().equals("ROLE_M"))
 					{
 						model.addAttribute("accessInfo", ui);
@@ -203,7 +205,10 @@ public class InternalUserController {
 				System.out.println("editEmpProfile: updating info with "+ui.toString());
 				userService.updateUserInfo(ui);
 				System.out.println("editEmpProfile : updated user info ");
-				model.addAttribute("accessInfo", userService.getUserInfobyUserName(UserInfo.getUserName()));
+				UserInfo = userService.getUserInfobyUserName(UserInfo.getUserName());
+				UserInfo.setRole(userService.setRole(UserInfo.getRole()));
+				model.addAttribute("accessInfo", UserInfo);
+				model.addAttribute("success", "Updated details successfully");
 				return "editEmpProfile";
 			}
 			if(!(UserInfo.getUserName()).matches("^[a-z0-9_-]{3,16}$"))
@@ -225,6 +230,7 @@ public class InternalUserController {
 					//check if the user is an external user
 					if(ui.getRole().equals("ROLE_U") || ui.getRole().equals("ROLE_M"))
 					{
+						ui.setRole(userService.setRole(ui.getRole()));
 						model.addAttribute("accessInfo", ui);
 						return "editEmpProfile";
 					}

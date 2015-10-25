@@ -36,7 +36,7 @@
 			and email id is editable</h4>
 		<form:form commandName="accessInfo"
 			action="/RichirichBank/EditEmpProfile" method="post">
-			
+
 			<div class="panel panel-default">
 				<div class="panel-heading">User Name</div>
 				<form:input path="userName" readonly="true" />
@@ -49,10 +49,13 @@
 				<div class="panel-heading">Last Name</div>
 				<form:input path="lastName" readonly="true" />
 			</div>
-
+			<div class="panel panel-default">
+				<div class="panel-heading">Role</div>
+				<form:input path="role" readonly="true" />
+			</div>
 			<div class="panel panel-default">
 				<div class="panel-heading">Modified Email ID</div>
-				<form:input path="emaiID" /> 
+				<form:input path="emaiID" />
 				<label style="color: red">${emailid}</label>
 			</div>
 			<div class="panel panel-default">
@@ -69,7 +72,7 @@
 				<form:input path="phoneNumber" />
 				<label style="color: red">${phoneNumber}</label>
 			</div>
-			<input type="submit" value="Update Details" />
+			<input type="submit" class="btn btn-primary" value="Update Details" />
 		</form:form>
 	</div>
 

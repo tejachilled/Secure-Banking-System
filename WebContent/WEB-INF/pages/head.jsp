@@ -63,20 +63,20 @@
 
 				<sec:authorize access="hasRole('ROLE_SA')">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown">Internal Account Management<b
+						data-toggle="dropdown">Internal Employee Management<b
 							class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<sec:authorize access="hasRole('ROLE_SA')">
 								<li><a href="/RichirichBank/addInternalUser">Add
-										a new internal account</a></li>
+										a new internal employee</a></li>
 							</sec:authorize>
 							<sec:authorize access="hasRole('ROLE_SA')">
 								<li><a href="/RichirichBank/ViewInternalEmpProfile">View
-										internal Emp</a></li>
+										internal employee</a></li>
 							</sec:authorize>
 							<sec:authorize access="hasRole('ROLE_SA')">
 								<li><a href="/RichirichBank/EditInternalEmpProfile">Edit
-										internal Emp</a></li>
+										internal employee</a></li>
 							</sec:authorize>
 						</ul></li>
 				</sec:authorize>

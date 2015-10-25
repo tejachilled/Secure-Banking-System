@@ -22,6 +22,9 @@ import org.springframework.web.bind.support.SessionStatus;
 import com.bankapp.model.UserInfo;
 import com.bankapp.services.UserService;
 import com.bankapp.services.UserValidator;
+import com.bankapp.userexceptions.CustomException;
+import com.bankapp.userexceptions.UserAccountExist;
+import com.bankapp.userexceptions.UserNameExists;
 
 @Controller
 public class AdminController {
@@ -68,7 +71,6 @@ public class AdminController {
 				}
 				else
 				{
-
 					if(ui.getUserName().equals("ROLE_RE") || ui.getUserName().equals("ROLE_SM"))
 					{
 						model.addAttribute("accessInfo", ui);
@@ -88,6 +90,13 @@ public class AdminController {
 			return "viewInternalEmpProfile";
 		}
 	}
+	@Transactional
+	@RequestMapping(value="/addInternalUser")
+	public String registerAInternalUser(ModelMap model)
+	{
+		model.addAttribute("intUser", new UserInfo());
+		return "addInternalUser";
+	}
 
 	@Transactional
 	@RequestMapping(value="/addInternalUser",method=RequestMethod.POST)
@@ -104,11 +113,14 @@ public class AdminController {
 		System.out.println(UserInfo.getFirstName());
 
 		UserInfo.setPassword(encoder.encode(UserInfo.getPassword()));
-		//	UserInfo.setEnable(false);
-
-
-		UUID uniqueToken =UUID.randomUUID();
-
+		try{
+			userService.addNewInternaluser(UserInfo,role);
+			model.addAttribute("success", "Added new user successfully!");
+		}catch(CustomException exception){
+			model.addAttribute("exception", exception.getMessage());
+		} catch (UserNameExists exception) {
+			model.addAttribute("exception", exception.getMessage());
+		}
 		return "addInternalUser";
 
 	}
@@ -176,9 +188,12 @@ public class AdminController {
 						ui.setPhoneNumber(UserInfo.getPhoneNumber());
 					}
 					System.out.println("editEmpProfile: updating info with "+ui.toString());
-					userService.updateUserInfo(ui);
+					userService.updateInternalUserInfo(ui);
 					System.out.println("editInternalEmpProfile : updated user info ");
-					model.addAttribute("accessInfo", userService.getUserInfobyUserName(UserInfo.getUserName()));
+					model.addAttribute("success", "Updated details successfully");
+					UserInfo = userService.getUserInfobyUserName(UserInfo.getUserName());
+					UserInfo.setRole(userService.setRole(UserInfo.getRole()));
+					model.addAttribute("accessInfo", UserInfo);
 					return "editInternalEmpProfile";
 				}
 				if(!(UserInfo.getUserName()).matches("^[a-z0-9_-]{3,16}$"))
@@ -197,15 +212,16 @@ public class AdminController {
 					else
 					{
 						UserInfo ui = userService.getUserInfobyUserName(UserInfo.getUserName());
-						//check if the user is an external user
+						//check if the user is an Internal user
 						if(ui.getRole().equals("ROLE_RE") || ui.getRole().equals("ROLE_SM"))
 						{
+							ui.setRole(userService.setRole(ui.getRole()));
 							model.addAttribute("accessInfo", ui);
 							return "editInternalEmpProfile";
 						}
 						else
 						{
-							model.addAttribute("usernameerror", "Not a valid customer");
+							model.addAttribute("usernameerror", "Not a valid user");
 							return "editInternalEmpProfile";
 						}
 					}

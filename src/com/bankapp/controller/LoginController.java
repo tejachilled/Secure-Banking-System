@@ -3,6 +3,7 @@ package com.bankapp.controller;
 import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,6 +53,8 @@ public class LoginController {
 	@RequestMapping(value="/logout",method=RequestMethod.GET)
 	public String logout(ModelMap model)
 	{
+		System.out.println("logout!!");
+		 SecurityContextHolder.getContext().setAuthentication(null);
 		return "login";
 	}
 	@RequestMapping(value="/loginFailed", method=RequestMethod.GET)

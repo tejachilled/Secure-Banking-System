@@ -15,10 +15,12 @@ public interface UserService {
 	public void insertData(UserInfo user);
 	public List<UserInfo> getExternalUserList(); 
 	public Long addNewExternalUuser(UserInfo userInfo,String role,String accountType) throws UserAccountExist, UserNameExists, CustomException;
-
 	public UserInfo getUserInfobyUserName(String userName);
 	public void updateUserInfo(UserInfo ui);
 	public void deleteUserInfo(UserInfo ui);
 	public UserInfo getUserAndAccuntInfobyUserName(String userName);
 	public String getUserRoleType(String username);
+	public void addNewInternaluser(UserInfo userInfo, String role) throws CustomException, UserNameExists;
+	public void updateInternalUserInfo(UserInfo ui);
+	public String setRole(String role);
 }

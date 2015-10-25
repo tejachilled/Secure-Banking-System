@@ -23,19 +23,7 @@
 				<form:form class="form-horizontal"
 					action="/RichirichBank/addInternalUser" method="post"
 					commandName="intUser" name="f">
-
-
 					<fieldset>
-					
-					<c:if test="${not empty accno }">
-							<div style="width: 40%;">
-								<div class="alert alert-dismissable alert-success">
-									<strong>Your account no ${accno} </strong>
-								</div>
-
-							</div>
-						</c:if>
-
 						<c:if test="${not empty exception}">
 							<div style="width: 40%;">
 								<div class="alert alert-dismissable alert-danger">
@@ -44,7 +32,7 @@
 							</div>
 						</c:if>
 					
-						<legend>New Account</legend>
+						<legend>New Employee</legend>
 						<div class="form-group">
 							<label class="col-lg-2 control-label">Firstname</label>
 							<div class="col-lg-10">

@@ -55,30 +55,6 @@ public class HomeController {
 	  List<UserInfo> userList = userService.getExternalUserList();
 	  return new ModelAndView("userList", "userList", userList);
 	 }
-
-	@RequestMapping(value="/register")
-	public String registerAUser(ModelMap model)
-	{
-		model.addAttribute("extUser", new UserInfo());
-		return "addExternalUserAccount";
-	}
-	@RequestMapping(value="/addInternalUser")
-	public String registerAInternalUser(ModelMap model)
-	{
-		model.addAttribute("intUser", new UserInfo());
-		return "addInternalUser";
-	}
-	
-	@RequestMapping(value="/home")
-	public String home(ModelMap model)
-	{
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		String ur = userService.getUserRoleType(username);
-		if(ur.equals("ROLE_SM")||ur.equals("ROLE_RE"))
-		   return "internalHome";
-		else 
-			return "login";
-	}
 	
 	@RequestMapping(value="/forgotpassword",method=RequestMethod.GET)
 	public String forgotPasswordClicked(Model model)

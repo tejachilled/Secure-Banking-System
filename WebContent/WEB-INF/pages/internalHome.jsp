@@ -16,6 +16,7 @@
 </head>
 <body>
 <jsp:include page="head.jsp"></jsp:include>
+<sec:authorize access="hasAnyRole('ROLE_RE','ROLE_SM')">
 <div class="btn-group btn-group-justified">
     <a href="/UserAccountManagement" class="btn btn-default">View</a>
   	<a href="/EditExtProfile" class="btn btn-default">Edit</a>
@@ -29,5 +30,6 @@
 	</sec:authorize>
 	<a href="/ExtUserProfileViewReq" class="btn btn-default">Profile View Request</a>
  </div>
+ </sec:authorize>
 </body>
 </html>
