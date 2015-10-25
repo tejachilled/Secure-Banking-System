@@ -2,6 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <html>
 
@@ -24,18 +25,24 @@ td {
 		<h1>${bank_name}</h1>
 		<h2>PII Access Information</h2>
 		<br> <br> <br>
-		<table>
-			<tr>
-				<td><b>USERNAME</b></td>
-				<td><b>SSN</b></td>
-			</tr>
-			<c:forEach var="piiAccessInfo" items="${piiAccessInfoList}">
+		<c:if test="${fn:length(piiAccessInfoList) gt 0}">
+			<table>
 				<tr>
-					<td>${piiAccessInfo.userName}</td>
-					<td>${piiAccessInfo.pii}</td>
+					<td><b>USERNAME</b></td>
+					<td><b>SSN</b></td>
 				</tr>
-			</c:forEach>
-		</table>
+				<c:forEach var="piiAccessInfo" items="${piiAccessInfoList}">
+					<tr>
+						<td>${piiAccessInfo.userName}</td>
+						<td>${piiAccessInfo.pii}</td>
+					</tr>
+				</c:forEach>
+			</table>
+		</c:if>
+
+		<c:if test="${fn:length(piiAccessInfoList) eq 0}">
+			None of your PII Access Requests have been approved yet! Please try again sometime later.
+		</c:if>
 	</div>
 </body>
 </html>

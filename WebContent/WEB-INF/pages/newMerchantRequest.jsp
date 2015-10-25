@@ -13,7 +13,6 @@
 <jsp:include page="headExt.jsp"></jsp:include>
 </head>
 <body>
-	
 
 	<form:form class="form-horizontal"	action="/RichirichBank/initiateMerchTrans" method="post"  name="f">
 
