@@ -30,43 +30,20 @@ public class MerchantDAOImpl implements MerchantDAO {
 		
 		int res = 0;
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		String approvalStatus = "A";
-		if (transaction.getAmount() >= 1000) {
-			approvalStatus = "P";
-			String sql = "Insert into tbl_transactions (transaction_id,account_id,transaction_type,isCritical,amount,date_of_transaction_initiation,internal_user_approval,initiated_by) Values(?,?,?,?,?,?,?,?)";
-			res = jdbcTemplate.update(
+		String approvalStatus = "P";
+		String sql = "Insert into tbl_transactions (transaction_id,account_id,transaction_type,isCritical,amount,date_of_transaction_initiation,internal_user_approval,initiated_by, remark) Values(?,?,?,?,?,?,?,?,?)";
+		res = jdbcTemplate.update(
 					sql,
 					new Object[] { transaction.getTransactionID(),
 							transaction.getAccountId(), transaction.getType(),
 							transaction.getIsCritical(),
 							transaction.getAmount(),
 							transaction.getDateInitiated(), approvalStatus,
-							userAccounts.getUsername() });
-		}
-		else {
-			System.out.println("Inside insert new merchant dao");
-			try {
-			String sql = "Insert into tbl_transactions (transaction_id,account_id,transaction_type,isCritical,amount,date_of_transaction_initiation,date_of_transaction_approval,internal_user_approval,initiated_by,approved_by) Values(?,?,?,?,?,?,?,?,?,?)";
-			res = jdbcTemplate.update(
-					sql,
-					new Object[] { transaction.getTransactionID(),
-							transaction.getAccountId(), transaction.getType(),
-							transaction.getIsCritical(),
-							transaction.getAmount(),
-							transaction.getDateInitiated(), transaction.getDateInitiated(),approvalStatus,
-							userAccounts.getUsername(), "Automatic" });
-			}
-			catch(Exception e) {
-				e.printStackTrace();
-			}
-			
-		}
-		if (res > 0) {
-			
-			return true;
-
-		}
-		return false;
+							userAccounts.getUsername(),
+							transaction.getRemark()});
+		
+		
+		return res >0;
 	}
 
 	@Override
@@ -97,6 +74,15 @@ public class MerchantDAOImpl implements MerchantDAO {
 			//logger
 			return null;
 		}
+	}
+
+	@Override
+	public Useraccounts getUserAccountsInfoByUserName(String userName) {
+		String sql = "SELECT * FROM tbl_accounts WHERE user_name = ?";
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		Useraccounts userAccounts = jdbcTemplate.queryForObject(sql,
+				new Object[] { userName }, new UseraccountsRowMapper());
+		return userAccounts;
 	}
 
 }

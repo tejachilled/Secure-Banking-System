@@ -27,4 +27,5 @@ public interface UserDAO {
 	public UserInfo getUserAndAccuntInfobyUserName(String userName);
 	public void updateInternalUserInfo(UserInfo userInfo);
 	public void registerNewInternalUser(UserInfo userInfo, String role) throws CustomException, UserNameExists;
+	public boolean checkAccountExists(Long accountid);
 }

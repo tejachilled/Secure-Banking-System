@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@taglib uri="http://www.springframework.org/security/tags"
+	prefix="sec"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -10,16 +12,16 @@
 	<script type="text/javascript"
 		src="<c:url value="/resources/js/bootstrap.js"/>"></script>
 <title>Insert title here</title>
-<jsp:include page="headExt.jsp"></jsp:include>
+<jsp:include page="extHome.jsp"></jsp:include>
 </head>
 <body>
 	
-
+<sec:authorize access="hasRole('ROLE_M')">
 	<form:form class="form-horizontal"	action="/RichirichBank/initiateMerchTrans" method="post"  name="f">
 
-		<div class="body"></div>
-		<div class="grad"></div>
 		<div class="header"></div>
+		<div class="grad"></div>
+		<div class="body">
 			
 			<label>Account Number</label><input type="text" name="accountnum"><br> 
 			<label>Amount</label><input type="text" name="amount"><br>
@@ -39,5 +41,6 @@
 			src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 
 	</form:form>
+	</sec:authorize>
 </body>
 </html>

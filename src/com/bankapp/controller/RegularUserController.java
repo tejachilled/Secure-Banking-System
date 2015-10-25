@@ -25,6 +25,7 @@ import com.bankapp.model.Transaction;
 import com.bankapp.model.Transfer;
 import com.bankapp.model.Useraccounts;
 import com.bankapp.services.TransactionService;
+import com.bankapp.services.UserService;
 import com.bankapp.userexceptions.MinimumBalanceException;
 import com.bankapp.userexceptions.NegativeAmountException;
 
@@ -33,6 +34,8 @@ public class RegularUserController {
 
 	@Autowired
 	TransactionService transactionService;
+	@Autowired
+	UserService userService;
 	
 	@RequestMapping("/extHome")
 	public String externalCustomer(Model model,HttpSession session, HttpServletRequest request)
@@ -54,7 +57,7 @@ public class RegularUserController {
 	
 	@RequestMapping(value="/Transfer")
 	public String transferPage(ModelMap model) {
-		model.addAttribute("transactions", new Transfer());
+		model.addAttribute("transferAmt", new Transfer());
 		return "transfer";
 	}
 	
@@ -188,4 +191,23 @@ public class RegularUserController {
 		return modelAndView;
 	}
 	
+	@Transactional
+	@RequestMapping(value="/initiateTransfer",method=RequestMethod.POST)
+	public ModelAndView submitFormTransfer(ModelMap model, @ModelAttribute("transferAmt") Transfer transfer, BindingResult result, SessionStatus status, HttpServletRequest request, HttpServletResponse response,ServletRequest servletRequest) throws Exception
+	{
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("transferAmt", new Transfer());
+		modelAndView.setViewName("transfer");
+		Long accno = transfer.getToAccountNo();
+		boolean accStatus = userService.checkAccountExists(accno);
+		if (accStatus){
+			return modelAndView;
+		}
+		else {
+			modelAndView.addObject("errorMessage", "Account Does not exist Chal Chutiye!!!");
+			return modelAndView;
+		}
+		
+	}
 }

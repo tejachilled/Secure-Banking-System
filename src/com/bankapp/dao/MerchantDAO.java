@@ -22,5 +22,7 @@ public interface MerchantDAO {
 	
 	// call tbl_accounts
 	public List<Transaction> getTransactionHistory(String userName);
+	
+	public Useraccounts getUserAccountsInfoByUserName(String UserName);
 
 }

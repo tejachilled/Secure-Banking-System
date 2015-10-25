@@ -483,6 +483,20 @@ public class UserDAOImpl implements UserDAO {
 		userAccounts = jdbcTemplate.query(sql, new Object[] { userName }, new UseraccountsRowMapper());
 		return userAccounts;
 	}
+	@Override
+	public boolean checkAccountExists(Long accountid) {
+		
+		String sql = "select count(*) from tbl_accounts where account_id = ?";
+
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		int accStatus = jdbcTemplate.queryForObject(sql, new Object[] { accountid }, Integer.class);		
+		if (accStatus == 1)
+		{
+			return true;
+		}
+		
+		return false;
+	}
 
 
 

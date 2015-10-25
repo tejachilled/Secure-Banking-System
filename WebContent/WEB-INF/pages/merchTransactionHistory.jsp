@@ -3,6 +3,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@taglib uri="http://www.springframework.org/security/tags"
+	prefix="sec"%>
 <html>
 
 <head>
@@ -11,6 +13,7 @@
 	<script type="text/javascript"
 		src="<c:url value="/resources/js/bootstrap.js"/>"></script>
 	<title>Transaction History</title>
+	<jsp:include page="extHome.jsp"></jsp:include>
 	<style>
 	table {
 		width: 100%;
@@ -23,7 +26,7 @@
 	</style>
 </head>
 <body>
-	<jsp:include page="headExt.jsp"></jsp:include>
+ <sec:authorize access="hasRole('ROLE_M')">
 	<table>
 			<tr>
 				<td><b>CUSTOMER ACCOUNT NUMBER</b></td>
@@ -51,5 +54,6 @@
 				
 			
 		</table>
+ </sec:authorize>
 </body>
 </html>

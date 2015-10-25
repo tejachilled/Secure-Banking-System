@@ -44,12 +44,11 @@ public class MerchantController {
 	@RequestMapping(value="/merchTransactionHistory",method=RequestMethod.GET)
 	public ModelAndView merchTransactionHistory(){
 		ModelAndView model = new ModelAndView();
-		//TODO:- hard-coded as of now
 		String merchantUserName= SecurityContextHolder.getContext().getAuthentication().getName();
 		if(merchantUserName==null){
 			System.out.println("username is null. requires logger");
 		} else{
-			merchantUserName= "mani";
+			//merchantUserName= "mani";
 			List<Transaction> listTransaction= merchantService.getTransactionHistory(merchantUserName);
 			model.addObject("TransactionList", listTransaction);
 		}
@@ -63,7 +62,7 @@ public class MerchantController {
 	{
 		ModelAndView modelView = new ModelAndView();
 		String remark= request.getParameter("remark");
-		String type="D";//by default
+		String type="C";//by default
 		
 		Long accountId;
 		Double amountVal;
@@ -72,24 +71,35 @@ public class MerchantController {
 			amountVal= Double.valueOf(request.getParameter("amount"));
 		} catch(NumberFormatException | NullPointerException e){
 			System.out.println("Exception "+e);
+			modelView.addObject("merchantTxnMsg", "Check Account/AmountNumber Format."
+					+ "Credit/Debit Transaction not Initiated");
 			modelView.setViewName("extHome");
 			return modelView;
 		}
 
-		if(merchantService.isAccountValid(accountId)){ //TODO:- call appropriate service
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		if(merchantService.isAccountValid(accountId, userName) && amountVal>0){ 
 			if(request.getParameter("radios") != null) {
 	            if(request.getParameter("radios").equals("radio2")) {
-	            	type="C";
+	            	type="D";
 	            }
 	        }
 			
-		String userName = SecurityContextHolder.getContext().getAuthentication().getName();	
-		merchantService.insertNewTransaction(accountId, amountVal, remark, type, userName);
-		modelView.addObject("merchantTxnMsg", "Credit/Debit Transaction not Initiated");
+			boolean txnStatus= merchantService.insertNewTransaction(accountId, amountVal, 
+				remark, type, userName);//try-clause
+			if(txnStatus){
+				modelView.addObject("merchantTxnMsg", "Credit/Debit Transaction Initiated");
+			} else{
+				modelView.addObject("merchantTxnMsg", "Credit/Debit Transaction not Initiated");
+				System.out.println("something wrong with txn values");
+			}
+		
 			
 		} else{
 			//add some error message
-			modelView.addObject("merchantTxnMsg", "Credit/Debit Transaction not Initiated");
+			modelView.addObject("merchantTxnMsg", "Account Id/Amount Value is/are not valid."
+					+ "Credit/Debit Transaction not Initiated");
 		}
 		
 		modelView.setViewName("extHome");

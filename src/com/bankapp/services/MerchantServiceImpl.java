@@ -4,10 +4,13 @@
 package com.bankapp.services;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.bankapp.dao.MerchantDAOImpl;
+import com.bankapp.jdbc.UseraccountsRowMapper;
 import com.bankapp.model.Transaction;
 import com.bankapp.model.Useraccounts;
 
@@ -26,8 +29,10 @@ public class MerchantServiceImpl implements MerchantService {
 	 * @see com.bankapp.services.MerchantService#isAccountValid(java.lang.Long)
 	 */
 	@Override
-	public boolean isAccountValid(Long accountId) {
-		return merchantDAO.getUserName(accountId)!=null;
+	public boolean isAccountValid(Long accountId, String userName) {
+		//merchant cannot put its a/c id for credit/deposit
+		String user= merchantDAO.getUserName(accountId);
+		return (user!=null && !user.equals(userName));
 	}
 
 	@Override
@@ -40,7 +45,8 @@ public class MerchantServiceImpl implements MerchantService {
 			transaction.setAmount(amount);
 			transaction.setRemark(remark);
 			transaction.setType(type);
-			//transaction.setIsCritical(isCritical);
+			transaction.setTransactionID(UUID.randomUUID().toString());
+			transaction.setIsCritical("M"); // all merch txns are critical
 		} catch(Exception e){
 			System.out.println(e);
 			//do logging
@@ -55,9 +61,8 @@ public class MerchantServiceImpl implements MerchantService {
 	}
 
 	@Override
-	public Useraccounts getUserAccountsInfoByUserName(String UserName) {
-		// TODO Auto-generated method stub
-		return null;
+	public Useraccounts getUserAccountsInfoByUserName(String userName) {
+		return merchantDAO.getUserAccountsInfoByUserName(userName);
 	}
 
 }

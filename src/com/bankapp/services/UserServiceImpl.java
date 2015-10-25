@@ -114,6 +114,9 @@ public class UserServiceImpl implements UserService {
 		System.out.println("Role to display : "+role);
 		return role;
 	}
+	public boolean checkAccountExists(Long accountid){
+		return userdao.checkAccountExists(accountid);
+	}
 
 
 
