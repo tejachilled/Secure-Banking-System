@@ -15,7 +15,6 @@
 <jsp:include page="extHome.jsp"></jsp:include>
 </head>
 <body>
-	
 <sec:authorize access="hasRole('ROLE_M')">
 	<form:form class="form-horizontal"	action="/RichirichBank/initiateMerchTrans" method="post"  name="f">
 
