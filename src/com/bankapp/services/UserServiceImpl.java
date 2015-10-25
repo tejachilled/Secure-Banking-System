@@ -84,4 +84,8 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		return userdao.getUserRole(username);
 	}
+	
+	public boolean checkAccountExists(Long accountid){
+		return userdao.checkAccountExists(accountid);
+	}
 }
