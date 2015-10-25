@@ -34,6 +34,7 @@ public class RegularUserController {
 
 	@Autowired
 	TransactionService transactionService;
+	@Autowired
 	UserService userService;
 	
 	@RequestMapping("/extHome")
@@ -198,10 +199,15 @@ public class RegularUserController {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("transferAmt", new Transfer());
 		modelAndView.setViewName("transfer");
-		System.out.println("In Transact");
-		System.out.println(transfer);
-		boolean accStatus = userService.checkAccountExists(transfer.getToAccountNo());
-		System.out.println(accStatus);
-		return modelAndView;
+		Long accno = transfer.getToAccountNo();
+		boolean accStatus = userService.checkAccountExists(accno);
+		if (accStatus){
+			return modelAndView;
+		}
+		else {
+			modelAndView.addObject("errorMessage", "Account Does not exist Chal Chutiye!!!");
+			return modelAndView;
+		}
+		
 	}
 }

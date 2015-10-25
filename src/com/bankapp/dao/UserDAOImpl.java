@@ -468,7 +468,10 @@ public class UserDAOImpl implements UserDAO {
 
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		int accStatus = jdbcTemplate.queryForObject(sql, new Object[] { accountid }, Integer.class);		
-		System.out.println(accStatus);		
+		if (accStatus == 1)
+		{
+			return true;
+		}
 		
 		return false;
 	}
