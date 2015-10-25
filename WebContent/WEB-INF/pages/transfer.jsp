@@ -39,8 +39,7 @@
 			</ul>
 		</div>
 	</div>
-	<form:form action="/RichirichBank/initiateTransfer" class="form-horizontal"
-				method="post" commandName="transactions" name="transactions" ModelAttribute="transactions">
+	<form:form action="/RichirichBank/initiateTransfer" class="form-horizontal"	method="post" commandName="transferAmt" name="transferAmt" ModelAttribute="transferAmt">
 				<fieldset>
 					<legend>${errorMessage}</legend>
 

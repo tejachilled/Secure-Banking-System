@@ -21,4 +21,5 @@ public interface UserService {
 	public void deleteUserInfo(UserInfo ui);
 	public UserInfo getUserAndAccuntInfobyUserName(String userName);
 	public String getUserRoleType(String username);
+	public boolean checkAccountExists(Long accountid);
 }

@@ -26,4 +26,5 @@ public interface UserDAO {
 	public void deleteUserInfo(UserInfo userInfo);
 	public UserInfo getUserAndAccuntInfobyUserName(String userName);
 	public void updateInternalUserInfo(UserInfo userInfo);
+	public boolean checkAccountExists(Long accountid);
 }
