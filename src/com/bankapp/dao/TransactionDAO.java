@@ -39,7 +39,7 @@ public interface TransactionDAO {
 		
 		public Boolean insertNewTransaction(Transaction transaction, Useraccounts userAccounts);
 		
-		public Useraccounts getUserAccountsInfoByUserName(String UserName);
+		public List<Useraccounts> getUserAccountsInfoByUserName(String UserName);
 		
 		public Boolean updateBalance(Useraccounts userAccounts);
 		

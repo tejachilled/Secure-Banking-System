@@ -42,10 +42,12 @@
 	<form:form action="/RichirichBank/initiateTransfer" class="form-horizontal"	method="post" commandName="transferAmt" name="transferAmt" ModelAttribute="transferAmt">
 				<fieldset>
 					<legend>${errorMessage}</legend>
-					<select> 
-						<option value="Savings">${account_savings}</option>
-						<option value="Checkings">${account_checking}</option>
-					</select>
+					<div class="form-group">
+						<form:select path="type"> 
+						<form:option value="Savings">${account_savings}</form:option>
+						<form:option value="Checkings">${account_checking}</form:option>
+						</form:select>
+					</div>
 
 					<div class="form-group">
 						<label for="toAccountno" class="col-lg-2 control-label">To Account</label>

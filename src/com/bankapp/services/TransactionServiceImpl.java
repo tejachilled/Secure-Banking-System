@@ -83,7 +83,7 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public Useraccounts getUserAccountsInfoByUserName(String UserName) {
+	public List<Useraccounts> getUserAccountsInfoByUserName(String UserName) {
 		//returns the Useraccounts object based on the username
 		return transactionDAO.getUserAccountsInfoByUserName(UserName);
 	}

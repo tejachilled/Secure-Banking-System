@@ -170,11 +170,10 @@ public class TransactionDAOImpl implements TransactionDAO {
 	}
 
 	@Override
-	public Useraccounts getUserAccountsInfoByUserName(String UserName) {
+	public List <Useraccounts> getUserAccountsInfoByUserName(String UserName) {
 		String sql = "SELECT * FROM tbl_accounts WHERE user_name = ?";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		Useraccounts userAccounts = jdbcTemplate.queryForObject(sql,
-				new Object[] { UserName }, new UseraccountsRowMapper());
+		List<Useraccounts> userAccounts = jdbcTemplate.query(sql, new Object[] { UserName }, new UseraccountsRowMapper());
 		return userAccounts;
 	}
 
