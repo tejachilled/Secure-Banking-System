@@ -48,6 +48,10 @@
 					<legend>${errorMessage}</legend>
 
 					<div class="form-group">
+						<select> 
+						<option value="${save_account}">${account_savings}</option>
+						<option value="${save_account}">${account_checking}</option>
+						</select>
 						<label for="amtInvolved" class="col-lg-2 control-label">Amount to Debit</label>
 						<div class="col-lg-10">
 							<form:input path="amount" />	
