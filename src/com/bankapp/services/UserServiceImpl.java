@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public String setRole(String role) {
+	public String setRoleToDisplayUI(String role) {
 		if(role.contains("SA")){
 			role = "Administrator";
 		}else if(role.contains("RE")){

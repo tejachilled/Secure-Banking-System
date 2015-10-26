@@ -247,8 +247,38 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public void deleteUserInfo(UserInfo userInfo) {
-		// TODO Auto-generated method stub
+		if(userInfo.getRole().contains("employee") || userInfo.getRole().contains("Manager")){
+			deleteInternalEmp(userInfo.getUserName());
+		}		
 
+	}
+	private void deleteInternalEmp(String userName) {
+		// TODO Auto-generated method stub
+		String sql = "DELETE from tbl_login"
+				+ " WHERE user_name = ?";
+		PreparedStatement preparedStatement = null;
+
+		try {
+			conn = dataSource.getConnection();
+			preparedStatement= conn.prepareStatement(sql);
+			preparedStatement.setString(1, userName);
+			// execute update SQL stetement
+			System.out.println("update statement : "+preparedStatement.toString());
+			preparedStatement.executeUpdate();
+			System.out.println("Record is deleted to Internal users table table!");
+			preparedStatement.close();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	@Override
 	public UserInfo getUserAndAccuntInfobyUserName(String userName) {

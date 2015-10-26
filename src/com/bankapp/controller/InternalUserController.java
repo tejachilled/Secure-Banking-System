@@ -206,7 +206,7 @@ public class InternalUserController {
 				userService.updateUserInfo(ui);
 				System.out.println("editEmpProfile : updated user info ");
 				UserInfo = userService.getUserInfobyUserName(UserInfo.getUserName());
-				UserInfo.setRole(userService.setRole(UserInfo.getRole()));
+				UserInfo.setRole(userService.setRoleToDisplayUI(UserInfo.getRole()));
 				model.addAttribute("accessInfo", UserInfo);
 				model.addAttribute("success", "Updated details successfully");
 				return "editEmpProfile";
@@ -230,7 +230,7 @@ public class InternalUserController {
 					//check if the user is an external user
 					if(ui.getRole().equals("ROLE_U") || ui.getRole().equals("ROLE_M"))
 					{
-						ui.setRole(userService.setRole(ui.getRole()));
+						ui.setRole(userService.setRoleToDisplayUI(ui.getRole()));
 						model.addAttribute("accessInfo", ui);
 						return "editEmpProfile";
 					}

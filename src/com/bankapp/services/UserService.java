@@ -22,6 +22,6 @@ public interface UserService {
 	public String getUserRoleType(String username);
 	public void addNewInternaluser(UserInfo userInfo, String role) throws CustomException, UserNameExists;
 	public void updateInternalUserInfo(UserInfo ui);
-	public String setRole(String role);
+	public String setRoleToDisplayUI(String role);
 	public boolean checkAccountExists(Long accountid);
 }

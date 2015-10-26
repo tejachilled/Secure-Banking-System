@@ -17,12 +17,21 @@
 		method="post" action="/RichirichBank/EditEmpProfile">
 		<fieldset>
 			<legend>Enter User name to Edit Account Details</legend>
+			<c:if test="${not empty success }">
+				<div style="width: 40%;">
+					<div class="alert alert-dismissable alert-success">
+						<strong>${success}</strong>
+					</div>
+
+				</div>
+			</c:if>
 			<div>
 				<div class="col-lg-10">
 					<form:input path="userName" class="form-control" id="usernameid"
 						placeholder="User Name" />
 					<label style="color: red">${usernameerror}</label>
 				</div>
+
 			</div>
 			<div class="form-group">
 				<div class="col-lg-10 col-lg-offset-2">

@@ -17,6 +17,14 @@ pageEncoding="ISO-8859-1"%>
 		method="post" action="/RichirichBank/EditInternalEmpProfile">
 		<fieldset>
 			<legend>Enter User name to Edit employee Details</legend>
+			<c:if test="${not empty success }">
+				<div style="width: 40%;">
+					<div class="alert alert-dismissable alert-success">
+						<strong>${success}</strong>
+					</div>
+
+				</div>
+			</c:if>
 			<div>
 				<div class="col-lg-10">
 					<form:input path="userName" class="form-control" id="usernameid"

@@ -71,7 +71,7 @@
 										a new internal employee</a></li>
 							</sec:authorize>
 							<sec:authorize access="hasRole('ROLE_SA')">
-								<li><a href="/RichirichBank/ViewInternalEmpProfile">View
+								<li><a href="/RichirichBank/ViewInternalEmpProfile">View/Delete
 										internal employee</a></li>
 							</sec:authorize>
 							<sec:authorize access="hasRole('ROLE_SA')">
