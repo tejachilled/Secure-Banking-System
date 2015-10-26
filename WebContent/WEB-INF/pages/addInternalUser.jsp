@@ -68,7 +68,7 @@
 						</div>
 
 						<div class="form-group">
-							<label class="col-lg-2 control-label">Email</label>
+							<label class="col-lg-2 control-label">Email (Please give correct email id, temporary password will be sent)</label>
 							<div class="col-lg-10">
 								<form:input path="emaiID" cssClass="form-control" />
 								<form:errors path="emaiID"

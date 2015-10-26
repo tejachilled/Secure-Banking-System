@@ -17,6 +17,15 @@
 		method="post" action="/RichirichBank/ViewEmpProfile">
 		<fieldset>
 			<legend>Enter User Credentials to Access Account Details</legend>
+			
+			<c:if test="${not empty success }">
+				<div style="width: 40%;">
+					<div class="alert alert-dismissable alert-success">
+						<strong>${success}</strong>
+					</div>
+
+				</div>
+			</c:if>
 			<div>
 				<div class="col-lg-10">
 					<form:input path="userName" class="form-control" id="usernameid"

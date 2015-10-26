@@ -82,7 +82,8 @@
 						</div>
 
 						<div class="form-group">
-							<label class="col-lg-2 control-label">Email</label>
+							<label class="col-lg-2 control-label">Email (Please give
+								correct email id, temporary password will be sent)</label>
 							<div class="col-lg-10">
 								<form:input path="emaiID" cssClass="form-control" />
 								<form:errors path="emaiID"
@@ -138,23 +139,14 @@
 							</div>
 						</div>
 
-						<c:if test="${not empty error}">
-							<div style="width: 30%;">
-								<div class="alert alert-dismissable alert-danger">
-									<strong>Choose different security questions </strong>
-								</div>
+						<div class="form-group">
+							<label class="col-lg-2 control-label">Security Question 1 : What is your first car name ?</label>
+							<div class="col-lg-10">
+								<form:input path="sq1" cssClass="form-control" />
+								<form:errors path="phoneNumber"
+									cssClass="alert alert-dismissable alert-danger"></form:errors>
 							</div>
-						</c:if>
-						<c:if test="${not empty ans}">
-							<div style="width: 30%;">
-								<div class="alert alert-dismissable alert-danger">
-									<strong>Please provide answers for security questions
-									</strong>
-								</div>
-							</div>
-						</c:if>
-
-
+						</div>
 
 						<div class="form-group">
 							<div class="col-lg-10 col-lg-offset-2">

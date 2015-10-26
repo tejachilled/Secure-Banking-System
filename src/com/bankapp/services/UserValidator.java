@@ -15,7 +15,7 @@ public class UserValidator implements Validator {
 
 	public void validate(Object arg0, Errors arg1) {
 		// TODO Auto-generated method stub
-		
+
 		UserInfo user=(UserInfo)arg0;
 		String username=user.getUserName();
 		String firstname=user.getFirstName();
@@ -24,24 +24,23 @@ public class UserValidator implements Validator {
 		String phoneNumber = ""+user.getPhoneNumber();
 		String emaiID = user.getEmaiID();
 		String address1 = user.getAddress1();
-		
+
 		if(firstname!= null && !firstname.matches("^[a-zA-Z]{1,12}$"))
 		{
 			arg1.rejectValue("firstName", "UserInfo.firstName");
 		}
-		
+
 		if(lastname!=null && !lastname.matches("^[a-zA-Z]{1,12}$"))
 		{
 			arg1.rejectValue("lastName", "UserInfo.lastName");
 		}
-					
+
 		if(password !=null && !password.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,10}$"))
 		{
 			System.out.println("cmg here");
 			arg1.rejectValue("password", "UserInfo.password");
-			 
 		}
-			
+
 		if(username!=null && !username.matches("^[a-z0-9_-]{3,16}$"))
 		{
 			arg1.rejectValue("userName", "UserInfo.userName");
@@ -49,17 +48,18 @@ public class UserValidator implements Validator {
 		if(phoneNumber!=null && !phoneNumber.matches("\\d{10}")){
 			arg1.rejectValue("phoneNumber", "UserInfo.phoneNumber");
 		}
-		
+
 		if (address1 != null && !address1.matches("^[a-zA-Z0-9_#]*$")) {
 			arg1.rejectValue("address1", "UserInfo.address1");
 		}
-		
-		if (emaiID != null && !emaiID.matches("^[a-zA-Z_._@]{1,20}$")) {
+
+		if (emaiID != null && !emaiID.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+				+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")) {
 			arg1.rejectValue("emaiID", "UserInfo.emaiID");
 		}
-		
+
 		System.out.println("in validator");
 	}
 
-	
+
 }
