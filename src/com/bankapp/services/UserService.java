@@ -24,4 +24,5 @@ public interface UserService {
 	public void updateInternalUserInfo(UserInfo ui);
 	public String setRoleToDisplayUI(String role);
 	public boolean checkAccountExists(Long accountid);
+	public boolean isFirstLogin(String name);
 }

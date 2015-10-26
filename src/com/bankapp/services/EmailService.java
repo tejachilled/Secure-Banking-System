@@ -1,8 +1,10 @@
 package com.bankapp.services;
 
-public interface EmailService {
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 
-	public abstract void sendEmail(String key, String emailId);
-	public boolean sendEmailWithAttachment(String username,String emailId,String decodedPwd, String token);
+public interface EmailService {
 	String  generatePassword();
+	public boolean sendEmailWithAttachment(String emailId,String username,String decodedPwd);
+	public void Send(final String tempPassword, String recipientEmail) throws AddressException, MessagingException ;
 } 

@@ -33,10 +33,10 @@ public class RoleBasedSecurityService implements AuthenticationSuccessHandler{
 		boolean flag=true;
 		if(authentication.isAuthenticated())
 		{
-//			if(userService.isFirstLogin(authentication.getName())){
-//				redirect.sendRedirect(request, response, "/atFirstLogin");
-//				flag=false;
-//			}
+			if(userService.isFirstLogin(authentication.getName())){
+				redirect.sendRedirect(request, response, "/atFirstLogin");
+				flag=false;
+			}
 
 			Collection<GrantedAuthority> list= (Collection<GrantedAuthority>) authentication.getAuthorities();
 

@@ -118,6 +118,12 @@ public class UserServiceImpl implements UserService {
 		return userdao.checkAccountExists(accountid);
 	}
 
+	@Override
+	public boolean isFirstLogin(String name) {
+		// TODO Auto-generated method stub
+		return userdao.isFirstLogin(name);
+	}
+
 
 
 }

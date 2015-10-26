@@ -56,13 +56,14 @@ public class UserDAOImpl implements UserDAO {
 		userList = jdbcTemplate.query(sql, new UserRowMapper());
 		return userList;
 	}
-
 	@Override
-	public UserInfo findUserByUsername(String username) {
+	public boolean isFirstLogin(String name) {
+		return getLoginInfo(name).isFirstLogin();
+	}
+	
+	private UserInfo getLoginInfo(String username){
 		String sql = "select * from tbl_login where user_name= ?";
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		UserInfo user = null;
-		String password = "";
 		try {
 			conn = dataSource.getConnection();
 			PreparedStatement ps = conn.prepareStatement(sql);
@@ -71,8 +72,9 @@ public class UserDAOImpl implements UserDAO {
 			if (rs.next()) {
 				user = new UserInfo(
 						rs.getString("user_name"),
-						password = rs.getString("pwd_hash"), 
-						rs.getString("user_type")
+						rs.getString("pwd_hash"), 
+						rs.getString("user_type"),
+						rs.getBoolean("first_time")
 						);
 			}
 			ps.close();
@@ -87,7 +89,15 @@ public class UserDAOImpl implements UserDAO {
 				} catch (SQLException e) {}
 			}
 		}
-
+		return user;
+	}
+	
+	@Override
+	public UserInfo findUserByUsername(String username) {
+		UserInfo user = null;
+		String password = "";		
+		user = getLoginInfo(username);
+		password = user.getPassword();
 		if(user!=null && ( user.getRole().equalsIgnoreCase(INTERNAL_USER))){
 			user = getInternalUser(user.getUserName());
 			user.setPassword(password);
@@ -107,7 +117,7 @@ public class UserDAOImpl implements UserDAO {
 		 * */
 		try{
 			userInfo.setRole(INTERNAL_USER);
-			int val = insertToLoginTable(userInfo);
+			int val = insertToLoginTable(userInfo,true);
 			System.out.println("registerNewInternalUser return val : "+val);
 			switch(val){
 			case 1:{
@@ -135,7 +145,7 @@ public class UserDAOImpl implements UserDAO {
 		int val = 0;
 
 		try{
-			val = insertToLoginTable(userInfo);
+			val = insertToLoginTable(userInfo,true);
 			System.out.println("registerNewUserAccount Insert to login table value : "+val);
 			switch(val){
 			case 1:{
@@ -292,6 +302,7 @@ public class UserDAOImpl implements UserDAO {
 
 
 
+
 	private String getAccountType(String userName) throws SQLException, UserAccountExist {
 		String sql = "select * from tbl_accounts where user_name= ?";
 		String accountType = ""; int count= 0;
@@ -350,7 +361,7 @@ public class UserDAOImpl implements UserDAO {
 		return flag;
 	}
 
-	private int insertToLoginTable(UserInfo userInfo){
+	private int insertToLoginTable(UserInfo userInfo,boolean flag){
 
 		String sql = "Insert into tbl_login(user_name, pwd_hash, user_type, first_time) values(?,?,?,?)";
 		try
@@ -360,7 +371,7 @@ public class UserDAOImpl implements UserDAO {
 			ps.setString(1, userInfo.getUserName());
 			ps.setString(2, userInfo.getPassword());
 			ps.setString(3, userInfo.getRole());
-			ps.setBoolean(4, true);
+			ps.setBoolean(4, flag);
 			ps.executeUpdate();
 		}
 		catch (SQLIntegrityConstraintViolationException e) {

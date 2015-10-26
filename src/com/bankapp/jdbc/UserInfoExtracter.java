@@ -19,6 +19,9 @@ public class UserInfoExtracter {
 		user.setAddress1(resultSet.getString("add_l1"));
 		user.setAddress2(resultSet.getString("add_l2"));
 		user.setRole(resultSet.getString("role").toUpperCase());
+		user.setSq1(resultSet.getString("sq1"));
+		user.setSq2(resultSet.getString("sq2"));
+		user.setSq3(resultSet.getString("sq3"));
 		return user;
 	}
 
