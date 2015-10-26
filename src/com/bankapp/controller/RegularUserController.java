@@ -49,6 +49,8 @@ public class RegularUserController {
 	@RequestMapping(value="/Credit")
 	public String creditPage(ModelMap model) {
 		model.addAttribute("credit", new Transaction());
+		model.addAttribute("account_savings", "Checkings");
+		model.addAttribute("account_checking", "Savings");
 		logger.info("Inside User Credit");
 		return "credit";
 	}
@@ -56,6 +58,14 @@ public class RegularUserController {
 	@RequestMapping(value="/Debit")
 	public String debitPage(ModelMap model) {
 		model.addAttribute("debit", new Transaction());
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		logger.info("Inside User");
+		Useraccounts userAccounts = transactionService.getUserAccountsInfoByUserName(userName);
+		String accountid = String.valueOf(userAccounts.getAccountno());
+		logger.info(accountid);
+		model.addAttribute("account_savings", "SAVINGS - " + accountid.substring(accountid.length() - 4, accountid.length()));
+		model.addAttribute("account_checking", "Checking");
+		
 		logger.info("Inside User Debit");
 		return "debit";
 	}
@@ -63,6 +73,8 @@ public class RegularUserController {
 	@RequestMapping(value="/Transfer")
 	public String transferPage(ModelMap model) {
 		model.addAttribute("transferAmt", new Transfer());
+		model.addAttribute("check_account", "Checkings");
+		model.addAttribute("save_account", "Savings");
 		return "transfer";
 	}
 	

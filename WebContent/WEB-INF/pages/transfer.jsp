@@ -43,8 +43,8 @@
 				<fieldset>
 					<legend>${errorMessage}</legend>
 					<select> 
-						<option value="${save_account}">${account_savings}</option>
-						<option value="${check_account}">${account_checking}</option>
+						<option value="Savings">${account_savings}</option>
+						<option value="Checkings">${account_checking}</option>
 					</select>
 
 					<div class="form-group">
