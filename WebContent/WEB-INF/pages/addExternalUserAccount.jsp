@@ -45,7 +45,7 @@
 								</div>
 							</div>
 						</c:if>
-
+	<h5>*For creating both accounts, please give same exact information in all fields and select a different account for user id*</h5>
 						<legend>New Account</legend>
 						<div class="form-group">
 							<label class="col-lg-2 control-label">Firstname</label>
@@ -69,14 +69,6 @@
 							<div class="col-lg-10">
 								<form:input path="userName" cssClass="form-control" />
 								<form:errors path="userName"
-									cssClass="alert alert-dismissable alert-danger"></form:errors>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-lg-2 control-label">Password</label>
-							<div class="col-lg-10">
-								<form:password path="password" cssClass="form-control" />
-								<form:errors path="password"
 									cssClass="alert alert-dismissable alert-danger"></form:errors>
 							</div>
 						</div>
@@ -143,7 +135,23 @@
 							<label class="col-lg-2 control-label">Security Question 1 : What is your first car name ?</label>
 							<div class="col-lg-10">
 								<form:input path="sq1" cssClass="form-control" />
-								<form:errors path="phoneNumber"
+								<form:errors path="sq1"
+									cssClass="alert alert-dismissable alert-danger"></form:errors>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-lg-2 control-label">Security Question 2 : What is your pet name ?</label>
+							<div class="col-lg-10">
+								<form:input path="sq2" cssClass="form-control" />
+								<form:errors path="sq2"
+									cssClass="alert alert-dismissable alert-danger"></form:errors>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-lg-2 control-label">Security Question 3 : What is your mother's name ?</label>
+							<div class="col-lg-10">
+								<form:input path="sq3" cssClass="form-control" />
+								<form:errors path="sq3"
 									cssClass="alert alert-dismissable alert-danger"></form:errors>
 							</div>
 						</div>

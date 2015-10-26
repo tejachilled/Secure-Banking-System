@@ -58,14 +58,6 @@
 									cssClass="alert alert-dismissable alert-danger"></form:errors>
 							</div>
 						</div>
-						<div class="form-group">
-							<label class="col-lg-2 control-label">Password</label>
-							<div class="col-lg-10">
-								<form:password path="password" cssClass="form-control" />
-								<form:errors path="password"
-									cssClass="alert alert-dismissable alert-danger"></form:errors>
-							</div>
-						</div>
 
 						<div class="form-group">
 							<label class="col-lg-2 control-label">Email (Please give correct email id, temporary password will be sent)</label>
@@ -113,22 +105,31 @@
 							</div>
 						</div>
 
-
-						<c:if test="${not empty error}">
-							<div style="width: 30%;">
-								<div class="alert alert-dismissable alert-danger">
-									<strong>Choose different security questions </strong>
-								</div>
+						<div class="form-group">
+							<label class="col-lg-2 control-label">Security Question 1 : What is your first car name ?</label>
+							<div class="col-lg-10">
+								<form:input path="sq1" cssClass="form-control" />
+								<form:errors path="sq1"
+									cssClass="alert alert-dismissable alert-danger"></form:errors>
 							</div>
-						</c:if>
-						<c:if test="${not empty ans}">
-							<div style="width: 30%;">
-								<div class="alert alert-dismissable alert-danger">
-									<strong>Please provide answers for security questions
-									</strong>
-								</div>
+						</div>
+						<div class="form-group">
+							<label class="col-lg-2 control-label">Security Question 2 : What is your pet name ?</label>
+							<div class="col-lg-10">
+								<form:input path="sq2" cssClass="form-control" />
+								<form:errors path="sq2"
+									cssClass="alert alert-dismissable alert-danger"></form:errors>
 							</div>
-						</c:if>
+						</div>
+						<div class="form-group">
+							<label class="col-lg-2 control-label">Security Question 3 : What is your mother's name ?</label>
+							<div class="col-lg-10">
+								<form:input path="sq3" cssClass="form-control" />
+								<form:errors path="sq3"
+									cssClass="alert alert-dismissable alert-danger"></form:errors>
+							</div>
+						</div>
+						
 
 						
 

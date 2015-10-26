@@ -2,6 +2,8 @@ package com.bankapp.controller;
 
 import java.sql.SQLException;
 import java.util.UUID;
+
+import javax.mail.MessagingException;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -68,11 +70,11 @@ public class InternalUserController {
 			System.out.println("error");
 			return "addExternalUserAccount";
 		}
-		
-		System.out.println("submitForm: first name"+UserInfo.getFirstName());
-		UserInfo.setPassword(encoder.encode(UserInfo.getPassword()));
 		Long accno= 0L ;
 		try{
+			final String tempPwd = emailService.generatePassword();
+			emailService.Send(tempPwd, UserInfo.getEmaiID());
+			UserInfo.setPassword(encoder.encode(tempPwd));
 			accno=userService.addNewExternalUuser(UserInfo,role,accountType);
 			model.addAttribute("accno", accno);
 		}catch(UserAccountExist exception){
@@ -80,6 +82,8 @@ public class InternalUserController {
 		}catch(CustomException exception){
 			model.addAttribute("exception", exception.getMessage());
 		} catch (UserNameExists exception) {
+			model.addAttribute("exception", exception.getMessage());
+		}catch (MessagingException exception) {
 			model.addAttribute("exception", exception.getMessage());
 		}
 

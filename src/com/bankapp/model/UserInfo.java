@@ -18,14 +18,19 @@ public class UserInfo {
 	private String role;
 	private String ssn;
 	private List<Useraccounts> account;
+	private String sq1;
+	private String sq2;
+	private String sq3;
+	private boolean isFirstLogin;
 	
 	public UserInfo(){
 		
 	}
-	public UserInfo(String userName,String password,String role){
+	public UserInfo(String userName,String password,String role,boolean isFirstLogin){
 		this.userName = userName;
 		this.password = password;
 		this.role = role;
+		this.setFirstLogin(isFirstLogin);
 	}
 	/**
 	 * @return the role
@@ -151,19 +156,7 @@ public class UserInfo {
 	public void setSsn(String ssn) {
 		this.ssn = ssn;
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("UserInfo [userName=").append(userName).append(", password=").append(password)
-				.append(", firstName=").append(firstName).append(", lastName=").append(lastName).append(", emaiID=")
-				.append(emaiID).append(", phoneNumber=").append(phoneNumber).append(", address1=").append(address1)
-				.append(", address2=").append(address2).append(", role=").append(role).append(", ssn=").append(ssn)
-				.append("]");
-		return builder.toString();
-	}
+	
 	/**
 	 * @return the account
 	 */
@@ -175,6 +168,68 @@ public class UserInfo {
 	 */
 	public void setAccount(List<Useraccounts> account) {
 		this.account = account;
+	}
+	/**
+	 * @return the sq1
+	 */
+	public String getSq1() {
+		return sq1;
+	}
+	/**
+	 * @param sq1 the sq1 to set
+	 */
+	public void setSq1(String sq1) {
+		this.sq1 = sq1;
+	}
+	/**
+	 * @return the sq2
+	 */
+	public String getSq2() {
+		return sq2;
+	}
+	/**
+	 * @param sq2 the sq2 to set
+	 */
+	public void setSq2(String sq2) {
+		this.sq2 = sq2;
+	}
+	/**
+	 * @return the sq3
+	 */
+	public String getSq3() {
+		return sq3;
+	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("UserInfo [userName=").append(userName).append(", password=").append(password)
+				.append(", firstName=").append(firstName).append(", lastName=").append(lastName).append(", emaiID=")
+				.append(emaiID).append(", phoneNumber=").append(phoneNumber).append(", address1=").append(address1)
+				.append(", address2=").append(address2).append(", role=").append(role).append(", ssn=").append(ssn)
+				.append(", account=").append(account).append(", sq1=").append(sq1).append(", sq2=").append(sq2)
+				.append(", sq3=").append(sq3).append("]");
+		return builder.toString();
+	}
+	/**
+	 * @param sq3 the sq3 to set
+	 */
+	public void setSq3(String sq3) {
+		this.sq3 = sq3;
+	}
+	/**
+	 * @return the isFirstLogin
+	 */
+	public boolean isFirstLogin() {
+		return isFirstLogin;
+	}
+	/**
+	 * @param isFirstLogin the isFirstLogin to set
+	 */
+	public void setFirstLogin(boolean isFirstLogin) {
+		this.isFirstLogin = isFirstLogin;
 	}
 	
 }
