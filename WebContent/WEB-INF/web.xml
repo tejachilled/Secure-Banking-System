@@ -47,6 +47,17 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
              org.springframework.web.context.ContextLoaderListener
         </listener-class>
 	</listener>  
-	 
+	<listener>
+	<listener-class>
+            com.bankapp.listeners.LoggerListener
+        </listener-class>
+   </listener>
+	 <listener>
+    <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+</listener>
+<context-param>
+    <param-name>log4jConfigLocation</param-name>
+    <param-value>/WEB-INF/resources/log4j.properties</param-value>
+</context-param>
 	
 </web-app>

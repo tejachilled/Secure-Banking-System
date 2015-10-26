@@ -38,7 +38,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 	public List<Transaction> getPendingTransactionsForRE() {
 		// TODO Auto-generated method stub
 		List<Transaction> trList = new ArrayList<Transaction>();
-		String query = "SELECT transaction_id, account_id, transaction_type, isCritical, amount, date_of_transaction_initiation,  date_of_transaction_approval FROM tbl_transactions where isCritical='L' and internal_user_approval='P' ";
+		String query = "SELECT transaction_id, account_id, transaction_type, isCritical, amount, date_of_transaction_initiation,  date_of_transaction_approval, remark FROM tbl_transactions where isCritical='L' and internal_user_approval='P' ";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		trList = jdbcTemplate.query(query, new TransactionRowMapper());
 		return trList;
@@ -53,7 +53,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 	public List<Transaction> getPendingTransactionsForSM() {
 		// TODO Auto-generated method stub
 		List<Transaction> trList = new ArrayList<Transaction>();
-		String query = "SELECT transaction_id, account_id, transaction_type, isCritical, amount, date_of_transaction_initiation,  date_of_transaction_approval FROM tbl_transactions where internal_user_approval='P' ";
+		String query = "SELECT transaction_id, account_id, transaction_type, isCritical, amount, date_of_transaction_initiation,  date_of_transaction_approval, remark FROM tbl_transactions where internal_user_approval='P' ";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		trList = jdbcTemplate.query(query, new TransactionRowMapper());
 		return trList;
@@ -202,7 +202,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 
 	@Override
 	public List<Transaction> getTransaction(String tId) {
-		String query = "SELECT transaction_id, account_id, transaction_type, isCritical, amount, date_of_transaction_initiation,  date_of_transaction_approval FROM tbl_transactions where transaction_id=? and internal_user_approval='P' ";
+		String query = "SELECT transaction_id, account_id, transaction_type, isCritical, amount, date_of_transaction_initiation,  date_of_transaction_approval, remark FROM tbl_transactions where transaction_id=? and internal_user_approval='P' ";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		return jdbcTemplate.query(query, new TransactionRowMapper(), tId);
 	}

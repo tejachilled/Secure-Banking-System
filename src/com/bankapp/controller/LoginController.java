@@ -2,6 +2,7 @@ package com.bankapp.controller;
 
 import java.security.Principal;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -17,7 +18,8 @@ public class LoginController {
 
 	@Autowired
 	 UserService userService;
-	 
+	private static final Logger logger = Logger.getLogger(LoginController.class);
+	
 	@RequestMapping(value = { "/welcome"}, method = RequestMethod.GET)
 	public ModelAndView welcomePage() {
 		System.out.println("coming");
@@ -48,6 +50,7 @@ public class LoginController {
 	public String login(ModelMap model)
 	{
 		System.out.println("in login controller");
+		logger.info("In Login Controller");
 		return "login";
 	}
 	@RequestMapping(value="/logout",method=RequestMethod.GET)
