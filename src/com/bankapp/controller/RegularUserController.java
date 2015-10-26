@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -37,6 +38,8 @@ public class RegularUserController {
 	@Autowired
 	UserService userService;
 	
+	private static final Logger logger = Logger.getLogger(RegularUserController.class);
+	
 	@RequestMapping("/extHome")
 	public String externalCustomer(Model model,HttpSession session, HttpServletRequest request)
 	{
@@ -46,12 +49,14 @@ public class RegularUserController {
 	@RequestMapping(value="/Credit")
 	public String creditPage(ModelMap model) {
 		model.addAttribute("credit", new Transaction());
+		logger.info("Inside User Credit");
 		return "credit";
 	}
 	
 	@RequestMapping(value="/Debit")
 	public String debitPage(ModelMap model) {
 		model.addAttribute("debit", new Transaction());
+		logger.info("Inside User Debit");
 		return "debit";
 	}
 	
@@ -70,7 +75,7 @@ public class RegularUserController {
 		modelAndView.setViewName("debit");
 		
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-		
+		logger.info("Inside User Debit-initiated by: "+userName);
 		Useraccounts userAccounts = transactionService.getUserAccountsInfoByUserName(userName);
 		try {
 			if(transaction.getAmount()<0){
