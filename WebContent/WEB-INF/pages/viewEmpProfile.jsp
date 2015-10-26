@@ -24,47 +24,61 @@
 					<label style="color: red">${usernameerror}</label>
 				</div>
 			</div>
-
 			<div class="form-group">
 				<div class="col-lg-10 col-lg-offset-2">
 					<button type="submit" class="btn btn-primary">Submit</button>
 				</div>
 			</div>
+
+			<div>
+				<div class="panel panel-default">
+					<div class="panel-heading">First Name</div>
+					<div class="panel-body">${accessInfo.firstName}</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">Last Name</div>
+					<div class="panel-body">${accessInfo.lastName}</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">User Name</div>
+					<div class="panel-body">${accessInfo.userName}</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">Email ID</div>
+					<div class="panel-body">${accessInfo.emaiID}</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">Address line 1</div>
+					<div class="panel-body">${accessInfo.address1}</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">Address line 2</div>
+					<div class="panel-body">${accessInfo.address2}</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">Phone Number</div>
+					<div class="panel-body">${accessInfo.phoneNumber}</div>
+				</div>
+
+				<c:forEach var="accounts" items="${accessInfo.account}">
+					<div class="panel panel-default">
+						<div class="panel-heading">${accounts.accountType}Account</div>
+						<div class="panel-body">${accounts.accountno}</div>
+					</div>
+				</c:forEach>
+			</div>
+			<c:if test="${not empty accessInfo.role }">
+				<div class="form-group">
+					<div class="col-lg-10 col-lg-offset-2">
+						<input type="hidden" id="role" name="role"
+							value="${accessInfo.role}"> <input type="submit"
+							class="btn btn-primary" value="Delete" name="Delete"></input>
+					</div>
+				</div>
+			</c:if>
+
 		</fieldset>
 	</form:form>
-	<div>
-		<div class="panel panel-default">
-			<div class="panel-heading">First Name</div>
-			<div class="panel-body">${accessInfo.firstName}</div>
-		</div>
-		<div class="panel panel-default">
-			<div class="panel-heading">Last Name</div>
-			<div class="panel-body">${accessInfo.lastName}</div>
-		</div>
-		<div class="panel panel-default">
-			<div class="panel-heading">User Name</div>
-			<div class="panel-body">${accessInfo.userName}</div>
-		</div>
-		<div class="panel panel-default">
-			<div class="panel-heading">Email ID</div>
-			<div class="panel-body">${accessInfo.emaiID}</div>
-		</div>
-		<div class="panel panel-default">
-			<div class="panel-heading">Address line 1</div>
-			<div class="panel-body">${accessInfo.address1}</div>
-		</div>
-		<div class="panel panel-default">
-			<div class="panel-heading">Address line 2</div>
-			<div class="panel-body">${accessInfo.address2}</div>
-		</div>
-		<div class="panel panel-default">
-			<div class="panel-heading">Phone Number</div>
-			<div class="panel-body">${accessInfo.phoneNumber}</div>
-		</div>
-		<div class="panel panel-default">
-			<div class="panel-heading">Phone Number</div>
-			<div class="panel-body">${accessInfo.phoneNumber}</div>
-		</div>
-	</div>
+
 </body>
 </html>

@@ -97,6 +97,20 @@ public class InternalUserController {
 		return "viewEmpProfile";
 	}
 
+	
+	@RequestMapping(value="/ViewEmpProfile",method=RequestMethod.POST, params = "Delete")
+	public String delEmpProfile(@ModelAttribute ("accessInfo") @Validated UserInfo userInfo,HttpServletRequest request, BindingResult result, SessionStatus status,Model model)
+	{
+		String role=request.getParameter("role").toString();
+		System.out.println("in dele method with user role : "+role);
+		if(role!=null){
+			userInfo.setRole(role);
+			userService.deleteUserInfo(userInfo);
+			model.addAttribute("success", "Successfully deleted!");
+		}
+		return "viewEmpProfile";
+	}
+	
 	@RequestMapping(value="/ViewEmpProfile",method=RequestMethod.POST)
 	public String viewEmpProfile(@ModelAttribute ("accessInfo") @Validated UserInfo userInfo, BindingResult result, SessionStatus status,Model model)
 	{
@@ -120,8 +134,9 @@ public class InternalUserController {
 				}
 				else
 				{
-					if(ui.getUserName().equals("ROLE_U") || ui.getUserName().equals("ROLE_M"))
+					if(ui.getRole().equalsIgnoreCase("ROLE_U") || ui.getRole().equalsIgnoreCase("ROLE_M"))
 					{
+						ui.setRole(userService.setRoleToDisplayUI(ui.getRole()));
 						model.addAttribute("accessInfo", ui);
 						return "viewEmpProfile";
 					}
@@ -249,70 +264,5 @@ public class InternalUserController {
 		}
 	}
 
-	//Delete Employees
-	@RequestMapping(value="/DeleteEmpProfile",method=RequestMethod.GET)
-	public String deleteEmpProfile(Model model)
-	{
-		model.addAttribute("accessInfo", new UserInfo());
-		return "deleteEmpProfile";
-	}
-
-	@RequestMapping(value="/DeleteEmpProfile",method=RequestMethod.POST)
-	public String deleteEmpProfile(@ModelAttribute ("accessInfo") @Validated UserInfo UserInfo, BindingResult result, SessionStatus status,Model model)
-	{
-		//add objects to model
-		model.addAttribute("accessInfo", UserInfo);
-		model.addAttribute("usernameerror",null);
-		model.addAttribute("deleteMessage",null);
-		//validate input format
-		if(UserInfo.getUserName()!=null)
-		{
-			if(!(UserInfo.getUserName()).matches("^[a-z0-9_-]{3,16}$"))
-			{
-				model.addAttribute("usernameerror","Please enter a valid username");
-				return "deleteEmpProfile";
-			}
-			else
-			{
-				//validate if reasonable request and username exists
-				if(userService.getUserInfobyUserName(UserInfo.getUserName())==null)
-				{
-					model.addAttribute("usernameerror","Specified username does not exist");
-					return "deleteEmpProfile";
-				}
-				else
-				{
-					UserInfo ui = userService.getUserInfobyUserName(UserInfo.getUserName());
-					if(!(UserInfo.getEmaiID()==null))
-					{
-						userService.deleteUserInfo(ui);
-						model.addAttribute("deleteMessage","Delete Successfull!");
-						model.addAttribute("accessInfo", new UserInfo());
-						return "deleteEmpProfile";
-					}
-					//check if the user is an external user
-					String ur = userService.getUserRoleType(ui.getUserName());
-					if(ur.equals("ROLE_EMPLOYEE"))
-					{
-						model.addAttribute("accessInfo", ui);
-						return "deleteEmpProfile";
-					}
-					else
-					{
-						model.addAttribute("usernameerror", "Not a valid employee");
-						return "deleteEmpProfile";
-					}
-				}
-			}
-		}
-		else
-		{
-			model.addAttribute("usernameerror","Please enter the username");
-			return "deleteEmpProfile";
-		}
-	}
-
-
-
-
+	
 }

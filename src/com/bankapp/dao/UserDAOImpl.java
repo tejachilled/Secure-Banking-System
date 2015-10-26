@@ -247,12 +247,9 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public void deleteUserInfo(UserInfo userInfo) {
-		if(userInfo.getRole().contains("employee") || userInfo.getRole().contains("Manager")){
-			deleteInternalEmp(userInfo.getUserName());
-		}		
-
+		deleteFromTables(userInfo.getUserName());
 	}
-	private void deleteInternalEmp(String userName) {
+	private void deleteFromTables(String userName) {
 		// TODO Auto-generated method stub
 		String sql = "DELETE from tbl_login"
 				+ " WHERE user_name = ?";
@@ -515,7 +512,7 @@ public class UserDAOImpl implements UserDAO {
 	}
 	@Override
 	public boolean checkAccountExists(Long accountid) {
-		
+
 		String sql = "select count(*) from tbl_accounts where account_id = ?";
 
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -524,7 +521,7 @@ public class UserDAOImpl implements UserDAO {
 		{
 			return true;
 		}
-		
+
 		return false;
 	}
 

@@ -77,7 +77,6 @@
 						<input type="hidden" id="role" name="role"
 							value="${accessInfo.role}"> <input type="submit"
 							class="btn btn-primary" value="Delete" name="Delete"></input>
-
 					</div>
 				</div>
 			</c:if>
