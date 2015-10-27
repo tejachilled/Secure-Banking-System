@@ -22,7 +22,8 @@
 		<intercept-url pattern="/piiaccessinfo" access="hasRole('ROLE_SA')"/>
 		<intercept-url pattern="/newPiiRequest" access="hasRole('ROLE_SA')"/>	
 		<intercept-url pattern="/sendPiiAccessRequest" access="hasRole('ROLE_SA')"/>	
-		
+		<intercept-url pattern="/downloadLogFile/*" access="hasRole('ROLE_SA')"/>	
+		<intercept-url pattern="/viewSystemLogs" access="hasRole('ROLE_SA')"/>	
 
 		<!-- Manager Roles --> 
 		<intercept-url pattern="/addExternalUserAccount" access="hasRole('ROLE_SM')" />
