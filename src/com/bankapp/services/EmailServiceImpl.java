@@ -44,12 +44,13 @@ public class EmailServiceImpl implements EmailService {
 		return pass.toString();		
 	}
 	
-	 public void Send(final String tempPassword, String recipientEmail) throws AddressException, MessagingException {
-		 final String username = "SunDevilBankASU";
+	 public void Send(String userName,final String tempPassword, String recipientEmail,Long accNo) throws AddressException, MessagingException {
+		 final String FromEmail = "SunDevilBankASU";
 		 final String password = "SunDevilBank";
 		 final String title = "Confidential Information enclosed from SunDevilBank";
-		 String message = "Your temporary password : "+tempPassword;
-		 EmailServiceImpl.Send(username, password, recipientEmail, "", title, message);
+		 String message = "Your Username : "+ userName+ "\n "+
+				 "Your temporary password : "+tempPassword+ "\n ";
+		 EmailServiceImpl.Send(FromEmail, password, recipientEmail, "", title, message);
 	    }
 	 public static void Send(final String username, final String password, String recipientEmail, String ccEmail, String title, String message) throws AddressException, MessagingException {
 	        Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());

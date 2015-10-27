@@ -56,33 +56,6 @@ public class HomeController {
 	  return new ModelAndView("userList", "userList", userList);
 	 }
 	
-	@RequestMapping(value="/forgotpassword",method=RequestMethod.GET)
-	public String forgotPasswordClicked(Model model)
-	{
-		System.out.println("in forgot password");
-		return "forgotPassword";
-	}
-
-	@RequestMapping(value="/forgotpassword",method=RequestMethod.POST)
-	public ModelAndView forgotPasswordNextClicked(@RequestParam("usernamegiven") String usernamegiven)
-	{
-		System.out.println("in forgot password Post"+" "+usernamegiven);
-		ModelAndView model = null;
-//
-//		if(check if present in db - usernamegiven))
-//		{
-//		//	otpService.generateOTP(usernamegiven);
-//			ModelAndView model1 = new ModelAndView("forgotPassword");
-//			model1.addObject("type", "forgotpassword");
-//			model1.addObject("username", usernamegiven);
-//			model1.setViewName("otpVerify");
-//		}
-//		else
-//		{
-//			model.addObject("errorMessage", "Username is not valid!");
-//		}
-
-		return model;
-	}
+	
 
 }

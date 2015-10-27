@@ -19,13 +19,17 @@
 }
 
 .msg {
-	padding: 30px;
-	margin-bottom: 20px;
-	border: 5px solid transparent;
-	border-radius: 4px;
-	color: #FFF;
-	background-color: #FFF;
-	border-color: #FFF;
+	width: 200px;
+	height: 15px;
+	background: transparent;
+	background-color: #FFBABA;
+	border: 2px solid rgba(255, 255, 255, 0.6);
+	border-radius: 1px;
+	color: #008000;
+	font-family: 'Exo', sans-serif;
+	font-size: 16px;
+	font-weight: 200;
+	padding: 6px;
 }
 
 @import url(http://fonts.googleapis.com/css?family=Exo:100,200,400);
@@ -226,6 +230,10 @@ jQuery(document).ready(function(){
 
 			<c:if test="${not empty error}">
 				<input type="search" name="error" class="error" value="${error }">
+				<br>
+			</c:if>
+			<c:if test="${not empty success}">
+				<input type="search" name="error" class="msg" value="${success }">
 				<br>
 			</c:if>
 			<input type="text" name="username" placeholder="Username" required

@@ -25,4 +25,5 @@ public interface UserService {
 	public String setRoleToDisplayUI(String role);
 	public boolean checkAccountExists(Long accountid);
 	public boolean isFirstLogin(String name);
+	public void changePassword(String confirmPassword, String userName);
 }

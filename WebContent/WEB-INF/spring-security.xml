@@ -9,9 +9,9 @@
 		<intercept-url pattern="/logout" access="permitAll" />
 		<intercept-url pattern="/login" access="permitAll" />
 		<intercept-url pattern="/forgotpassword" access="permitAll" />
+		<intercept-url pattern="/changePassword" access="permitAll" />
 		<intercept-url pattern="/loginFailed" access="permitAll" />
 		<intercept-url pattern="/403" access="permitAll" />
-		<intercept-url pattern="/changePassword" access="permitAll" />
 		<intercept-url pattern="/home" access="hasAnyRole('ROLE_SA','ROLE_RE', 'ROLE_M', 'ROLE_U')"/>
 
 		<!-- Admin Roles -->

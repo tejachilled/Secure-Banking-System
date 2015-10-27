@@ -45,11 +45,6 @@ public class InternalUserController {
 	EmailService emailService;
 
 
-	@RequestMapping(value="/atFirstLogin")
-	public String userAtFirstLogin(Model model){
-		return "changePassword";
-	}
-
 	@RequestMapping(value="/register")
 	public String registerAUser(ModelMap model)
 	{
@@ -73,9 +68,10 @@ public class InternalUserController {
 		Long accno= 0L ;
 		try{
 			final String tempPwd = emailService.generatePassword();
-			emailService.Send(tempPwd, UserInfo.getEmaiID());
 			UserInfo.setPassword(encoder.encode(tempPwd));
+			System.out.println("sec answer 3 : "+UserInfo.getSq3());
 			accno=userService.addNewExternalUuser(UserInfo,role,accountType);
+			emailService.Send(UserInfo.getUserName(),tempPwd, UserInfo.getEmaiID(),accno);
 			model.addAttribute("accno", accno);
 		}catch(UserAccountExist exception){
 			model.addAttribute("exception", exception.getMessage());
@@ -89,9 +85,6 @@ public class InternalUserController {
 
 		return "addExternalUserAccount";
 	}
-
-
-
 
 	// Manager functionalities
 	@RequestMapping(value="/ViewEmpProfile",method=RequestMethod.GET)
