@@ -9,7 +9,7 @@ public class EmailTest {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		EmailServiceImpl email = new EmailServiceImpl();
-		email.sendEmailWithAttachment("tejachilled@gmail.com", "file1", "");
+		//email.sendEmailWithAttachment("tejachilled@gmail.com", "file1", "");
 	}
 
 }
