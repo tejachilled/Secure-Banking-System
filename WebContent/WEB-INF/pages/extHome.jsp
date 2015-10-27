@@ -23,6 +23,8 @@
 		<a href="/RichirichBank/requestEdit" class="btn btn-default">Edit
 			Request</a> <a href="/RichirichBank/transactionReviewRequest"
 			class="btn btn-default">Review Transactions Request</a>
+		<a href="/RichirichBank/viewTransactions"
+			class="btn btn-default">View Recent Transactions</a>
 	</sec:authorize>
 	<sec:authorize access="hasRole('ROLE_M')">
 		<a href="/RichirichBank/newMerchantRequest" class="btn btn-default">Initiate Credit-Debit Request</a>
