@@ -18,7 +18,7 @@
 <body>
 	<jsp:include page="headExt.jsp"></jsp:include>
 	<div class="btn-group btn-group-justified">
-	<sec:authorize access="hasAnyRole('ROLE_SM','ROLE_RE', 'ROLE_SA')">
+	<sec:authorize access="hasAnyRole('ROLE_M','ROLE_U')">
 		<a href="/RichirichBank/viewMyProfile" class="btn btn-default">View</a>
 		<a href="/RichirichBank/requestEdit" class="btn btn-default">Edit
 			Request</a> <a href="/RichirichBank/transactionReviewRequest"

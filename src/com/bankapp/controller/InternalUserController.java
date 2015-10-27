@@ -260,6 +260,16 @@ public class InternalUserController {
 			return "viewEmpProfile";
 		}
 	}
+	
+	@RequestMapping(value="/viewMyIntProfile",method=RequestMethod.GET)
+	public String viewMyself(Model model)
+	{
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
+		UserInfo user = userService.getUserAndAccuntInfobyUserName(username);
+		model.addAttribute("accessInfo", user);
+		return "viewExtInfo";
+	}
 
 	
 }

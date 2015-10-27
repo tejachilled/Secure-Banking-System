@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.bankapp.model.Transaction;
 import com.bankapp.model.Transfer;
+import com.bankapp.model.UserInfo;
 import com.bankapp.model.Useraccounts;
 import com.bankapp.services.TransactionService;
 import com.bankapp.services.UserService;
@@ -257,5 +258,15 @@ public class RegularUserController {
 			return modelAndView;
 		}
 		
+	}
+	
+	@RequestMapping(value="/viewMyProfile",method=RequestMethod.GET)
+	public String viewMyself(Model model)
+	{
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
+		UserInfo user = userService.getUserAndAccuntInfobyUserName(username);
+		model.addAttribute("accessInfo", user);
+		return "viewIntInfo";
 	}
 }

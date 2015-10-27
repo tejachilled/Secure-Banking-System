@@ -34,7 +34,7 @@
 		<intercept-url pattern="/addExtUser" access="hasRole('ROLE_SM')" />
  
 		<!-- User and Merchant Pages -->
-		<intercept-url pattern="/extHome" access="hasRole('ROLE_U')" />
+		<intercept-url pattern="/extHome" access="hasAnyRole('ROLE_U','ROLE_M')" />
 		<intercept-url pattern="/Credit" access="hasAnyRole('ROLE_U','ROLE_M')" />
 		<intercept-url pattern="/Debit" access="hasAnyRole('ROLE_U','ROLE_M')" />
 		<intercept-url pattern="/initiateCredit" access="hasAnyRole('ROLE_U','ROLE_M')" />

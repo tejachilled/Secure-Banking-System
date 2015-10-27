@@ -16,32 +16,7 @@
 <title>Home</title>
 </head>
 <body>
-
-	<div class="navbar navbar-inverse">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle" data-toggle="collapse"
-				data-target=".navbar-inverse-collapse">
-				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-					class="icon-bar"></span>
-			</button>
-			<a class="navbar-brand" href="#">Welcome <sec:authentication
-					property="name" /></a>
-		</div>
-		<div class="navbar-collapse collapse navbar-inverse-collapse">
-			<ul class="nav navbar-nav">
-				<li class="active"><a href="/RichirichBank/extHome">Home</a></li>
-				<li class="dropdown"><a href="#" class="dropdown-toggle"
-					data-toggle="dropdown">Fund Management <b class="caret"></b></a>
-					<ul class="dropdown-menu">
-						<li><a href="/RichirichBank/Debit">Debit</a></li>
-						<li><a href="/RichirichBank/Credit">Credit</a></li>
-						<li><a href="/RichirichBank/Transfer">Transfer</a></li>
-			</ul>	</li></ul>	
-			<ul class="nav navbar-nav navbar-right">
-				<li><a href="/RichirichBank/logout">Logout</a></li>
-			</ul>
-		</div>
-	</div>
+<jsp:include page="headExt.jsp"></jsp:include>
 				<form:form action="/RichirichBank/initiateDebit" class="form-horizontal"
 				method="post" commandName="debit" name="debit" ModelAttribute="debit">
 				<fieldset>
