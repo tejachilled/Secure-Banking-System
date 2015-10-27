@@ -271,5 +271,4 @@ public class InternalUserController {
 		return "viewIntInfo";
 	}
 
-	
 }
