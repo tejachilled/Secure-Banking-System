@@ -182,11 +182,6 @@ body {
 <!-- Bootstrap Core CSS -->
 <link href="<c:url value="/resources/css/bootstrap.min.css"/>"
 	rel="stylesheet">
-<!-- Custom CSS -->
-<link href="<c:url value="/resources/css/grayscale.css"/>"
-	rel="stylesheet">
-<script type="text/javascript"
-	src="<c:url value="/resources/js/prefixfree.min.js"/>"></script>
 <link href="<c:url value="/resources/css/keyboard.css"/>"
 	rel="stylesheet">
 

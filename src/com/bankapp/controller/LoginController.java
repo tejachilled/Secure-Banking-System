@@ -56,7 +56,12 @@ public class LoginController {
 
 	}
 	@RequestMapping(value="/403",method=RequestMethod.GET)
-	public String accessDenied(ModelMap model) {
+	public String accessDenied(ModelMap model,Principal user) {
+
+		if (user != null) {
+			model.addAttribute("username",user.getName());
+		} 
+
 		return "403";
 	}
 

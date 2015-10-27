@@ -43,7 +43,6 @@ public class OTPServiceImpl implements OTPService {
 
 	@Override
 	public boolean checkOTP(String userName, String userOTP) throws CustomException {
-		// TODO Auto-generated method stub
 		return otpDao.checkOTP(userName, userOTP);
 	}
 }

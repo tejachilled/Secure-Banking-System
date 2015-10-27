@@ -274,7 +274,7 @@ public class RegularUserController {
 				.getAuthentication().getName();
 		UserInfo user = userService.getUserAndAccuntInfobyUserName(username);
 		model.addAttribute("accessInfo", user);
-		return "viewIntInfo";
+		return "viewExtInfo";
 	}
 	
 	@RequestMapping(value="/viewTransactions",method=RequestMethod.GET)
