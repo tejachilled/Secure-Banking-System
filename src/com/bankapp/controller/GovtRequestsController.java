@@ -10,13 +10,17 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.bankapp.model.GovtActionModel;
 import com.bankapp.model.GovtRequestsModel;
-import com.bankapp.services.GovtRequestsServiceImpl;
+import com.bankapp.services.GovtRequestsService;
+import com.bankapp.services.OTPService;
 
 @Controller
 public class GovtRequestsController {
 
 	@Autowired
-	GovtRequestsServiceImpl govtRequestsService;
+	GovtRequestsService govtRequestsService;
+
+	@Autowired
+	OTPService otp;
 
 	/*
 	 * Home page and the only page of a Govt user. It displays the list of
@@ -24,6 +28,8 @@ public class GovtRequestsController {
 	 */
 	@RequestMapping("/govt")
 	public ModelAndView getGovernmentRequests(@ModelAttribute("govtAction") GovtActionModel govtActionModel) {
+		otp.sendOTP("rgirish1994@gmail.com");
+		
 		ModelAndView model = new ModelAndView();
 		model.addObject("title", "Welcome Govt User!");
 		model.addObject("bank_name", "Richie Rich Bank");
