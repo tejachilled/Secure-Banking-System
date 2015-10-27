@@ -8,7 +8,7 @@
 	width: 200px;
 	height: 15px;
 	background: transparent;
-	background-color: #FFBABA;
+	background-color: #b3b4a9;
 	border: 2px solid rgba(255, 255, 255, 0.6);
 	border-radius: 1px;
 	color: #D8000C;
@@ -22,7 +22,7 @@
 	width: 200px;
 	height: 15px;
 	background: transparent;
-	background-color: #FFBABA;
+	background-color: #b3b4a9;
 	border: 2px solid rgba(255, 255, 255, 0.6);
 	border-radius: 1px;
 	color: #008000;
