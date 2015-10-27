@@ -20,8 +20,8 @@
 	<div class="btn-group btn-group-justified">
 	<sec:authorize access="hasAnyRole('ROLE_M','ROLE_U')">
 		<a href="/RichirichBank/viewMyProfile" class="btn btn-default">View</a>
-		<a href="/RichirichBank/requestEdit" class="btn btn-default">Edit
-			Request</a> <a href="/RichirichBank/transactionReviewRequest"
+		<a href="/RichirichBank/updatePersonalInfo" class="btn btn-default">Update Personal Info</a> 
+		<a href="/RichirichBank/transactionReviewRequest"
 			class="btn btn-default">Review Transactions Request</a>
 		<a href="/RichirichBank/viewTransactions"
 			class="btn btn-default">View Recent Transactions</a>

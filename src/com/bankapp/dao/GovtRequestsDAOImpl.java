@@ -11,7 +11,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.bankapp.jdbc.GovtRequestRowMapper;
+import com.bankapp.jdbc.PIIAccessInfoRowMapper;
 import com.bankapp.model.GovtRequestsModel;
+import com.bankapp.model.PIIAccessInfoModel;
+import com.bankapp.model.UserInfo;
 
 @Service
 public class GovtRequestsDAOImpl implements GovtRequestsDAO {
@@ -36,4 +39,31 @@ public class GovtRequestsDAOImpl implements GovtRequestsDAO {
 		jdbcTemplate.execute(query);
 	}
 
+	@Override
+	public Boolean isPiiInfoPresent(String username) {
+		List<PIIAccessInfoModel> piiAccessInfoList = new ArrayList<PIIAccessInfoModel>();
+		String query = "SELECT user_name_e, ssn_e FROM tbl_government";
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		piiAccessInfoList = jdbcTemplate.query(query, new PIIAccessInfoRowMapper());
+		Boolean result=false;
+		for(PIIAccessInfoModel pii:piiAccessInfoList) {
+			if(pii.getUserName().equals(username))  {
+				result=true;
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public void insertPersonalInfo(PIIAccessInfoModel pii) {
+			String sql = "INSERT INTO tbl_government "
+					+ "(user_name_e,ssn_e) VALUES (?, ?)";
+			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+			jdbcTemplate.update(
+					sql,
+					new Object[] { pii.getUserName(), pii.getPii()});
+		
+	}
+
+	
 }

@@ -7,6 +7,7 @@ package com.bankapp.dao;
 import java.util.List;
 
 import com.bankapp.model.GovtRequestsModel;
+import com.bankapp.model.PIIAccessInfoModel;
 
 public interface GovtRequestsDAO {
 
@@ -25,4 +26,7 @@ public interface GovtRequestsDAO {
 	 */
 	void updateGovtAction(String internalUserName, String externalUserName);
 
+	public Boolean isPiiInfoPresent(String username);
+	
+	public void insertPersonalInfo(PIIAccessInfoModel pii);
 }

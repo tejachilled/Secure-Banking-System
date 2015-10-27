@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.bankapp.dao.GovtRequestsDAO;
 import com.bankapp.model.GovtRequestsModel;
+import com.bankapp.model.PIIAccessInfoModel;
 
 @Service
 public class GovtRequestsServiceImpl implements GovtRequestsService {
@@ -34,6 +35,16 @@ public class GovtRequestsServiceImpl implements GovtRequestsService {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public Boolean isPiiInfoPresent(String username) {
+		return govtRequestsDAO.isPiiInfoPresent(username);
+	}
+
+	@Override
+	public void insertPersonalInfo(PIIAccessInfoModel pii) {	
+		govtRequestsDAO.insertPersonalInfo(pii);
 	}
 
 }
