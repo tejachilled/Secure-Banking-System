@@ -46,6 +46,9 @@ public class UserDAOImpl implements UserDAO {
 				new Object[] { user.getFirstName(), user.getLastName()});
 
 	}
+	
+	
+	
 	@Override
 	public List<UserInfo> getExternalUserList() {
 		List<UserInfo> userList = new ArrayList<>();
@@ -56,6 +59,33 @@ public class UserDAOImpl implements UserDAO {
 		userList = jdbcTemplate.query(sql, new UserRowMapper());
 		return userList;
 	}
+	
+	
+	@Override
+	public void updateLoginTable(String password, String userName) {
+		// TODO Auto-generated method stub
+		String sql = "update tbl_login set pwd_hash= ? , first_time = ?  where user_name= ?";
+		try {
+			conn = dataSource.getConnection();
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, password);
+			ps.setBoolean(2, false);
+			ps.setString(3, userName);
+			ps.executeUpdate();			
+			ps.close();
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {}
+			}
+		}
+	}
+
 	@Override
 	public boolean isFirstLogin(String name) {
 		return getLoginInfo(name).isFirstLogin();
@@ -390,7 +420,7 @@ public class UserDAOImpl implements UserDAO {
 		return 1;
 	}
 	private void insertToExternalUserTable(UserInfo userInfo) throws  UserNameExists {
-		String sql = "insert into tbl_external_users(user_name, first_name, last_name, email_id, phone_number, add_l1, add_l2, role) values(?,?,?,?,?,?,?,?)";
+		String sql = "insert into tbl_external_users(user_name, first_name, last_name, email_id, phone_number, add_l1, add_l2, role,sa1,sa2,sa3) values(?,?,?,?,?,?,?,?,?,?,?)";
 		try
 		{
 			conn = dataSource.getConnection();
@@ -407,6 +437,9 @@ public class UserDAOImpl implements UserDAO {
 			}else if(userInfo.getRole().equalsIgnoreCase(MERCHANT)){
 				ps.setString(8, "ROLE_M");
 			}
+			ps.setString(9, userInfo.getSq1());
+			ps.setString(10, userInfo.getSq2());
+			ps.setString(11, userInfo.getSq3());
 			ps.executeUpdate();
 		}
 		catch (SQLIntegrityConstraintViolationException e) {
@@ -426,7 +459,7 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	private void insertToInternalUserTable(UserInfo userInfo) throws UserNameExists, SQLException {
-		String sql = "insert into tbl_internal_users(user_name, first_name, last_name, email_id, phone_number, add_l1, add_l2, role) values(?,?,?,?,?,?,?,?)";
+		String sql = "insert into tbl_internal_users(user_name, first_name, last_name, email_id, phone_number, add_l1, add_l2, role,sa1,sa2,sa3) values(?,?,?,?,?,?,?,?,?,?,?)";
 		try
 		{
 			conn = dataSource.getConnection();
@@ -439,6 +472,9 @@ public class UserDAOImpl implements UserDAO {
 			ps.setString(6, userInfo.getAddress1());
 			ps.setString(7, userInfo.getAddress2());
 			ps.setString(8, userInfo.getRole());
+			ps.setString(9, userInfo.getSq1());
+			ps.setString(10, userInfo.getSq2());
+			ps.setString(11, userInfo.getSq3());
 			System.out.println("insertToInternalUserTable : "+ps.toString());
 			ps.executeUpdate();
 		}
@@ -535,7 +571,6 @@ public class UserDAOImpl implements UserDAO {
 
 		return false;
 	}
-
 
 
 

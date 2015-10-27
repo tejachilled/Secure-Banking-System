@@ -6,6 +6,6 @@ import com.bankapp.model.PIIAccessInfoModel;
 
 public interface PIIAccessInfoService {
 
-	List<PIIAccessInfoModel> getPIIAccessInfoList();
+	List<PIIAccessInfoModel> getPIIAccessInfoList(String userName);
 
 }

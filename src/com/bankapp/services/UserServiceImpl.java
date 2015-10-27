@@ -6,6 +6,7 @@ package com.bankapp.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bankapp.dao.UserDAO;
@@ -23,6 +24,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	 UserDAO userdao;
+	
+	@Autowired 
+	PasswordEncoder encoder;
 
 	 @Override
 	 public void insertData(UserInfo user) {
@@ -122,6 +126,12 @@ public class UserServiceImpl implements UserService {
 	public boolean isFirstLogin(String name) {
 		// TODO Auto-generated method stub
 		return userdao.isFirstLogin(name);
+	}
+
+	@Override
+	public void changePassword(String confirmPassword, String userName) {
+		// TODO Auto-generated method stub
+		userdao.updateLoginTable(encoder.encode(confirmPassword),userName);
 	}
 
 

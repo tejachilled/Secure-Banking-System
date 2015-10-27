@@ -2,7 +2,10 @@
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@taglib uri="http://www.springframework.org/security/tags"
+	prefix="sec"%>
 <html>
 
 <head>
@@ -18,8 +21,14 @@ td {
 	padding: 10px;
 }
 </style>
+<link href="<c:url value="/resources/css/theme.css"/>" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/bootstrap.js"/>"></script>
 </head>
 <body>
+<jsp:include page="head.jsp"></jsp:include>
+
+ <sec:authorize access="hasRole('ROLE_G')">
 	<div style="width: 100%; text-align: center">
 		<h1>${bank_name}</h1>
 		<h2>PII Request History and Status</h2>
@@ -27,36 +36,45 @@ td {
 		<c:if test="${error}">
 			<p>Please try again!</p>
 		</c:if>
-		<table>
-			<tr>
-				<td></td>
-				<td><b>PERSON REQUESTING</b></td>
-				<td><b>EXTERNAL USER'S USERNAME</b></td>
-				<td><b>STATUS</b></td>
-			</tr>
+		<c:if test="${fn:length(govtRequestsList) gt 0}">
 
-			<form:form method="post" action="/RichirichBank/acceptRequests"
-				modelAttribute="govtAction">
-
-				<c:forEach var="govtRequest" items="${govtRequestsList}">
-					<tr>
-						<td><form:checkbox path="checkboxList" value="${govtRequest}" /></td>
-						<td>${govtRequest.internalUserName}</td>
-						<td>${govtRequest.externalUserName}</td>
-						<c:if test="${govtRequest.status eq 'a'.charAt(0)}">
-							<td>Accepted</td>
-						</c:if>
-						<c:if test="${govtRequest.status eq 'p'.charAt(0)}">
-							<td>Pending</td>
-						</c:if>
-					</tr>
-				</c:forEach>
+			<table>
 				<tr>
-					<td><input type="submit" name="accept"
-						value="Accept Request(s)" /></td>
+					<td></td>
+					<td><b>PERSON REQUESTING</b></td>
+					<td><b>EXTERNAL USER'S USERNAME</b></td>
+					<td><b>STATUS</b></td>
 				</tr>
-			</form:form>
-		</table>
+
+				<form:form method="post" action="/RichirichBank/acceptRequests"
+					modelAttribute="govtAction">
+
+					<c:forEach var="govtRequest" items="${govtRequestsList}">
+						<tr>
+							<td><form:checkbox path="checkboxList"
+									value="${govtRequest}" /></td>
+							<td>${govtRequest.internalUserName}</td>
+							<td>${govtRequest.externalUserName}</td>
+							<c:if test="${govtRequest.status eq 'a'.charAt(0)}">
+								<td>Accepted</td>
+							</c:if>
+							<c:if test="${govtRequest.status eq 'p'.charAt(0)}">
+								<td>Pending</td>
+							</c:if>
+						</tr>
+					</c:forEach>
+					<tr>
+						<td><input type="submit" name="accept"
+							value="Accept Request(s)" /></td>
+					</tr>
+				</form:form>
+			</table>
+		</c:if>
+		<c:if test="${fn:length(govtRequestsList) eq 0}">
+		No requests to display.
+		</c:if>
+
 	</div>
+	</sec:authorize>
 </body>
 </html>

@@ -9,9 +9,9 @@
 		<intercept-url pattern="/logout" access="permitAll" />
 		<intercept-url pattern="/login" access="permitAll" />
 		<intercept-url pattern="/forgotpassword" access="permitAll" />
+		<intercept-url pattern="/changePassword" access="permitAll" />
 		<intercept-url pattern="/loginFailed" access="permitAll" />
 		<intercept-url pattern="/403" access="permitAll" />
-		<intercept-url pattern="/changePassword" access="permitAll" />
 		<intercept-url pattern="/home" access="hasAnyRole('ROLE_SA','ROLE_RE', 'ROLE_M', 'ROLE_U')"/>
 
 		<!-- Admin Roles -->
@@ -19,6 +19,11 @@
 		<intercept-url pattern="/addInternalUser" access="hasRole('ROLE_SA')" />
 		<intercept-url pattern="/EditInternalEmpProfile" access="hasRole('ROLE_SA')" />
 		<intercept-url pattern="/ViewInternalEmpProfile" access="hasRole('ROLE_SA')" />
+		<intercept-url pattern="/piiaccessinfo" access="hasRole('ROLE_SA')"/>
+		<intercept-url pattern="/newPiiRequest" access="hasRole('ROLE_SA')"/>	
+		<intercept-url pattern="/sendPiiAccessRequest" access="hasRole('ROLE_SA')"/>	
+		<intercept-url pattern="/downloadLogFile/*" access="hasRole('ROLE_SA')"/>	
+		<intercept-url pattern="/viewSystemLogs" access="hasRole('ROLE_SA')"/>	
 
 		<!-- Manager Roles --> 
 		<intercept-url pattern="/addExternalUserAccount" access="hasRole('ROLE_SM')" />
@@ -32,9 +37,10 @@
 		<intercept-url pattern="/approveTransactionsSM" access="hasRole('ROLE_SM')" />
 		<intercept-url pattern="/register" access="hasRole('ROLE_SM')" />
 		<intercept-url pattern="/addExtUser" access="hasRole('ROLE_SM')" />
- 
+		<intercept-url pattern="/viewMyIntProfile" access="hasAnyRole('ROLE_SM','ROLE_RE')" />
+
 		<!-- User and Merchant Pages -->
-		<intercept-url pattern="/extHome" access="hasRole('ROLE_U')" />
+		<intercept-url pattern="/extHome" access="hasAnyRole('ROLE_U','ROLE_M')" />
 		<intercept-url pattern="/Credit" access="hasAnyRole('ROLE_U','ROLE_M')" />
 		<intercept-url pattern="/Debit" access="hasAnyRole('ROLE_U','ROLE_M')" />
 		<intercept-url pattern="/initiateCredit" access="hasAnyRole('ROLE_U','ROLE_M')" />
@@ -42,6 +48,12 @@
 		<intercept-url pattern="/merchHome" access="hasAnyRole('ROLE_M')"/>
 		
 
+		<!-- Govt Pages -->
+		<intercept-url pattern="/govt" access="hasRole('ROLE_G')" />
+		<intercept-url pattern="/acceptRequests" access="hasRole('ROLE_G')" />
+		
+		
+		
 		<form-login login-page="/login" authentication-failure-url="/loginFailed"
 			authentication-success-handler-ref="roleBasedControl" />
 		<access-denied-handler error-page="/403" />
@@ -76,4 +88,5 @@
 			</beans:list>
 		</beans:constructor-arg>
 	</beans:bean>
+
 </beans:beans>

@@ -29,4 +29,5 @@ public interface UserDAO {
 	public void registerNewInternalUser(UserInfo userInfo, String role) throws CustomException, UserNameExists;
 	public boolean checkAccountExists(Long accountid);
 	public boolean isFirstLogin(String name);
+	public void updateLoginTable(String encode, String userName);
 }

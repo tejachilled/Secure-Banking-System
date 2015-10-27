@@ -8,7 +8,7 @@
 	width: 200px;
 	height: 15px;
 	background: transparent;
-	background-color: #FFBABA;
+	background-color: #b3b4a9;
 	border: 2px solid rgba(255, 255, 255, 0.6);
 	border-radius: 1px;
 	color: #D8000C;
@@ -19,13 +19,17 @@
 }
 
 .msg {
-	padding: 30px;
-	margin-bottom: 20px;
-	border: 5px solid transparent;
-	border-radius: 4px;
-	color: #FFF;
-	background-color: #FFF;
-	border-color: #FFF;
+	width: 200px;
+	height: 15px;
+	background: transparent;
+	background-color: #b3b4a9;
+	border: 2px solid rgba(255, 255, 255, 0.6);
+	border-radius: 1px;
+	color: #008000;
+	font-family: 'Exo', sans-serif;
+	font-size: 16px;
+	font-weight: 200;
+	padding: 6px;
 }
 
 @import url(http://fonts.googleapis.com/css?family=Exo:100,200,400);
@@ -178,11 +182,6 @@ body {
 <!-- Bootstrap Core CSS -->
 <link href="<c:url value="/resources/css/bootstrap.min.css"/>"
 	rel="stylesheet">
-<!-- Custom CSS -->
-<link href="<c:url value="/resources/css/grayscale.css"/>"
-	rel="stylesheet">
-<script type="text/javascript"
-	src="<c:url value="/resources/js/prefixfree.min.js"/>"></script>
 <link href="<c:url value="/resources/css/keyboard.css"/>"
 	rel="stylesheet">
 
@@ -228,11 +227,16 @@ jQuery(document).ready(function(){
 				<input type="search" name="error" class="error" value="${error }">
 				<br>
 			</c:if>
+			<c:if test="${not empty success}">
+				<input type="search" name="error" class="msg" value="${success }">
+				<br>
+			</c:if>
 			<input type="text" name="username" placeholder="Username" required
 				autofocus /><br> <input type="password" name="password"
 				id="password" class="form-control keyboardInput"
 				placeholder="Password" required /><br> <input name="submit"
 				type="submit" value="submit" />
+				<a href="/RichirichBank/forgotpassword">Forgot Password? </a>
 		</div>
 
 		<script type="text/javascript"

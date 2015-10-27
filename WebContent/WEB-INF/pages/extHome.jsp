@@ -18,11 +18,13 @@
 <body>
 	<jsp:include page="headExt.jsp"></jsp:include>
 	<div class="btn-group btn-group-justified">
-	<sec:authorize access="hasAnyRole('ROLE_SM','ROLE_RE', 'ROLE_SA')">
+	<sec:authorize access="hasAnyRole('ROLE_M','ROLE_U')">
 		<a href="/RichirichBank/viewMyProfile" class="btn btn-default">View</a>
 		<a href="/RichirichBank/requestEdit" class="btn btn-default">Edit
 			Request</a> <a href="/RichirichBank/transactionReviewRequest"
 			class="btn btn-default">Review Transactions Request</a>
+		<a href="/RichirichBank/viewTransactions"
+			class="btn btn-default">View Recent Transactions</a>
 	</sec:authorize>
 	<sec:authorize access="hasRole('ROLE_M')">
 		<a href="/RichirichBank/newMerchantRequest" class="btn btn-default">Initiate Credit-Debit Request</a>

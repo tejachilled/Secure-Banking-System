@@ -1125,7 +1125,7 @@ var VKI_attach, VKI_close;
     ];
     for (var x = 0, elem; elem = inputElems[x++];)
       for (var y = 0, ex; ex = elem[y++];)
-        if (ex.nodeName == "TEXTAREA" || ex.type == "text" || ex.type == "password")
+        if (ex.nodeName == "TEXTAREA" || ex.type == "text" || ex.type == "password" || ex.type == "number")
 				  if (ex.className.indexOf("keyboardInput") > -1) VKI_attach(ex);
 
     VKI_addListener(document.documentElement, 'click', function(e) { self.VKI_close(); }, false);

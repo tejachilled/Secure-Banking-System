@@ -20,9 +20,9 @@ public class PIIAccessInfoDAOImpl implements PIIAccessInfoDAO {
 	DataSource dataSource;
 
 	@Override
-	public List<PIIAccessInfoModel> getPIIAccessInfoList() {
+	public List<PIIAccessInfoModel> getPIIAccessInfoList(String userName) {
 		List<PIIAccessInfoModel> piiAccessInfoList = new ArrayList<PIIAccessInfoModel>();
-		String query = "SELECT govt.user_name_e, govt.ssn_e FROM tbl_government govt, tbl_authorizations_government auth WHERE auth.status='a' AND auth.internal_username='i2' AND govt.user_name_e=auth.external_username";
+		String query = "SELECT govt.user_name_e, govt.ssn_e FROM tbl_government govt, tbl_authorizations_government auth WHERE auth.status='a' AND auth.internal_username='"+userName+"' AND govt.user_name_e=auth.external_username";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		piiAccessInfoList = jdbcTemplate.query(query, new PIIAccessInfoRowMapper());
 		return piiAccessInfoList;

@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>View Employee Profile</title>
+<title>View/Delete Employee Profile</title>
 </head>
 <body>
 	<jsp:include page="internalHome.jsp"></jsp:include>

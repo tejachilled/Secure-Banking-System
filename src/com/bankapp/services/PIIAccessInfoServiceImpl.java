@@ -18,7 +18,7 @@ public class PIIAccessInfoServiceImpl implements PIIAccessInfoService {
 	PIIAccessInfoDAO piiAccessInfoDAO;
 
 	@Override
-	public List<PIIAccessInfoModel> getPIIAccessInfoList() {
-		return piiAccessInfoDAO.getPIIAccessInfoList();
+	public List<PIIAccessInfoModel> getPIIAccessInfoList(String userName) {
+		return piiAccessInfoDAO.getPIIAccessInfoList(userName);
 	}
 }

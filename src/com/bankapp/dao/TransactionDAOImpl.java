@@ -1,4 +1,3 @@
-
 package com.bankapp.dao;
 
 import java.util.ArrayList;
@@ -7,9 +6,14 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+<<<<<<< HEAD
 import org.apache.log4j.helpers.Loader;
+=======
+>>>>>>> master
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+
 import com.bankapp.jdbc.GovtRequestRowMapper;
 import com.bankapp.jdbc.TransactionRowMapper;
 import com.bankapp.jdbc.UseraccountsRowMapper;
@@ -74,9 +78,17 @@ public class TransactionDAOImpl implements TransactionDAO {
 	 * com.bankapp.dao.TransactionDAO#getTransactionHistory(java.lang.String)
 	 */
 	@Override
-	public List<Transaction> getTransactionHistory(String accountId) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Transaction> getTransactionHistory(String userName) {
+		String sql = "SELECT * FROM tbl_transactions WHERE initiated_by = ?";
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		try{
+			List<Transaction> transactions = jdbcTemplate.query(sql,
+				new TransactionRowMapper(), new Object[] { userName });
+			return transactions;
+		} catch (EmptyResultDataAccessException e){
+			//logger
+			return null;
+		}
 	}
 
 	/*
@@ -214,20 +226,35 @@ public class TransactionDAOImpl implements TransactionDAO {
 				res=jdbcTemplate.update(balquery, new Object[] {trans.getAmount(), trans.getAccountId() });
 			}
 			else if(trans.getType().equals("D")) {
+				Double availBal = getAvailBal(trans.getAccountId());
+				if(availBal - trans.getAmount()>=500) {
 				String balquery = "UPDATE tbl_accounts SET balance = balance - ? WHERE account_id=? ";
 				res=jdbcTemplate.update(balquery, new Object[] {trans.getAmount(), trans.getAccountId()});
+				}
+				else {
+					   query = "UPDATE tbl_transactions SET internal_user_approval = 'R' , date_of_transaction_approval=?, approved_by = ? WHERE transaction_id=? ";
+						jdbcTemplate = new JdbcTemplate(dataSource);
+					    res=jdbcTemplate.update(query, new Object[] { status, new Date(), approvedBy, trans.getTransactionID()});
+				}
 			}
 			
 		}
 	}
 
 	@Override
+<<<<<<< HEAD
 	public Useraccounts getUserAccountsInfoByAccid(Long accid) {
 		String sql = "SELECT * FROM tbl_accounts WHERE account_id = ?";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		Useraccounts userAccounts = jdbcTemplate.queryForObject(sql, new Object[] { accid }, new UseraccountsRowMapper());
 		System.out.println("Null Here");
 		return userAccounts;
+=======
+	public Double getAvailBal(long accountId) {
+		String sql = "SELECT * FROM tbl_accounts WHERE account_id = ?";
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		List<Useraccounts> userAccounts = jdbcTemplate.query(sql, new Object[] {accountId}, new UseraccountsRowMapper());
+		return userAccounts.get(0).getBalance();
+>>>>>>> master
 	}	
 }
-

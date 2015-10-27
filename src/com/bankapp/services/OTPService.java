@@ -1,7 +1,10 @@
 package com.bankapp.services;
 
+import com.bankapp.userexceptions.CustomException;
+
 public interface OTPService {
 
-	String sendOTP(String toEmailAddress);
+	boolean sendOTP(String toEmailAddress, String userName);
+	boolean checkOTP(String userName,String userOTP) throws CustomException;
 
 }

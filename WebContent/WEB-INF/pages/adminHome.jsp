@@ -26,6 +26,12 @@
 </head>
 <body>
 <jsp:include page="head.jsp"></jsp:include>
+<div class="btn-group btn-group-justified">
+	<sec:authorize access="hasAnyRole('ROLE_SA')">
+		<a href="/RichirichBank/newPiiRequest" class="btn btn-default">New PII Request</a>
+		<a href="/RichirichBank/piiaccessinfo" class="btn btn-default">PII Access Info</a>
+	</sec:authorize>
+	</div>
 <div class="middleDiv">Welcome Admin :)</div>
 </body>
 </html>

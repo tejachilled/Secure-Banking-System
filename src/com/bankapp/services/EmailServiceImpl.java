@@ -1,5 +1,8 @@
 package com.bankapp.services;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.security.Security;
 import java.util.Date;
@@ -24,6 +27,9 @@ import javax.mail.internet.MimeMultipart;
 
 import org.springframework.stereotype.Service;
 
+import com.sendgrid.SendGrid;
+import com.sendgrid.SendGridException;
+import com.sendgrid.SendGrid.Email;
 import com.sun.mail.smtp.SMTPTransport;
 
 
@@ -44,12 +50,13 @@ public class EmailServiceImpl implements EmailService {
 		return pass.toString();		
 	}
 	
-	 public void Send(final String tempPassword, String recipientEmail) throws AddressException, MessagingException {
-		 final String username = "SunDevilBankASU";
+	 public void Send(String userName,final String tempPassword, String recipientEmail,Long accNo) throws AddressException, MessagingException {
+		 final String FromEmail = "SunDevilBankASU";
 		 final String password = "SunDevilBank";
 		 final String title = "Confidential Information enclosed from SunDevilBank";
-		 String message = "Your temporary password : "+tempPassword;
-		 EmailServiceImpl.Send(username, password, recipientEmail, "", title, message);
+		 String message = "Your Username : "+ userName+ "\n "+
+				 "Your temporary password : "+tempPassword+ "\n ";
+		 EmailServiceImpl.Send(FromEmail, password, recipientEmail, "", title, message);
 	    }
 	 public static void Send(final String username, final String password, String recipientEmail, String ccEmail, String title, String message) throws AddressException, MessagingException {
 	        Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
@@ -96,73 +103,31 @@ public class EmailServiceImpl implements EmailService {
 	        t.sendMessage(msg, msg.getAllRecipients());      
 	        t.close();
 	    }
-	 // Not working for attachent as file was not presenr. Please some one fix it
-	 public boolean sendEmailWithAttachment(String emailId,String username,String decodedPwd)
-		{
-			Properties props = new Properties();
-			props.put("mail.smtp.host", "smtp.gmail.com");
-			props.put("mail.smtp.socketFactory.port", "465");
-			props.put("mail.smtp.socketFactory.class",
-					"javax.net.ssl.SSLSocketFactory");
-			props.put("mail.smtp.auth", "true");
-			props.put("mail.smtp.port", "465");
-
-			Session session = Session.getDefaultInstance(props,
-					new javax.mail.Authenticator() {
-						protected PasswordAuthentication getPasswordAuthentication() {
-							return new PasswordAuthentication(
-									"SunDevilBankASU@gmail.com", "SunDevilBank");
-						}
-					});
-			
+	 @Override
+		public boolean sendEmailWithAttachment(String toName, String fromName, String toAddress, String fromAddress, String subject,
+				String body, File attachment) {
+			SendGrid sendgrid = new SendGrid("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");
+			Email email = new Email();
+			email.addTo(toAddress);
+			email.setFromName(fromName);
+			email.addToName(toName);
+			email.setFrom(fromAddress);
+			email.setSubject(subject);
+			email.setText(body);
 			try {
-				  MimeMessage message = new MimeMessage(session);
-			         message.setFrom(new InternetAddress("SunDevilBankASU@gmail.com"));
-			         message.addRecipient(Message.RecipientType.TO,
-			                                  new InternetAddress(emailId));
-			         message.setSubject("RichiRich Bank ");
-			         BodyPart messageBodyPart = new MimeBodyPart();
-			         messageBodyPart.setText("This is your token have fun!!   "+"\n Your Password is " + decodedPwd);
-			         Multipart multipart = new MimeMultipart();
-
-			         multipart.addBodyPart(messageBodyPart);
-			         // Part two is attachment
-			         messageBodyPart = new MimeBodyPart();
-			         String filename = "file.txt";
-			         DataSource source = new FileDataSource(filename);
-			         messageBodyPart.setDataHandler(new DataHandler(source));
-			         messageBodyPart.setFileName(filename);
-			         multipart.addBodyPart(messageBodyPart);
-
-			         // Send the complete message parts
-			         message.setContent(multipart );
-//
-//			         messageBodyPart = new MimeBodyPart();
-//			         String filename = username+".pfx";
-//			         DataSource source = new FileDataSource(filename);
-//			         messageBodyPart.setDataHandler(new DataHandler(source));
-//			         messageBodyPart.setFileName(filename);
-//			         multipart.addBodyPart(messageBodyPart);
-//			         message.setContent(multipart );
-//			         
-//			         messageBodyPart=new MimeBodyPart();
-//			         String filename1= "Encryptor.jar";
-//			         DataSource source1=new FileDataSource(filename);
-//			         messageBodyPart.setDataHandler(new DataHandler(source1));
-//			         messageBodyPart.setFileName(filename1);
-//			         multipart.addBodyPart(messageBodyPart);
-//			         message.setContent(multipart);
-//			         
-			         Transport.send(message);
-			         System.out.println("Sent message successfully....");
-			        
-
-			} catch (MessagingException e) {
-				throw new RuntimeException(e);
+				if (attachment != null) {
+					// change the file name here
+					email.addAttachment("filename.extension", attachment);
+				}
+				sendgrid.send(email);
+			} catch (FileNotFoundException fnfe) {
+				return false;
+			} catch (IOException fnfe) {
+				return false;
+			} catch (SendGridException fnfe) {
+				return false;
 			}
-
-			return false;
-
+			return true;
 		}
 }
 	

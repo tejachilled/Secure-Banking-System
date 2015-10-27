@@ -80,8 +80,11 @@
 							</sec:authorize>
 						</ul></li>
 				</sec:authorize>
+				<sec:authorize access="hasRole('ROLE_SA')">
+					<li><a href="/RichirichBank/viewSystemLogs">System Logs</a></li>
+				</sec:authorize>
 			</ul>
-
+            
 
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="/RichirichBank/logout">Logout</a></li>

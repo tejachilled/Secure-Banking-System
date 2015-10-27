@@ -10,6 +10,6 @@ import com.bankapp.model.PIIAccessInfoModel;
 
 public interface PIIAccessInfoDAO {
 
-	public List<PIIAccessInfoModel> getPIIAccessInfoList();
+	public List<PIIAccessInfoModel> getPIIAccessInfoList(String userName);
 
 }
