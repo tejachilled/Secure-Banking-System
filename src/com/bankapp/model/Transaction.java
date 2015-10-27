@@ -16,6 +16,7 @@ public class Transaction {
 	private Date dateInitiated;
 	private Date dataApproved;
 	private String remark;
+	private String accType;
 	
 	/**
 	 * @return the transactionID
@@ -113,6 +114,12 @@ public class Transaction {
 	 */
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	public String getAccType() {
+		return accType;
+	}
+	public void setAccType(String accType) {
+		this.accType = accType;
 	}
 	
 	

@@ -39,6 +39,8 @@ public interface TransactionService {
 	
 	public List<Useraccounts> getUserAccountsInfoByUserName(String UserName);
 	
+	public Useraccounts getUserAccountsInfoByAccid(Long accid);
+	
 	public Boolean updateBalance(Useraccounts userAccounts);
 	
 	public void deleteTransaction(Transaction transaction);

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.bankapp.model.AccountType;
 import com.bankapp.model.Transaction;
 import com.bankapp.model.Transfer;
 import com.bankapp.model.Useraccounts;
@@ -49,22 +50,8 @@ public class RegularUserController {
 	
 	@RequestMapping(value="/Credit")
 	public String creditPage(ModelMap model) {
-		model.addAttribute("credit", new Transaction());
-		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-		logger.info("Inside User");
-		List<Useraccounts> userAccounts = transactionService.getUserAccountsInfoByUserName(userName);
-		for (Useraccounts userAccount: userAccounts){
-			String accountid = String.valueOf(userAccount.getAccountno());
-			logger.info(accountid);
-			if (userAccount.getAccountType().equalsIgnoreCase("savings")){
-				model.addAttribute("account_savings", "SAVINGS - " + accountid.substring(accountid.length() - 4, accountid.length()));
-			}
-			else if (userAccount.getAccountType().equalsIgnoreCase("checking"))
-			{
-				model.addAttribute("account_checking", "CHECKING - " + accountid.substring(accountid.length() - 4, accountid.length()));
-			}		
-		}
-		
+		model.addAttribute("credit", new Transaction());		
+		bindAccounts(model);
 		logger.info("Inside User Credit");
 		return "credit";
 	}
@@ -72,20 +59,8 @@ public class RegularUserController {
 	@RequestMapping(value="/Debit")
 	public String debitPage(ModelMap model) {
 		model.addAttribute("debit", new Transaction());
-		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-		List<Useraccounts> userAccounts = transactionService.getUserAccountsInfoByUserName(userName);
-		for (Useraccounts userAccount: userAccounts){
-			String accountid = String.valueOf(userAccount.getAccountno());
-			logger.info(accountid);
-			if (userAccount.getAccountType().equalsIgnoreCase("savings")){
-				model.addAttribute("account_savings", "SAVINGS - " + accountid.substring(accountid.length() - 4, accountid.length()));
-			}
-			else if (userAccount.getAccountType().equalsIgnoreCase("checking"))
-			{
-				model.addAttribute("account_checking", "CHECKING - " + accountid.substring(accountid.length() - 4, accountid.length()));
-			}		
-		}
 		
+		bindAccounts(model);		
 		logger.info("Inside User Debit");
 		return "debit";
 	}
@@ -93,19 +68,7 @@ public class RegularUserController {
 	@RequestMapping(value="/Transfer")
 	public String transferPage(ModelMap model) {
 		model.addAttribute("transferAmt", new Transfer());
-		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-		List<Useraccounts> userAccounts = transactionService.getUserAccountsInfoByUserName(userName);
-		for (Useraccounts userAccount: userAccounts){
-			String accountid = String.valueOf(userAccount.getAccountno());
-			logger.info(accountid);
-			if (userAccount.getAccountType().equalsIgnoreCase("savings")){
-				model.addAttribute("account_savings", "SAVINGS - " + accountid.substring(accountid.length() - 4, accountid.length()));
-			}
-			else if (userAccount.getAccountType().equalsIgnoreCase("checking"))
-			{
-				model.addAttribute("account_checking", "CHECKING - " + accountid.substring(accountid.length() - 4, accountid.length()));
-			}		
-		}
+		bindAccounts(model);
 		return "transfer";
 	}
 	
@@ -116,15 +79,24 @@ public class RegularUserController {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("debit", new Transaction());
 		modelAndView.setViewName("debit");
-		
+		logger.info(transaction.getAccType());		
+		bindAccounts(modelAndView);
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
 		logger.info("Inside User Debit-initiated by: "+userName);
+		
 		List<Useraccounts> userAccounts = transactionService.getUserAccountsInfoByUserName(userName);
+		Useraccounts accUserAccount = null;
+		
+		for (Useraccounts currUserAcc: userAccounts){
+			if(currUserAcc.getAccountType().equals(transaction.getAccType())){
+				accUserAccount = currUserAcc;
+			}
+		}
 		try {
 			if(transaction.getAmount()<0){
 				throw new NegativeAmountException("Amount cannot be a negative Value!!!");
 			}
-			if((userAccounts.get(0).getBalance()-transaction.getAmount()<500)){
+			if(accUserAccount.getBalance()-transaction.getAmount()<500){
 				throw new MinimumBalanceException("Debit Cannot be performed as the Amount after debit is lesser than the minimum balance of $500 !!!");
 			}
 		Transaction trans = new Transaction();
@@ -140,17 +112,17 @@ public class RegularUserController {
 			trans.setIsCritical("N");
 		}
 		trans.setDateInitiated(new Date());
-		trans.setAccountId(userAccounts.get(0).getAccountno());
+		trans.setAccountId(accUserAccount.getAccountno());
 		trans.setTransactionID(UUID.randomUUID().toString());
-		Boolean res= transactionService.insertNewTransaction(trans, userAccounts.get(0));
+		Boolean res= transactionService.insertNewTransaction(trans, accUserAccount);
 		if(res.equals(true)&&!trans.getIsCritical().equals("N")) {
 			modelAndView.addObject("msg","Debit Transaction has been submit the bank..The amount will be debited from your account once the Transaction is Approved!!!");
 		}
 		else if(res.equals(true)&&trans.getIsCritical().equals("N")) {
-			userAccounts.get(0).setBalance(userAccounts.get(0).getBalance()-transaction.getAmount());
-			Boolean val=transactionService.updateBalance(userAccounts.get(0));
+			accUserAccount.setBalance(accUserAccount.getBalance()-transaction.getAmount());
+			Boolean val=transactionService.updateBalance(accUserAccount);
 			if(val)
-				modelAndView.addObject("msg", "Debit was Successful..New Account Balance is "+userAccounts.get(0).getBalance());
+				modelAndView.addObject("msg", "Debit was Successful..New Account Balance is "+accUserAccount.getBalance());
 			else {
 				modelAndView.addObject("msg","Unexpected Error Occurred or Invalid Input format..Please Try Again.. If problem persists contact the customer support!!!");
 				transactionService.deleteTransaction(transaction);
@@ -182,15 +154,23 @@ public class RegularUserController {
 		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("credit", new Transaction());
+		logger.info(transaction.getAccType());
 		modelAndView.setViewName("credit");
-		
+		bindAccounts(modelAndView);
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-		
 		
 		try {
 			List<Useraccounts> userAccounts = transactionService.getUserAccountsInfoByUserName(userName);
 			if(transaction.getAmount()<0){
 				throw new NegativeAmountException("Amount cannot be a negative Value!!!");
+			}
+		Useraccounts accUserAccount = null;
+		for (Useraccounts currUserAcc: userAccounts){
+				if(currUserAcc.getAccountType().equalsIgnoreCase(transaction.getAccType())){
+					accUserAccount = currUserAcc;
+					logger.info("Trans" + transaction.getAccType());
+					logger.info("Curr" + currUserAcc.getAccountType());
+				}
 			}
 		Transaction trans = new Transaction();
 		trans.setAmount(transaction.getAmount());
@@ -205,22 +185,22 @@ public class RegularUserController {
 			trans.setIsCritical("N");
 		}
 		trans.setDateInitiated(new Date());
-		trans.setAccountId(userAccounts.get(0).getAccountno());
+		trans.setAccountId(accUserAccount.getAccountno());
 		trans.setTransactionID(UUID.randomUUID().toString());
-		Boolean res= transactionService.insertNewTransaction(trans, userAccounts.get(0));
+		Boolean res= transactionService.insertNewTransaction(trans, accUserAccount);
 		
 		if(res.equals(true)&&trans.getIsCritical()!="N") {
 			modelAndView.addObject("msg","Credit Transaction has been submit the bank..The amount will be credited from your account once the Transaction is Approved!!!");
 		}
 		else if(res.equals(true)&&trans.getIsCritical()=="N") {
 
-			userAccounts.get(0).setBalance(userAccounts.get(0).getBalance()+transaction.getAmount());
-			Boolean val=transactionService.updateBalance(userAccounts.get(0));
+			accUserAccount.setBalance(accUserAccount.getBalance()+transaction.getAmount());
+			Boolean val=transactionService.updateBalance(accUserAccount);
 			if(val) {
-				modelAndView.addObject("msg", "Credit was Successful..New Account Balance is "+userAccounts.get(0).getBalance());
+				modelAndView.addObject("msg", "Credit was Successful..New Account Balance is "+accUserAccount.getBalance());
 			}
 			else {
-				modelAndView.addObject("msg","Unexpected Error Occurred or Invalid Input format..Please Try Again.. If problem persists contact the customer support!!!");
+				//modelAndView.addObject("msg","Unexpected Error Occurred or Invalid Input format..Please Try Again.. If problem persists contact the customer support!!!");
 				transactionService.deleteTransaction(transaction);
 			}
 		}
@@ -247,14 +227,137 @@ public class RegularUserController {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("transferAmt", new Transfer());
 		modelAndView.setViewName("transfer");
+		logger.info(transfer.getAccType());
+		bindAccounts(modelAndView);
 		Long accno = transfer.getToAccountNo();
 		boolean accStatus = userService.checkAccountExists(accno);
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		logger.info("Inside User Debit-initiated by: "+userName);
+		
+		List<Useraccounts> userAccounts = transactionService.getUserAccountsInfoByUserName(userName);
+		Useraccounts debUserAccount = null;
+		try{
+		for (Useraccounts currUserAcc: userAccounts){
+				if(currUserAcc.getAccountType().equalsIgnoreCase(transfer.getAccType())){
+					debUserAccount = currUserAcc;
+					logger.info("Checking Null 1");
+				}
+			}
+		Transaction debTrans = new Transaction();
+		Transaction credTrans = new Transaction();
+		debTrans.setAccountId(debUserAccount.getAccountno());
+		logger.info("Checking Null 2");
+		credTrans.setAccountId(transfer.getToAccountNo());
+		logger.info("Checking Null 3");
+		debTrans.setType("D");
+		credTrans.setType("C");
+		if(transfer.getAmountInvolved()>=10000) {
+			debTrans.setIsCritical("H");
+			credTrans.setIsCritical("H");
+		}
+		else if (transfer.getAmountInvolved()<10000 && transfer.getAmountInvolved()>=1000){
+			debTrans.setIsCritical("L");
+			credTrans.setIsCritical("L");
+		}
+		else {
+			debTrans.setIsCritical("N");
+			credTrans.setIsCritical("N");
+		}
+		logger.info("Checking Null 4");
+		debTrans.setDateInitiated(new Date());
+		logger.info("Checking Null 5");
+		credTrans.setDateInitiated(new Date());
+		logger.info("Checking Null 6");
+		String transId = UUID.randomUUID().toString();
+		logger.info("Checking Null 7");
+		debTrans.setTransactionID(transId);
+		logger.info("Checking Null 8");
+		credTrans.setTransactionID(transId);
+		logger.info("Checking Null 9");
+		logger.info(transactionService);
+		Boolean debres = null;
+		try{
+		debres= transactionService.insertNewTransaction(debTrans, debUserAccount);
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+		}
+		logger.info("Checking Null 10");
+		Useraccounts credUserAccount = null;
+		logger.info("Checking Null 11");
+		credUserAccount = transactionService.getUserAccountsInfoByAccid(transfer.getToAccountNo());		
+		logger.info("Checking Null 12");
+		Boolean credres= transactionService.insertNewTransaction(credTrans, credUserAccount);
+		logger.info("Checking Null 13");
+		if(debres.equals(true)&&credres.equals(true)&&!debTrans.getIsCritical().equals("N")) {
+			modelAndView.addObject("msg","Debit Transaction has been submit the bank..The amount will be debited from your account once the Transaction is Approved!!!");
+		}
+		else if(debres.equals(true)&&credres.equals(true)&&debTrans.getIsCritical().equals("N")) {
+			debUserAccount.setBalance(debUserAccount.getBalance()-transfer.getToAccountNo());
+			credUserAccount.setBalance(credUserAccount.getBalance()+transfer.getToAccountNo());
+			Boolean debval=transactionService.updateBalance(debUserAccount);
+			Boolean credval = transactionService.updateBalance(credUserAccount);
+			if(credval && debval )
+				modelAndView.addObject("msg", "Transfer was Successful..New Account Balance is "+debUserAccount.getBalance());
+			else {
+				modelAndView.addObject("msg","Unexpected Error Occurred or Invalid Input format..Please Try Again.. If problem persists contact the customer support!!!");
+				transactionService.deleteTransaction(debTrans);
+				transactionService.deleteTransaction(credTrans);
+			}
+		}
+		else {
+			modelAndView.addObject("msg","Unexpected Error Occurred or Invalid Input format..Please Try Again.. If problem persists contact the customer support!!!");
+		}
+		
+		}
+		catch(Exception ex)
+		{
+			logger.info(ex);
+		}
+		
 		if (accStatus){
 			return modelAndView;
 		}
 		else {
-			modelAndView.addObject("errorMessage", "Account Does not exist Chal Chutiye!!!");
+			modelAndView.addObject("errorMessage", "Account Does not exist in Our System !!!");
 			return modelAndView;
+		}
+		
+	}
+	
+	private void bindAccounts(ModelMap model){
+		
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		logger.info("Inside User");
+		List<Useraccounts> userAccounts = transactionService.getUserAccountsInfoByUserName(userName);
+		for (Useraccounts userAccount: userAccounts){
+			String accountid = String.valueOf(userAccount.getAccountno());
+			logger.info(accountid);
+			if (userAccount.getAccountType().equalsIgnoreCase("savings")){
+				model.addAttribute("account_savings", "SAVINGS - " + accountid.substring(accountid.length() - 4, accountid.length()));
+			}
+			else if (userAccount.getAccountType().equalsIgnoreCase("checking"))
+			{
+				model.addAttribute("account_checking", "CHECKING - " + accountid.substring(accountid.length() - 4, accountid.length()));
+			}		
+		}
+		
+	}
+	
+	private void bindAccounts(ModelAndView modelAndView){
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		logger.info("Inside User");
+		List<Useraccounts> userAccounts = transactionService.getUserAccountsInfoByUserName(userName);
+		for (Useraccounts userAccount: userAccounts){
+			String accountid = String.valueOf(userAccount.getAccountno());
+			logger.info(accountid);
+			if (userAccount.getAccountType().equalsIgnoreCase("savings")){
+				modelAndView.addObject("account_savings", "SAVINGS - " + accountid.substring(accountid.length() - 4, accountid.length()));
+			}
+			else if (userAccount.getAccountType().equalsIgnoreCase("checking"))
+			{
+				modelAndView.addObject("account_checking", "CHECKING - " + accountid.substring(accountid.length() - 4, accountid.length()));
+			}		
 		}
 		
 	}

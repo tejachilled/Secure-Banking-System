@@ -39,13 +39,13 @@
 			</ul>
 		</div>
 	</div>
-	<form:form action="/RichirichBank/initiateTransfer" class="form-horizontal"	method="post" commandName="transferAmt" name="transferAmt" ModelAttribute="transferAmt">
+	<form:form action="/RichirichBank/initiateTransfer" class="form-horizontal"	method="post" commandName="transferAmt" name="transferAmt" ModelAttribute="transferAmt" >
 				<fieldset>
 					<legend>${errorMessage}</legend>
-					<div class="form-group">
-						<form:select path="type"> 
+					<div class="form-group col-lg-2">
+						<form:select path="accType"> 
 						<form:option value="Savings">${account_savings}</form:option>
-						<form:option value="Checkings">${account_checking}</form:option>
+						<form:option value="Checking">${account_checking}</form:option>
 						</form:select>
 					</div>
 

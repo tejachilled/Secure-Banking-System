@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 import javax.sql.DataSource;
+
+import org.apache.log4j.helpers.Loader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import com.bankapp.jdbc.GovtRequestRowMapper;
@@ -144,6 +146,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 							accounts.getUsername() });
 		}
 		else {
+		
 			System.out.println("Inside insert new transaction dao: mani");
 			try {
 			String sql = "Insert into tbl_transactions (transaction_id,account_id,transaction_type,isCritical,amount,date_of_transaction_initiation,date_of_transaction_approval,internal_user_approval,initiated_by,approved_by) Values(?,?,?,?,?,?,?,?,?,?)";
@@ -216,6 +219,15 @@ public class TransactionDAOImpl implements TransactionDAO {
 			}
 			
 		}
+	}
+
+	@Override
+	public Useraccounts getUserAccountsInfoByAccid(Long accid) {
+		String sql = "SELECT * FROM tbl_accounts WHERE account_id = ?";
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		Useraccounts userAccounts = jdbcTemplate.queryForObject(sql, new Object[] { accid }, new UseraccountsRowMapper());
+		System.out.println("Null Here");
+		return userAccounts;
 	}	
 }
 
