@@ -1,4 +1,3 @@
-
 package com.bankapp.dao;
 
 import java.util.ArrayList;
@@ -236,4 +235,3 @@ public class TransactionDAOImpl implements TransactionDAO {
 		return userAccounts.get(0).getBalance();
 	}	
 }
-
