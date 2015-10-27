@@ -96,7 +96,7 @@ public class LoginController {
 			if(!password.equals(confirmPassword))
 				throw new Exception("Passwords do not match!");
 			else if(!password.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,10}$")){
-				throw new Exception("invalid password, must be 10 characters and contain one capital letter and a number. Special characters are not allowed");
+				throw new Exception("Invalid password, must be 4-10 characters and contain one capital letter and a number. Special characters are not allowed");
 			}
 			String userName = SecurityContextHolder.getContext().getAuthentication().getName();
 			model= new ModelAndView("login");
@@ -107,7 +107,7 @@ public class LoginController {
 				System.out.println("in changepassword method un : "+userName);
 				userService.changePassword(confirmPassword, userName);
 				SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
-				model.addObject("success","Your password is successfully updated");
+				model.addObject("success","Successfully updated");
 				
 			}
 			return model;

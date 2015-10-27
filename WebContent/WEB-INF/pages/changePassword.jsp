@@ -33,6 +33,7 @@
 			</ul>
 		</div>
 	</div>
+	<h5>*Password must be 4-10 characters, should contain one capital letter and a number*</h5>
 	<form:form action="/RichirichBank/changePassword"
 		class="form-horizontal" method="post">
 		<fieldset>

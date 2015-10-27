@@ -49,7 +49,7 @@ public class UserValidator implements Validator {
 			arg1.rejectValue("phoneNumber", "UserInfo.phoneNumber");
 		}
 
-		if (address1 != null && !address1.matches("^[a-zA-Z0-9_#]*$")) {
+		if (address1 != null && !address1.matches("\\d+\\s+([a-zA-Z]+|[a-zA-Z]+\\s[a-zA-Z]+)")) {
 			arg1.rejectValue("address1", "UserInfo.address1");
 		}
 

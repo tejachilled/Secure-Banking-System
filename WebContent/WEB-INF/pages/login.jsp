@@ -241,6 +241,7 @@ jQuery(document).ready(function(){
 				id="password" class="form-control keyboardInput"
 				placeholder="Password" required /><br> <input name="submit"
 				type="submit" value="submit" />
+				<a href="/RichirichBank/forgotpassword">Forgot Password? </a>
 		</div>
 
 		<script type="text/javascript"
