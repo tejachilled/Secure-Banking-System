@@ -245,6 +245,8 @@ public class RegularUserController {
 			}
 		Transaction debTrans = new Transaction();
 		Transaction credTrans = new Transaction();
+		debTrans.setAmount(transfer.getAmountInvolved());
+		credTrans.setAmount(transfer.getAmountInvolved());
 		debTrans.setAccountId(debUserAccount.getAccountno());
 		logger.info("Checking Null 2");
 		credTrans.setAccountId(transfer.getToAccountNo());
@@ -273,8 +275,14 @@ public class RegularUserController {
 		debTrans.setTransactionID(transId);
 		logger.info("Checking Null 8");
 		credTrans.setTransactionID(transId);
-		logger.info("Checking Null 9");
-		logger.info(transactionService);
+		logger.info(debUserAccount);
+
+		logger.info(debTrans.getTransactionID());
+				logger.info(debTrans.getAccountId());
+				logger.info(debTrans.getType());
+						logger.info(debTrans.getIsCritical());
+								logger.info(debTrans.getAmount());
+										logger.info(debTrans.getDateInitiated());
 		Boolean debres = null;
 		try{
 		debres= transactionService.insertNewTransaction(debTrans, debUserAccount);
@@ -293,8 +301,8 @@ public class RegularUserController {
 			modelAndView.addObject("msg","Debit Transaction has been submit the bank..The amount will be debited from your account once the Transaction is Approved!!!");
 		}
 		else if(debres.equals(true)&&credres.equals(true)&&debTrans.getIsCritical().equals("N")) {
-			debUserAccount.setBalance(debUserAccount.getBalance()-transfer.getToAccountNo());
-			credUserAccount.setBalance(credUserAccount.getBalance()+transfer.getToAccountNo());
+			debUserAccount.setBalance(debUserAccount.getBalance()-transfer.getAmountInvolved());
+			credUserAccount.setBalance(credUserAccount.getBalance()+transfer.getAmountInvolved());
 			Boolean debval=transactionService.updateBalance(debUserAccount);
 			Boolean credval = transactionService.updateBalance(credUserAccount);
 			if(credval && debval )
