@@ -21,8 +21,7 @@
 	<sec:authorize access="hasAnyRole('ROLE_RE','ROLE_SM')">
 		<div class="btn-group btn-group-justified">
 			<a href="/RichirichBank/viewMyIntProfile" class="btn btn-default">View</a>
-			<a href="/EditExtProfile" class="btn btn-default">Edit</a> <a
-				href="/ExtUserRequests" class="btn btn-default">External User
+			<a href="/ExtUserRequests" class="btn btn-default">External User
 				Requests</a>
 			<sec:authorize access="hasRole('ROLE_RE')">
 				<a href="/RichirichBank/pendingTransactionsRE"
@@ -32,8 +31,6 @@
 				<a href="/RichirichBank/pendingTransactionsSM"
 					class="btn btn-default">Authorize Transactions (Critical)</a>
 			</sec:authorize>
-			<a href="/ExtUserProfileViewReq" class="btn btn-default">Profile
-				View Request</a>
 		</div>
 	</sec:authorize>
 </body>

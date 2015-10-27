@@ -266,9 +266,9 @@ public class InternalUserController {
 	{
 		String username = SecurityContextHolder.getContext()
 				.getAuthentication().getName();
-		UserInfo user = userService.getUserAndAccuntInfobyUserName(username);
+		UserInfo user = userService.getUserInfobyUserName(username);
 		model.addAttribute("accessInfo", user);
-		return "viewExtInfo";
+		return "viewIntInfo";
 	}
 
 	

@@ -12,7 +12,7 @@
 <title>View My Profile</title>
 </head>
 <body>
-	<jsp:include page="head.jsp"></jsp:include>
+	<jsp:include page="internalHome.jsp"></jsp:include>
 	<h3>This is your profile!</h3>
 	<div>
 		<div class="panel panel-default">
@@ -44,12 +44,6 @@
 			<div class="panel-body">${accessInfo.phoneNumber}</div>
 		</div>
 
-		<c:forEach var="accounts" items="${accessInfo.account}">
-			<div class="panel panel-default">
-				<div class="panel-heading">${accounts.accountType}Account</div>
-				<div class="panel-body">${accounts.accountno}</div>
-			</div>
-		</c:forEach>
 	</div>
 </body>
 </html>

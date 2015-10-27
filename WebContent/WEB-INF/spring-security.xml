@@ -32,6 +32,8 @@
 		<intercept-url pattern="/approveTransactionsSM" access="hasRole('ROLE_SM')" />
 		<intercept-url pattern="/register" access="hasRole('ROLE_SM')" />
 		<intercept-url pattern="/addExtUser" access="hasRole('ROLE_SM')" />
+		<intercept-url pattern="/viewMyIntProfile" access="hasAnyRole('ROLE_SM','ROLE_RE')" />
+
  
 		<!-- User and Merchant Pages -->
 		<intercept-url pattern="/extHome" access="hasAnyRole('ROLE_U','ROLE_M')" />
