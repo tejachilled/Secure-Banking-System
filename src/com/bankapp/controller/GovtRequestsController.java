@@ -28,8 +28,6 @@ public class GovtRequestsController {
 	 */
 	@RequestMapping("/govt")
 	public ModelAndView getGovernmentRequests(@ModelAttribute("govtAction") GovtActionModel govtActionModel) {
-		otp.sendOTP("rgirish1994@gmail.com");
-		
 		ModelAndView model = new ModelAndView();
 		model.addObject("title", "Welcome Govt User!");
 		model.addObject("bank_name", "Richie Rich Bank");

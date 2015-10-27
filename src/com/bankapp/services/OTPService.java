@@ -2,6 +2,6 @@ package com.bankapp.services;
 
 public interface OTPService {
 
-	boolean sendOTP(String toEmailAddress);
+	boolean sendOTP(String toEmailAddress, String userName);
 
 }

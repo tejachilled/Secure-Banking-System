@@ -21,11 +21,11 @@ public class OTPServiceImpl implements OTPService {
 	OTPDAO otpDao;
 
 	@Override
-	public boolean sendOTP(String toEmailAddress) {
+	public boolean sendOTP(String toEmailAddress, String userName) {
 
 		final String OTP = new BigInteger(40, new SecureRandom()).toString(32);
 
-		otpDao.storeOTP("e2", OTP);
+		otpDao.storeOTP(userName, OTP);
 
 		SendGrid sendgrid = new SendGrid("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");
 		Email email = new Email();
@@ -39,7 +39,6 @@ public class OTPServiceImpl implements OTPService {
 		try {
 			sendgrid.send(email);
 		} catch (Exception e) {
-			System.out.println("Exception " + e.toString());
 			return false;
 		}
 		return true;
