@@ -19,6 +19,10 @@
 		<intercept-url pattern="/addInternalUser" access="hasRole('ROLE_SA')" />
 		<intercept-url pattern="/EditInternalEmpProfile" access="hasRole('ROLE_SA')" />
 		<intercept-url pattern="/ViewInternalEmpProfile" access="hasRole('ROLE_SA')" />
+		<intercept-url pattern="/piiaccessinfo" access="hasRole('ROLE_SA')"/>
+		<intercept-url pattern="/newPiiRequest" access="hasRole('ROLE_SA')"/>	
+		<intercept-url pattern="/sendPiiAccessRequest" access="hasRole('ROLE_SA')"/>	
+		
 
 		<!-- Manager Roles --> 
 		<intercept-url pattern="/addExternalUserAccount" access="hasRole('ROLE_SM')" />
@@ -42,6 +46,12 @@
 		<intercept-url pattern="/merchHome" access="hasAnyRole('ROLE_M')"/>
 		
 
+		<!-- Govt Pages -->
+		<intercept-url pattern="/govt" access="hasRole('ROLE_G')" />
+		<intercept-url pattern="/acceptRequests" access="hasRole('ROLE_G')" />
+		
+		
+		
 		<form-login login-page="/login" authentication-failure-url="/loginFailed"
 			authentication-success-handler-ref="roleBasedControl" />
 		<access-denied-handler error-page="/403" />
