@@ -52,8 +52,8 @@ public class TransactionServiceImpl implements TransactionService {
 	 * @see com.bankapp.services.TransactionService#getTransactionHistory(java.lang.String)
 	 */
 	@Override
-	public List<Transaction> getTransactionHistory(String accountId) {
-		return transactionDAO.getTransactionHistory(accountId);
+	public List<Transaction> getTransactionHistory(String userName) {
+		return transactionDAO.getTransactionHistory(userName);
 	}
 
 	/* (non-Javadoc)

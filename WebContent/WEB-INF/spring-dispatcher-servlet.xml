@@ -64,6 +64,8 @@
 	
 	<bean id="merchantDAO" class="com.bankapp.dao.MerchantDAOImpl" />
 	<bean id="merchantService" class="com.bankapp.services.MerchantServiceImpl" />
+	
+	<bean id="pdfCreator" class="com.bankapp.util.PdfCreator" />
 
 	<!-- web.servlet.view.ResourceBundleViewResolver -->
 

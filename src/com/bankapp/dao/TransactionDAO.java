@@ -26,7 +26,7 @@ public interface TransactionDAO {
 		public List<Transaction> getApprovedTransactionsForEmployee();
 		
 		//get the transaction history for an account
-		public List<Transaction> getTransactionHistory(String accountId);
+		public List<Transaction> getTransactionHistory(String userName);
 		
 		//method to facilitate the download of the transaction as pdf
 		public List<Transaction> downloadTransactionHistory(String accountId, String startDate, String endDate);

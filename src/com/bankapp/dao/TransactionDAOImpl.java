@@ -7,6 +7,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.bankapp.jdbc.GovtRequestRowMapper;
@@ -73,9 +74,17 @@ public class TransactionDAOImpl implements TransactionDAO {
 	 * com.bankapp.dao.TransactionDAO#getTransactionHistory(java.lang.String)
 	 */
 	@Override
-	public List<Transaction> getTransactionHistory(String accountId) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Transaction> getTransactionHistory(String userName) {
+		String sql = "SELECT * FROM tbl_transactions WHERE initiated_by = ?";
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		try{
+			List<Transaction> transactions = jdbcTemplate.query(sql,
+				new TransactionRowMapper(), new Object[] { userName });
+			return transactions;
+		} catch (EmptyResultDataAccessException e){
+			//logger
+			return null;
+		}
 	}
 
 	/*

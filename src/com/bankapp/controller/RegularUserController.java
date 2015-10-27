@@ -1,5 +1,7 @@
 package com.bankapp.controller;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -31,6 +35,7 @@ import com.bankapp.services.TransactionService;
 import com.bankapp.services.UserService;
 import com.bankapp.userexceptions.MinimumBalanceException;
 import com.bankapp.userexceptions.NegativeAmountException;
+import com.bankapp.util.PdfCreator;
 
 @Controller
 public class RegularUserController {
@@ -39,6 +44,8 @@ public class RegularUserController {
 	TransactionService transactionService;
 	@Autowired
 	UserService userService;
+	@Autowired
+	PdfCreator pdfCreator;
 	
 	private static final Logger logger = Logger.getLogger(RegularUserController.class);
 	
@@ -254,7 +261,7 @@ public class RegularUserController {
 			return modelAndView;
 		}
 		else {
-			modelAndView.addObject("errorMessage", "Account Does not exist Chal Chutiye!!!");
+			modelAndView.addObject("errorMessage", "Account Does not exist.");
 			return modelAndView;
 		}
 		
@@ -268,5 +275,56 @@ public class RegularUserController {
 		UserInfo user = userService.getUserAndAccuntInfobyUserName(username);
 		model.addAttribute("accessInfo", user);
 		return "viewIntInfo";
+	}
+	
+	@RequestMapping(value="/viewTransactions",method=RequestMethod.GET)
+	public ModelAndView viewTransaction(){
+		ModelAndView model = new ModelAndView();
+		String userName= SecurityContextHolder.getContext().getAuthentication().getName();
+		if(userName==null){
+			System.out.println("username is null. requires logger");
+			//logger
+		} else{
+			List<Transaction> listTransaction= transactionService.getTransactionHistory(userName);
+			if(listTransaction !=null){
+				listTransaction= listTransaction.subList(0, 
+						listTransaction.size()> 10 ? 10 : listTransaction.size());
+			}
+			
+			model.addObject("TransactionList", listTransaction);
+		}
+		model.setViewName("viewTransactions");
+		return model;
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="/downloadTransaction",method=RequestMethod.GET)
+	public void downloadTransaction(HttpServletRequest request, HttpServletResponse response,ServletRequest servletRequest) throws Exception{
+		String userName= SecurityContextHolder.getContext().getAuthentication().getName();
+		if(userName==null){
+			System.out.println("username is null. requires logger");
+			//logger
+		} else{
+			List<Transaction> listTransaction= transactionService.getTransactionHistory(userName);
+			if(listTransaction !=null){
+				listTransaction= listTransaction.subList(0, 
+						listTransaction.size()> 15 ? 15 : listTransaction.size());
+			}
+			String filePath =pdfCreator.createPdf(listTransaction);
+			FileSystemResource fsr= new FileSystemResource(filePath);
+			response.setContentType("application/pdf"); 
+			response.setHeader("Content-Disposition", "attachment; filename=TransactionHistory.pdf"); 
+			OutputStream outStream = response.getOutputStream();
+			byte[] buffer = new byte[4096];
+			int bytesRead = -1;
+			InputStream inputStream= fsr.getInputStream();
+			while ((bytesRead = inputStream.read(buffer)) != -1) {
+				outStream.write(buffer, 0, bytesRead);
+			}
+			inputStream.close();
+			outStream.close();
+		}
+	    
 	}
 }
