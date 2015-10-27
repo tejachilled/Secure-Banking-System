@@ -30,9 +30,9 @@ public class OTPServiceImpl implements OTPService {
 		SendGrid sendgrid = new SendGrid("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");
 		Email email = new Email();
 		email.addTo(toEmailAddress);
-		email.setFromName("Richie Rich Bank");
+		email.setFromName("SunDevil Bank");
 		email.addToName("User");
-		email.setFrom("admin@richierichbank.com");
+		email.setFrom("SunDevilBankASU@gmail.com");
 		email.setSubject("OTP for Secure Banking System");
 		email.setText("Dear User,\n\nUse " + OTP
 				+ " as your OTP for logging into the Secure Banking System for Richie Rich Bank!\n\nHave a great day!");
