@@ -45,4 +45,6 @@ public interface TransactionDAO {
 		
 		public void deleteTransaction(Transaction transaction);
 		
+		public Double getAvailBal(long accountId); 
+		
 }

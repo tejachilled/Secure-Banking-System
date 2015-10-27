@@ -6,8 +6,10 @@ import java.util.Date;
 import java.util.List;
 
 import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+
 import com.bankapp.jdbc.GovtRequestRowMapper;
 import com.bankapp.jdbc.TransactionRowMapper;
 import com.bankapp.jdbc.UseraccountsRowMapper;
@@ -211,11 +213,27 @@ public class TransactionDAOImpl implements TransactionDAO {
 				res=jdbcTemplate.update(balquery, new Object[] {trans.getAmount(), trans.getAccountId() });
 			}
 			else if(trans.getType().equals("D")) {
+				Double availBal = getAvailBal(trans.getAccountId());
+				if(availBal - trans.getAmount()>=500) {
 				String balquery = "UPDATE tbl_accounts SET balance = balance - ? WHERE account_id=? ";
 				res=jdbcTemplate.update(balquery, new Object[] {trans.getAmount(), trans.getAccountId()});
+				}
+				else {
+					   query = "UPDATE tbl_transactions SET internal_user_approval = 'R' , date_of_transaction_approval=?, approved_by = ? WHERE transaction_id=? ";
+						jdbcTemplate = new JdbcTemplate(dataSource);
+					    res=jdbcTemplate.update(query, new Object[] { status, new Date(), approvedBy, trans.getTransactionID()});
+				}
 			}
 			
 		}
+	}
+
+	@Override
+	public Double getAvailBal(long accountId) {
+		String sql = "SELECT * FROM tbl_accounts WHERE account_id = ?";
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		List<Useraccounts> userAccounts = jdbcTemplate.query(sql, new Object[] {accountId}, new UseraccountsRowMapper());
+		return userAccounts.get(0).getBalance();
 	}	
 }
 
