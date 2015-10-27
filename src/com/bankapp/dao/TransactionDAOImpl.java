@@ -6,10 +6,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-<<<<<<< HEAD
 import org.apache.log4j.helpers.Loader;
-=======
->>>>>>> master
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -242,19 +239,19 @@ public class TransactionDAOImpl implements TransactionDAO {
 	}
 
 	@Override
-<<<<<<< HEAD
+
 	public Useraccounts getUserAccountsInfoByAccid(Long accid) {
 		String sql = "SELECT * FROM tbl_accounts WHERE account_id = ?";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		Useraccounts userAccounts = jdbcTemplate.queryForObject(sql, new Object[] { accid }, new UseraccountsRowMapper());
 		System.out.println("Null Here");
 		return userAccounts;
-=======
+	}
 	public Double getAvailBal(long accountId) {
 		String sql = "SELECT * FROM tbl_accounts WHERE account_id = ?";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		List<Useraccounts> userAccounts = jdbcTemplate.query(sql, new Object[] {accountId}, new UseraccountsRowMapper());
 		return userAccounts.get(0).getBalance();
->>>>>>> master
+
 	}	
 }
