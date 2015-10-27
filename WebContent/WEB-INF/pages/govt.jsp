@@ -4,6 +4,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@taglib uri="http://www.springframework.org/security/tags"
+	prefix="sec"%>
 <html>
 
 <head>
@@ -19,8 +21,14 @@ td {
 	padding: 10px;
 }
 </style>
+<link href="<c:url value="/resources/css/theme.css"/>" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/bootstrap.js"/>"></script>
 </head>
 <body>
+<jsp:include page="head.jsp"></jsp:include>
+
+ <sec:authorize access="hasRole('ROLE_G')">
 	<div style="width: 100%; text-align: center">
 		<h1>${bank_name}</h1>
 		<h2>PII Request History and Status</h2>
@@ -67,5 +75,6 @@ td {
 		</c:if>
 
 	</div>
+	</sec:authorize>
 </body>
 </html>

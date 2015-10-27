@@ -59,6 +59,10 @@ public class RoleBasedSecurityService implements AuthenticationSuccessHandler{
 					if(auth.getAuthority().equals("ROLE_M")){
 						redirect.sendRedirect(request,response, "/merchHome");
 					}
+					
+					if(auth.getAuthority().equals("ROLE_G")) {
+						redirect.sendRedirect(request, response, "/govt");
+					}
 				}
 			}
 		}
