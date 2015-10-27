@@ -44,6 +44,8 @@ public interface TransactionDAO {
 		public Boolean updateBalance(Useraccounts userAccounts);
 		
 		public void deleteTransaction(Transaction transaction);
+
+		public Useraccounts getUserAccountsInfoByAccid(Long accid);
 		
 		public Double getAvailBal(long accountId); 
 		

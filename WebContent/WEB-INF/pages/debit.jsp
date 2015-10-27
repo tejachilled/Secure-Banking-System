@@ -4,74 +4,73 @@
 	prefix="sec"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 
-<!-- Bootstrap Core CSS -->
-<link href="<c:url value="/resources/css/bootstrap.css"/>"
+<link href="<c:url value="/resources/css/theme.css"/>"
 	rel="stylesheet">
-<link href="<c:url value="/resources/css/theme.css"/>" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>	
+<script type="text/javascript" src="<c:url value="/resources/js/bootstrap.js"/>"></script>
+
 <title>Home</title>
 </head>
-<link href="<c:url value="/resources/css/keyboard.css"/>"
-	rel="stylesheet">
-
-</head>
-<script type="text/javascript"
-	src="<c:url value="/resources/js/jquery.js"/>"></script>
-
 <body>
-	<jsp:include page="headExt.jsp"></jsp:include>
-	<div class="btn-group btn-group-justified">
-	<form:form action="/RichirichBank/initiateDebit"
-		class="form-horizontal" method="post" commandName="debit" name="debit"
-		ModelAttribute="debit" autocomplete="off">
-		<fieldset>
-			<legend>${errorMessage}</legend>
 
-			<div class="form-group">
-				<label class="col-lg-2 control-label">Account type: </label>
-				<div class="col-lg-10">
-					<form:select path="type">
+	<div class="navbar navbar-inverse">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse"
+				data-target=".navbar-inverse-collapse">
+				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#">Welcome <sec:authentication
+					property="name" /></a>
+		</div>
+		<div class="navbar-collapse collapse navbar-inverse-collapse">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="/RichirichBank/extHome">Home</a></li>
+				<li class="dropdown"><a href="#" class="dropdown-toggle"
+					data-toggle="dropdown">Fund Management <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><a href="/RichirichBank/Debit">Debit</a></li>
+						<li><a href="/RichirichBank/Credit">Credit</a></li>
+						<li><a href="/RichirichBank/Transfer">Transfer</a></li>
+			</ul>	</li></ul>	
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="/RichirichBank/logout">Logout</a></li>
+			</ul>
+		</div>
+	</div>
+				<form:form action="/RichirichBank/initiateCredit" class="form-horizontal" method="post" commandName="debit" name="debit" ModelAttribute="debit">
+				<fieldset>
+					<legend>${errorMessage}</legend>
+
+					div class="form-group col-lg-2">
+						<form:select path="accType"> 
 						<form:option value="Savings">${account_savings}</form:option>
-						<form:option value="Checkings">${account_checking}</form:option>
-					</form:select>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="amtInvolved" class="col-lg-2 control-label">Amount
-					to Debit</label>
-				<div class="col-lg-10">
-					<input id="amount" name="amount" type="text"
-						class="keyboardInput" placeholder="Amount" required />
-				</div>
-			</div>
-			<script type="text/javascript"
-				src="<c:url value="/resources/js/keyboard.js"/>"></script>
-			<script
-				src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+						<form:option value="Checking">${account_checking}</form:option>
+						</form:select>
+					</div>
+					<div class="form-group">
+						<label for="amtInvolved" class="col-lg-2 control-label">Amount to Debit</label>
+						<div class="col-lg-10">
+							<form:input path="amount" />	
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-lg-10 col-lg-offset-2">
 
-			<!-- Bootstrap Core JavaScript -->
-			<script type="text/javascript"
-				src="<c:url value="/resources/js/bootstrap.js"/>"></script>
-
-			<!-- Plugin JavaScript -->
-			<script type="text/javascript"
-				src="<c:url value="/resources/js/jquery.easing.min.js"/>"></script>
-			<div class="form-group">
-				<div class="col-lg-10 col-lg-offset-2">
-
-					<button type="submit" class="btn btn-primary">Submit</button>
-				</div>
-			</div>
-		</fieldset>
-		<input type="hidden" name="${_csrf.parameterName}"
+							<button type="submit" class="btn btn-primary">Submit</button>
+						</div>
+					</div>
+				</fieldset>
+				<input type="hidden" name="${_csrf.parameterName}"
 			value="${_csrf.token}" />
-	</form:form>
-	<c:if test="${not empty msg}">
-		<c:out value="${msg}" />
-	</c:if>
-</div>
+			</form:form>
+			<c:if test="${not empty msg}">
+   			<c:out value="${msg}"/>
+		</c:if>
 </body>
 </html>
+

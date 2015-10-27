@@ -12,6 +12,7 @@ public class Transfer {
 	private long toAccountNo;
 	private Double amountInvolved;
 	private String type;
+	private String accType;
 	/**
 	 * @return the toAccountNo
 	 */
@@ -41,6 +42,12 @@ public class Transfer {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public String getAccType() {
+		return accType;
+	}
+	public void setAccType(String accType) {
+		this.accType = accType;
 	}
 	
 	

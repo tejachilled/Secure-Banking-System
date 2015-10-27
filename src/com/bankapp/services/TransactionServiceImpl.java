@@ -100,5 +100,11 @@ public class TransactionServiceImpl implements TransactionService {
 		
 	}
 
+	@Override
+	public Useraccounts getUserAccountsInfoByAccid(Long accid) {
+		
+		return transactionDAO.getUserAccountsInfoByAccid(accid);
+	}
+
 
 }
