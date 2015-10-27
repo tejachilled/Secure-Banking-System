@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.bankapp.model.AccountType;
 import com.bankapp.model.Transaction;
 import com.bankapp.model.Transfer;
 import com.bankapp.model.Useraccounts;
