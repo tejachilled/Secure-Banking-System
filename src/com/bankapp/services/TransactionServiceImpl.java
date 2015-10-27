@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bankapp.dao.TransactionDAO;
+import com.bankapp.dao.UserDAO;
 import com.bankapp.model.Transaction;
 import com.bankapp.model.UserInfo;
 import com.bankapp.model.Useraccounts;
@@ -52,8 +53,7 @@ public class TransactionServiceImpl implements TransactionService {
 	 */
 	@Override
 	public List<Transaction> getTransactionHistory(String accountId) {
-		// TODO Auto-generated method stub
-		return null;
+		return transactionDAO.getTransactionHistory(accountId);
 	}
 
 	/* (non-Javadoc)
@@ -83,7 +83,7 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public Useraccounts getUserAccountsInfoByUserName(String UserName) {
+	public List<Useraccounts> getUserAccountsInfoByUserName(String UserName) {
 		//returns the Useraccounts object based on the username
 		return transactionDAO.getUserAccountsInfoByUserName(UserName);
 	}

@@ -10,6 +10,8 @@ package com.bankapp.model;
 public class Transfer {
 
 	private long toAccountNo;
+	private Double amountInvolved;
+	private String type;
 	/**
 	 * @return the toAccountNo
 	 */
@@ -34,7 +36,13 @@ public class Transfer {
 	public void setAmountInvolved(Double amountInvolved) {
 		this.amountInvolved = amountInvolved;
 	}
-	private Double amountInvolved;
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	
 	
 
 }
