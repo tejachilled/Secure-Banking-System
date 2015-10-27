@@ -3,6 +3,7 @@ package com.bankapp.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +29,7 @@ public class PIIAccessInfoController {
 		model.addObject("title", "Welcome to Richie Rich Bank!");
 		model.addObject("bank_name", "Richie Rich Bank");
 		model.setViewName("piiaccessinfo");
-		List<PIIAccessInfoModel> piiAccessInfoList = piiAccessInfoService.getPIIAccessInfoList();
+		List<PIIAccessInfoModel> piiAccessInfoList = piiAccessInfoService.getPIIAccessInfoList(SecurityContextHolder.getContext().getAuthentication().getName());
 		model.addObject("piiAccessInfoList", piiAccessInfoList);
 		return model;
 	}
@@ -46,7 +47,7 @@ public class PIIAccessInfoController {
 	@RequestMapping("/sendPiiAccessRequest")
 	public String sendNewPiiRequest(@ModelAttribute("piiRequest") PIIRequestModel piiRequestModel) {
 		if (piiRequestModel != null)
-			piiRequestService.sendNewRequest(piiRequestModel.getUserNameExternal(), "i2");
+			piiRequestService.sendNewRequest(piiRequestModel.getUserNameExternal(), SecurityContextHolder.getContext().getAuthentication().getName());
 		return "redirect:/piiaccessinfo";
 	}
 
