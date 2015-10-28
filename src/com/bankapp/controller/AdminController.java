@@ -48,6 +48,7 @@ public class AdminController {
 
 	@Autowired
 	UserValidator userValidator;
+	
 	private static final Logger logger = Logger.getLogger(AdminController.class);
 	
 
