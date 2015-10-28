@@ -60,10 +60,15 @@ public class LoginController {
 	@RequestMapping(value="/logout",method=RequestMethod.GET)
 	public String logout(ModelMap model)
 	{
-
 		SecurityContextHolder.getContext().setAuthentication(null);
-		System.out.println("login failed");
-		model.addAttribute("error", "Invalid credentials");
+		logger.info("Logged out");
+		return "login";
+	}
+	@RequestMapping(value="/loginFailed", method=RequestMethod.GET)
+		public String loginFailed(ModelMap model, Principal user){
+			SecurityContextHolder.getContext().setAuthentication(null);
+			logger.info("Invalid credentials");
+			model.addAttribute("error", "Invalid credentials");
 		return "login";
 	}
 	@RequestMapping(value="/atFirstLogin")

@@ -42,7 +42,7 @@ public class InternalUserController {
 	@Autowired
 	EmailService emailService;
 
-	private static final Logger logger = Logger.getLogger(LoginController.class);
+	private static final Logger logger = Logger.getLogger(InternalUserController.class);
 
 	@RequestMapping(value="/register")
 	public String registerAUser(ModelMap model)
