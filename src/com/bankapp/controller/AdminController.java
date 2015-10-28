@@ -48,23 +48,20 @@ public class AdminController {
 
 	@Autowired
 	UserValidator userValidator;
-	
+
 	private static final Logger logger = Logger.getLogger(AdminController.class);
-	
 
 	// Admin functionalities
 	@RequestMapping(value = "/ViewInternalEmpProfile", method = RequestMethod.GET)
 	public String viewInternalEmpProfile(Model model) {
 		model.addAttribute("accessInfo", new UserInfo());
-		
+
 		return "viewInternalEmpProfile";
 	}
 
 	@RequestMapping(value = "/ViewInternalEmpProfile", method = { RequestMethod.POST }, params = "Delete")
-	public String deleteEmpProfile1(
-			@ModelAttribute("accessInfo") @Validated UserInfo userInfo,
-			HttpServletRequest request, BindingResult result,
-			SessionStatus status, Model model) {
+	public String deleteEmpProfile1(@ModelAttribute("accessInfo") @Validated UserInfo userInfo,
+			HttpServletRequest request, BindingResult result, SessionStatus status, Model model) {
 		String role = request.getParameter("role").toString();
 		System.out.println("in dele method with user role : " + role);
 		if (role != null) {
@@ -78,46 +75,42 @@ public class AdminController {
 	}
 
 	@RequestMapping(value = "/ViewInternalEmpProfile", method = RequestMethod.POST)
-	public String viewEmpProfile(
-			@ModelAttribute("accessInfo") @Validated UserInfo userInfo,
-			BindingResult result, SessionStatus status, Model model) {
-		
+	public String viewEmpProfile(@ModelAttribute("accessInfo") @Validated UserInfo userInfo, BindingResult result,
+			SessionStatus status, Model model) {
+
 		// add objects to model
 		model.addAttribute("accessInfo", userInfo);
 		model.addAttribute("usernameerror", null);
 		// validate input format
 		if (userInfo.getUserName() != null) {
-			logger.info("Viewing Internal Employee: "+userInfo.getUserName().toUpperCase() + " profile");
-			
+			logger.info("Viewing Internal Employee: " + userInfo.getUserName().toUpperCase() + " profile");
+
 			if (!(userInfo.getUserName()).matches("^[a-z0-9_-]{3,16}$")) {
-				model.addAttribute("usernameerror",
-						"Please enter a valid username");
+				model.addAttribute("usernameerror", "Please enter a valid username");
 				logger.info(userInfo.getUserName().toUpperCase() + " is not a valid Internal Employee");
-				
+
 				return "viewInternalEmpProfile";
 			} else {
-				
-				UserInfo ui = userService.getUserInfobyUserName(userInfo
-						.getUserName());
+
+				UserInfo ui = userService.getUserInfobyUserName(userInfo.getUserName());
 				// validate if reasonable request and username exists
 
 				if (ui == null) {
-					model.addAttribute("usernameerror",
-							"Specified username does not exist");
+					model.addAttribute("usernameerror", "Specified username does not exist");
 					logger.info(userInfo.getUserName().toUpperCase() + " internal employee doesn't exist");
-					
+
 					return "viewInternalEmpProfile";
 				} else {
-					// System.out.println("Admin controller user role : "+ui.getRole());
-					if (ui.getRole().equalsIgnoreCase("ROLE_RE")
-							|| ui.getRole().equalsIgnoreCase("ROLE_SM")) {
+					// System.out.println("Admin controller user role :
+					// "+ui.getRole());
+					if (ui.getRole().equalsIgnoreCase("ROLE_RE") || ui.getRole().equalsIgnoreCase("ROLE_SM")) {
 						ui.setRole(userService.setRoleToDisplayUI(ui.getRole()));
 						model.addAttribute("accessInfo", ui);
-						
+
 						return "viewInternalEmpProfile";
 					} else {
 						logger.info(userInfo.getUserName().toUpperCase() + " is not a valid internal employee");
-						
+
 						model.addAttribute("usernameerror", "Not a valid User");
 						return "viewInternalEmpProfile";
 					}
@@ -138,10 +131,8 @@ public class AdminController {
 
 	@Transactional
 	@RequestMapping(value = "/addInternalUser", method = RequestMethod.POST)
-	public String addInternalUser(ModelMap model,
-			@ModelAttribute("intUser") @Validated UserInfo UserInfo,
-			BindingResult result, SessionStatus status,
-			HttpServletRequest request, HttpServletResponse response,
+	public String addInternalUser(ModelMap model, @ModelAttribute("intUser") @Validated UserInfo UserInfo,
+			BindingResult result, SessionStatus status, HttpServletRequest request, HttpServletResponse response,
 			ServletRequest servletRequest) throws Exception {
 		String role = request.getParameter("role").toString();
 		userValidator.validate(UserInfo, result);
@@ -150,8 +141,9 @@ public class AdminController {
 			System.out.println("error");
 			return "addInternalUser";
 		}
-		logger.info("Adding an Internal Employee: with username"+UserInfo.getUserName().toUpperCase() + " with role: "+ role );
-		
+		logger.info("Adding an Internal Employee: with username" + UserInfo.getUserName().toUpperCase() + " with role: "
+				+ role);
+
 		UserInfo.setPassword(encoder.encode(UserInfo.getPassword()));
 		try {
 			userService.addNewInternaluser(UserInfo, role);
@@ -175,9 +167,8 @@ public class AdminController {
 	}
 
 	@RequestMapping(value = "/EditInternalEmpProfile", method = RequestMethod.POST)
-	public String editEmpProfile(
-			@ModelAttribute("accessInfo") @Validated UserInfo UserInfo,
-			BindingResult result, SessionStatus status, Model model) {
+	public String editEmpProfile(@ModelAttribute("accessInfo") @Validated UserInfo UserInfo, BindingResult result,
+			SessionStatus status, Model model) {
 		// add objects to model
 		model.addAttribute("accessInfo", UserInfo);
 		System.out.println("editInternalEmpProfile: " + UserInfo.toString());
@@ -188,31 +179,25 @@ public class AdminController {
 
 		// validate input format
 		if (UserInfo.getUserName() != null) {
-			logger.info("Editing Internal user profile with username : "+UserInfo.getUserName());
+			logger.info("Editing Internal user profile with username : " + UserInfo.getUserName());
 			if (UserInfo.getFirstName() != null) {
-				if (UserInfo.getAddress1() == null
-						|| UserInfo.getAddress1().length() == 0) {
-					model.addAttribute("addresserror",
-							"Please enter a valid address having characters numbers and #");
+				if (UserInfo.getAddress1() == null || UserInfo.getAddress1().length() == 0) {
+					model.addAttribute("addresserror", "Please enter a valid address having characters numbers and #");
 					return "editInternalEmpProfile";
 				}
 				if (UserInfo.getEmaiID() == null) {
-					model.addAttribute("emailid",
-							"Please enter a valid email id");
+					model.addAttribute("emailid", "Please enter a valid email id");
 					logger.info("Entered an Invalid email id");
 					return "editInternalEmpProfile";
 				}
 				String phoneNumber = "" + UserInfo.getPhoneNumber();
-				if (UserInfo.getPhoneNumber() == null
-						|| !phoneNumber.matches("\\d{10}")) {
-					model.addAttribute("phoneNumber",
-							"Please enter a valid 10 digit phone number");
+				if (UserInfo.getPhoneNumber() == null || !phoneNumber.matches("\\d{10}")) {
+					model.addAttribute("phoneNumber", "Please enter a valid 10 digit phone number");
 					logger.info("Entered an invalid phone number");
 					return "editInternalEmpProfile";
 				}
 
-				UserInfo ui = userService.getUserInfobyUserName(UserInfo
-						.getUserName());
+				UserInfo ui = userService.getUserInfobyUserName(UserInfo.getUserName());
 				if (ui.getAddress1() != null) {
 					if (!(ui.getAddress1()).matches("^[a-zA-Z0-9_#]*$")) {
 						model.addAttribute("addresserror",
@@ -232,42 +217,35 @@ public class AdminController {
 				if (UserInfo.getPhoneNumber() != ui.getPhoneNumber()) {
 					ui.setPhoneNumber(UserInfo.getPhoneNumber());
 				}
-				System.out.println("editEmpProfile: updating info with "
-						+ ui.toString());
+				System.out.println("editEmpProfile: updating info with " + ui.toString());
 				userService.updateInternalUserInfo(ui);
 				logger.info("Successfully updated internal user profile");
 				model.addAttribute("success", "Updated details successfully");
-				UserInfo = userService.getUserInfobyUserName(UserInfo
-						.getUserName());
-				UserInfo.setRole(userService.setRoleToDisplayUI(UserInfo
-						.getRole()));
+				UserInfo = userService.getUserInfobyUserName(UserInfo.getUserName());
+				UserInfo.setRole(userService.setRoleToDisplayUI(UserInfo.getRole()));
 				model.addAttribute("accessInfo", UserInfo);
 				model.addAttribute("success", "updated Successfully!");
 				return "editInternalEmpProfile";
 			}
 			if (!(UserInfo.getUserName()).matches("^[a-z0-9_-]{3,16}$")) {
-				model.addAttribute("usernameerror",
-						"Please enter a valid username");
+				model.addAttribute("usernameerror", "Please enter a valid username");
 				return "editInternalEmpProfile";
 			} else {
 				// validate if reasonable request and username exists
 				if (userService.getUserInfobyUserName(UserInfo.getUserName()) == null) {
-					model.addAttribute("usernameerror",
-							"Specified username does not exist");
-					logger.info("Username - "+UserInfo.getUserName()+ " does not exist");
+					model.addAttribute("usernameerror", "Specified username does not exist");
+					logger.info("Username - " + UserInfo.getUserName() + " does not exist");
 					return "editInternalEmpProfile";
 				} else {
-					UserInfo ui = userService.getUserInfobyUserName(UserInfo
-							.getUserName());
+					UserInfo ui = userService.getUserInfobyUserName(UserInfo.getUserName());
 					// check if the user is an Internal user
-					if (ui.getRole().equals("ROLE_RE")
-							|| ui.getRole().equals("ROLE_SM")) {
+					if (ui.getRole().equals("ROLE_RE") || ui.getRole().equals("ROLE_SM")) {
 						ui.setRole(userService.setRoleToDisplayUI(ui.getRole()));
 						model.addAttribute("accessInfo", ui);
 						logger.info("Successfully retried employee details");
 						return "editInternalEmpProfile";
 					} else {
-						logger.info("Username - "+UserInfo.getUserName()+ " is not a valid internal employee");
+						logger.info("Username - " + UserInfo.getUserName() + " is not a valid internal employee");
 						model.addAttribute("usernameerror", "Not a valid user");
 						return "editInternalEmpProfile";
 					}
@@ -296,12 +274,11 @@ public class AdminController {
 	}
 
 	@RequestMapping(value = "/downloadLogFile/{fileName}", method = RequestMethod.GET)
-	public void downloadFile(HttpServletResponse response,
-			@PathVariable("fileName") String fileName) {
+	public void downloadFile(HttpServletResponse response, @PathVariable("fileName") String fileName) {
 
 		File file = null;
-		file = new File(System.getProperty("BankLogs.Home")+ "/" + fileName);
-		
+		file = new File(System.getProperty("BankLogs.Home") + "/" + fileName);
+
 		if (!file.exists()) {
 			String errorMessage = "Sorry. The file you are looking for does not exist";
 			OutputStream outputStream = null;
@@ -324,13 +301,12 @@ public class AdminController {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				System.out.println(e.getMessage());
-					return;
+				return;
 			}
 			return;
 		}
 
-		String mimeType = URLConnection
-				.guessContentTypeFromName(file.getName());
+		String mimeType = URLConnection.guessContentTypeFromName(file.getName());
 		if (mimeType == null) {
 			mimeType = "application/octet-stream";
 		}
@@ -343,8 +319,7 @@ public class AdminController {
 		 * others(zip e.g) will be directly downloaded [may provide save as
 		 * popup, based on your browser setting.]
 		 */
-		response.setHeader("Content-Disposition",
-				String.format("inline; filename=\"" + file.getName() + "\""));
+		response.setHeader("Content-Disposition", String.format("inline; filename=\"" + file.getName() + "\""));
 
 		/*
 		 * "Content-Disposition : attachment" will be directly download, may
@@ -357,8 +332,7 @@ public class AdminController {
 
 		InputStream inputStream = null;
 		try {
-			inputStream = new BufferedInputStream(new FileInputStream(
-					file));
+			inputStream = new BufferedInputStream(new FileInputStream(file));
 		} catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
 			System.out.println(e1.getMessage());
@@ -377,4 +351,3 @@ public class AdminController {
 	}
 
 }
-
