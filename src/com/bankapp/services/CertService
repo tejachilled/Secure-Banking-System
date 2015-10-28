@@ -1,0 +1,9 @@
+package com.bankapp.services;
+
+public interface CertService {
+	void loadRoot() throws Exception;
+	void initCertPfx(String username, String password) throws Exception;
+	boolean sendCert(String toEmailAddress, String userName);
+	public boolean sendPfx(String toEmailAddress, String userName);
+	
+}
