@@ -15,9 +15,6 @@ import org.springframework.stereotype.Service;
 
 import com.bankapp.dao.OTPDAO;
 import com.bankapp.userexceptions.CustomException;
-import com.sendgrid.SendGrid;
-import com.sendgrid.SendGrid.Email;
-import com.sendgrid.SendGridException;
 
 @Service
 public class OTPServiceImpl implements OTPService {

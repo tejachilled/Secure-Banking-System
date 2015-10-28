@@ -16,6 +16,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -35,7 +36,6 @@ import com.bankapp.model.UserInfo;
 import com.bankapp.services.UserService;
 import com.bankapp.services.UserValidator;
 import com.bankapp.userexceptions.CustomException;
-import com.bankapp.userexceptions.UserAccountExist;
 import com.bankapp.userexceptions.UserNameExists;
 
 @Controller
@@ -48,11 +48,14 @@ public class AdminController {
 
 	@Autowired
 	UserValidator userValidator;
+	private static final Logger logger = Logger.getLogger(AdminController.class);
+	
 
 	// Admin functionalities
 	@RequestMapping(value = "/ViewInternalEmpProfile", method = RequestMethod.GET)
 	public String viewInternalEmpProfile(Model model) {
 		model.addAttribute("accessInfo", new UserInfo());
+		
 		return "viewInternalEmpProfile";
 	}
 
@@ -64,9 +67,11 @@ public class AdminController {
 		String role = request.getParameter("role").toString();
 		System.out.println("in dele method with user role : " + role);
 		if (role != null) {
+			logger.info("Requested delete");
 			userInfo.setRole(role);
 			userService.deleteUserInfo(userInfo);
 			model.addAttribute("success", "Successfully deleted!");
+			logger.info("Internal employee successfuly deleted!");
 		}
 		return "viewInternalEmpProfile";
 	}
@@ -75,17 +80,22 @@ public class AdminController {
 	public String viewEmpProfile(
 			@ModelAttribute("accessInfo") @Validated UserInfo userInfo,
 			BindingResult result, SessionStatus status, Model model) {
-
+		
 		// add objects to model
 		model.addAttribute("accessInfo", userInfo);
 		model.addAttribute("usernameerror", null);
 		// validate input format
 		if (userInfo.getUserName() != null) {
+			logger.info("Viewing Internal Employee: "+userInfo.getUserName().toUpperCase() + " profile");
+			
 			if (!(userInfo.getUserName()).matches("^[a-z0-9_-]{3,16}$")) {
 				model.addAttribute("usernameerror",
 						"Please enter a valid username");
+				logger.info(userInfo.getUserName().toUpperCase() + " is not a valid Internal Employee");
+				
 				return "viewInternalEmpProfile";
 			} else {
+				
 				UserInfo ui = userService.getUserInfobyUserName(userInfo
 						.getUserName());
 				// validate if reasonable request and username exists
@@ -93,6 +103,8 @@ public class AdminController {
 				if (ui == null) {
 					model.addAttribute("usernameerror",
 							"Specified username does not exist");
+					logger.info(userInfo.getUserName().toUpperCase() + " internal employee doesn't exist");
+					
 					return "viewInternalEmpProfile";
 				} else {
 					// System.out.println("Admin controller user role : "+ui.getRole());
@@ -100,8 +112,11 @@ public class AdminController {
 							|| ui.getRole().equalsIgnoreCase("ROLE_SM")) {
 						ui.setRole(userService.setRoleToDisplayUI(ui.getRole()));
 						model.addAttribute("accessInfo", ui);
+						
 						return "viewInternalEmpProfile";
 					} else {
+						logger.info(userInfo.getUserName().toUpperCase() + " is not a valid internal employee");
+						
 						model.addAttribute("usernameerror", "Not a valid User");
 						return "viewInternalEmpProfile";
 					}
@@ -134,17 +149,19 @@ public class AdminController {
 			System.out.println("error");
 			return "addInternalUser";
 		}
-		System.out.println(UserInfo.getFirstName());
-
+		logger.info("Adding an Internal Employee: with username"+UserInfo.getUserName().toUpperCase() + " with role: "+ role );
+		
 		UserInfo.setPassword(encoder.encode(UserInfo.getPassword()));
 		try {
 			userService.addNewInternaluser(UserInfo, role);
 			model.addAttribute("success", "Added new user successfully!");
+			logger.info("Employee created successfully!");
 		} catch (CustomException exception) {
 			model.addAttribute("exception", exception.getMessage());
 		} catch (UserNameExists exception) {
 			model.addAttribute("exception", exception.getMessage());
 		}
+
 		return "addInternalUser";
 
 	}
@@ -170,6 +187,7 @@ public class AdminController {
 
 		// validate input format
 		if (UserInfo.getUserName() != null) {
+			logger.info("Editing Internal user profile with username : "+UserInfo.getUserName());
 			if (UserInfo.getFirstName() != null) {
 				if (UserInfo.getAddress1() == null
 						|| UserInfo.getAddress1().length() == 0) {
@@ -180,6 +198,7 @@ public class AdminController {
 				if (UserInfo.getEmaiID() == null) {
 					model.addAttribute("emailid",
 							"Please enter a valid email id");
+					logger.info("Entered an Invalid email id");
 					return "editInternalEmpProfile";
 				}
 				String phoneNumber = "" + UserInfo.getPhoneNumber();
@@ -187,6 +206,7 @@ public class AdminController {
 						|| !phoneNumber.matches("\\d{10}")) {
 					model.addAttribute("phoneNumber",
 							"Please enter a valid 10 digit phone number");
+					logger.info("Entered an invalid phone number");
 					return "editInternalEmpProfile";
 				}
 
@@ -214,8 +234,7 @@ public class AdminController {
 				System.out.println("editEmpProfile: updating info with "
 						+ ui.toString());
 				userService.updateInternalUserInfo(ui);
-				System.out
-						.println("editInternalEmpProfile : updated user info ");
+				logger.info("Successfully updated internal user profile");
 				model.addAttribute("success", "Updated details successfully");
 				UserInfo = userService.getUserInfobyUserName(UserInfo
 						.getUserName());
@@ -234,6 +253,7 @@ public class AdminController {
 				if (userService.getUserInfobyUserName(UserInfo.getUserName()) == null) {
 					model.addAttribute("usernameerror",
 							"Specified username does not exist");
+					logger.info("Username - "+UserInfo.getUserName()+ " does not exist");
 					return "editInternalEmpProfile";
 				} else {
 					UserInfo ui = userService.getUserInfobyUserName(UserInfo
@@ -243,8 +263,10 @@ public class AdminController {
 							|| ui.getRole().equals("ROLE_SM")) {
 						ui.setRole(userService.setRoleToDisplayUI(ui.getRole()));
 						model.addAttribute("accessInfo", ui);
+						logger.info("Successfully retried employee details");
 						return "editInternalEmpProfile";
 					} else {
+						logger.info("Username - "+UserInfo.getUserName()+ " is not a valid internal employee");
 						model.addAttribute("usernameerror", "Not a valid user");
 						return "editInternalEmpProfile";
 					}

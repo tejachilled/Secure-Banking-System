@@ -8,5 +8,6 @@ import javax.mail.internet.AddressException;
 public interface EmailService {
 	String  generatePassword();
 	boolean sendEmailWithAttachment(String toName, String fromName, String toAddress, String fromAddress, String subject, String body, File attachment);
-	public void Send(String username,final String tempPassword, String recipientEmail, Long accno) throws AddressException, MessagingException ;
+	void Send(String username,final String tempPassword, String recipientEmail, Long accno) throws AddressException, MessagingException ;
+	
 }

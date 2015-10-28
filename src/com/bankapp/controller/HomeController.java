@@ -1,25 +1,20 @@
 package com.bankapp.controller;
 
-import org.springframework.security.core.context.SecurityContextHolder;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.bankapp.model.Transaction;
 import com.bankapp.model.UserInfo;
 import com.bankapp.services.UserService;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 @Controller
 public class HomeController {
+	private static final Logger logger = Logger.getLogger(HomeController.class);
 	
 	@Autowired  
 	UserService userService;
@@ -27,12 +22,14 @@ public class HomeController {
 	@RequestMapping(value="/intHome")
 	public String homePage(ModelMap model)
 	{
+		logger.info("Welcome employee");
 		return "internalHome";
 	}
 
 	@RequestMapping(value="/adminHome")
 	public String adminHomePage(ModelMap model)
 	{
+		logger.info("Welcome Admin");
 		return "adminHome";
 	}
 	
