@@ -48,6 +48,7 @@ public class AdminController {
 
 	@Autowired
 	UserValidator userValidator;
+	
 	private static final Logger logger = Logger.getLogger(AdminController.class);
 	
 
@@ -300,7 +301,7 @@ public class AdminController {
 
 		File file = null;
 		file = new File(System.getProperty("BankLogs.Home")+ "/" + fileName);
-
+		
 		if (!file.exists()) {
 			String errorMessage = "Sorry. The file you are looking for does not exist";
 			OutputStream outputStream = null;

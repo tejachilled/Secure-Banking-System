@@ -57,7 +57,6 @@
 	<bean id="transfer" class="com.bankapp.model.Transfer"/>
 	<bean id="userAccounts" class="com.bankapp.model.Useraccounts"/>
 	<bean id="userAccountsExtractor" class="com.bankapp.jdbc.UseraccountsExtracter"/>
-	<bean id ="accType" class="com.bankapp.model.AccountType"/>
 
 	<bean id="userDAO" class="com.bankapp.dao.UserDAOImpl" />
 	<bean id="userService" class="com.bankapp.services.UserServiceImpl" />

@@ -34,16 +34,6 @@ public class LoginController {
 
 	private static final Logger logger = Logger.getLogger(LoginController.class);
 
-	@RequestMapping(value = { "/welcome"}, method = RequestMethod.GET)
-	public ModelAndView welcomePage() {
-		System.out.println("coming");
-		ModelAndView model = new ModelAndView();
-		model.addObject("title", "Spring Security Custom Login Form");
-		model.addObject("message", "This is welcome page!");
-		model.setViewName("hello");
-		return model;
-
-	}
 
 	@RequestMapping(value="/403",method=RequestMethod.GET)
 	public String accessDenied(ModelMap model,Principal user) {
@@ -58,20 +48,20 @@ public class LoginController {
 	@RequestMapping(value={ "/","/login"},method=RequestMethod.GET)
 	public String login(ModelMap model)
 	{
-		System.out.println("in login controller");
+		SecurityContextHolder.getContext().setAuthentication(null);
 		logger.info("In Login Controller");
 		return "login";
 	}
 	@RequestMapping(value="/logout",method=RequestMethod.GET)
 	public String logout(ModelMap model)
 	{
-		System.out.println("logout!!");
 		SecurityContextHolder.getContext().setAuthentication(null);
 		return "login";
 	}
 	@RequestMapping(value="/loginFailed", method=RequestMethod.GET)
 	public String loginFailed(ModelMap model, Principal user)
 	{
+		SecurityContextHolder.getContext().setAuthentication(null);
 		System.out.println("login failed");
 		model.addAttribute("error", "Invalid credentials");
 		return "login";

@@ -15,25 +15,25 @@
 </head>
 <body>
 <jsp:include page="head.jsp"></jsp:include>
-
 <div class="btn-group btn-group-justified">
-<sec:authorize access="hasAnyRole('ROLE_RE','ROLE_SM')">
-    <a href="/RichirichBank/viewMyIntProfile" class="btn btn-default">View</a>
-    </sec:authorize>
+    <a href="/UserAccountManagement" class="btn btn-default">View</a>
+  	<a href="/EditExtProfile" class="btn btn-default">Edit</a>
+	<a href="/UserAccountManagementActivity" class="btn btn-default">Review Transactions</a>
+	<a href="/ExtUserRequests" class="btn btn-default">External User Requests</a>
 	<sec:authorize access="hasRole('ROLE_RE')">
 	<a href="/RichirichBank/pendingTransactionsRE" class="btn btn-default">Authorize Transactions </a>
 	</sec:authorize>
 	<sec:authorize access="hasRole('ROLE_SM')">
 	<a href="/RichirichBank/pendingTransactionsSM" class="btn btn-default">Authorize Transactions (Critical)</a>
 	</sec:authorize>
+	<a href="/ExtUserProfileViewReq" class="btn btn-default">Profile View Request</a>
  </div>
- <sec:authorize access="hasRole('ROLE_RE')">
+ <sec:authorize access="hasRole('ROLE_U')">
  <div style="width: 100%; text-align: center">
  <table>
 			
 
-			<form:form method="post" action="/RichirichBank/approveTransactionsRE"
-				modelAttribute="transactionIdList">
+			<form:form method="post" action="/RichirichBank/approveTransactionsMerchant" modelAttribute="transactionIdList">
 				<tr>
 				<td><b>Customer Account ID&nbsp;&nbsp;&nbsp;&nbsp;</b></td>
 				<td><b>Amount (in $)&nbsp;&nbsp;&nbsp;&nbsp;</b></td>
@@ -44,14 +44,16 @@
 					<tr>
 						<td>${trListItem.accountId}</td>
 						<td>${trListItem.amount}</td>
-						<c:if test="${trListItem.type eq 'C'}">
+						<c:if test="${trListItem.isCritical eq 'C'}">
 							<td>Credit</td>
 						</c:if>
-						<c:if test="${trListItem.type eq 'D'}">
+						<c:if test="${trListItem.isCritical eq 'M'}">
 							<td>Debit</td>
 						</c:if>
 						<td>${trListItem.dateInitiated}</td>
-						<td><form:checkbox path="TidList" value="${trListItem.transactionID}" /></td>
+						<c:if test="${trListItem.isCritical eq 'M'}">
+						<td><form:checkbox path="transactionIdList" value="${trListItem.transactionID}" /></td>
+						</c:if>						
 					</tr>
 				</c:forEach>
 				<tr></tr>
@@ -99,13 +101,10 @@
 						</c:if>
 						<td>${trListItem.dateInitiated}</td>
 						<c:if test="${trListItem.isCritical eq 'H'}">
-							<td>Critical [User-Initiated]</td>
-						</c:if>
-						<c:if test="${trListItem.isCritical eq 'M'}">
-							<td>Merchant Initiated</td>
+							<td>Critical</td>
 						</c:if>
 						<c:if test="${trListItem.isCritical eq 'L'}">
-							<td>Non-Critical [User Inititated]</td>
+							<td>Non-Critical</td>
 						</c:if>
 						<td><form:checkbox path="TidList" value="${trListItem.transactionID}" /></td>
 					</tr>

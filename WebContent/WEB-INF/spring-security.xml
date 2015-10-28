@@ -46,6 +46,8 @@
 		<intercept-url pattern="/initiateCredit" access="hasAnyRole('ROLE_U','ROLE_M')" />
 		<intercept-url pattern="/initiateDebit" access="hasAnyRole('ROLE_U','ROLE_M')" />
 		<intercept-url pattern="/merchHome" access="hasAnyRole('ROLE_M')"/>
+		<intercept-url pattern="/initiateTransfer" access="hasAnyRole('ROLE_U','ROLE_M')" />
+		<intercept-url pattern="/Transfer" access="hasAnyRole('ROLE_U','ROLE_M')" />
 		
 
 		<!-- Govt Pages -->

@@ -27,10 +27,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.bankapp.model.PIIAccessInfoModel;
 import com.bankapp.model.Transaction;
 import com.bankapp.model.Transfer;
 import com.bankapp.model.UserInfo;
 import com.bankapp.model.Useraccounts;
+import com.bankapp.services.GovtRequestsService;
 import com.bankapp.services.TransactionService;
 import com.bankapp.services.UserService;
 import com.bankapp.userexceptions.MinimumBalanceException;
@@ -46,6 +48,10 @@ public class RegularUserController {
 	UserService userService;
 	@Autowired
 	PdfCreator pdfCreator;
+	@Autowired
+	GovtRequestsService govtRequestsService;
+
+
 	
 	private static final Logger logger = Logger.getLogger(RegularUserController.class);
 	
@@ -377,6 +383,8 @@ public class RegularUserController {
 		
 	}
 
+	
+	
 	@RequestMapping(value="/viewMyProfile",method=RequestMethod.GET)
 	public String viewMyself(Model model)
 	{
@@ -436,5 +444,42 @@ public class RegularUserController {
 			outStream.close();
 		}
 	    
+	}
+	
+	@RequestMapping(value="/updatePersonalInfo")
+	public String updatePersonalInfo(ModelMap model) {
+		model.addAttribute("personalInfo", new PIIAccessInfoModel());
+		Boolean piiExists = govtRequestsService.isPiiInfoPresent(SecurityContextHolder.getContext().getAuthentication().getName());
+		String result="n";
+		if(piiExists.equals(true)) {
+			result="y";
+		}
+		model.addAttribute("piiExists",result);
+		return "updatePersonalInfo";
+	}
+	
+	@Transactional
+	@RequestMapping(value="/confirmUpdate",method=RequestMethod.POST)
+	public ModelAndView confirmUpdate(ModelMap modelinfo,@ModelAttribute("personalInfo") PIIAccessInfoModel pii) {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("updatePersonalInfo");
+		model.addObject("personalInfo", new PIIAccessInfoModel());
+		Boolean piiExists = govtRequestsService.isPiiInfoPresent(SecurityContextHolder.getContext().getAuthentication().getName());
+		String result="n";
+		if(piiExists.equals(true)) {
+			result="y";
+		}
+		else if(piiExists.equals(false)){
+			if(!pii.getPii().isEmpty()&&pii.getPii().matches("^(\\d{3}-?\\d{2}-?\\d{4}|XXX-XX-XXXX)$")) {
+				pii.setUserName(SecurityContextHolder.getContext().getAuthentication().getName());;
+			govtRequestsService.insertPersonalInfo(pii);
+			model.addObject("error", "Persnoal Info(SSN) Value has been updated successfully!!!");
+			}
+			else {
+				model.addObject("error", "Persnoal Info(SSN) Value is Invalid... Please Try Again!!!");
+			}
+		}
+		model.addObject("piiExists",result);
+		return model;
 	}
 }

@@ -1,11 +1,11 @@
 package com.bankapp.controller;
 
-import java.sql.SQLException;
-import java.util.UUID;
 import javax.mail.MessagingException;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,6 +42,7 @@ public class InternalUserController {
 	@Autowired
 	EmailService emailService;
 
+	private static final Logger logger = Logger.getLogger(LoginController.class);
 
 	@RequestMapping(value="/register")
 	public String registerAUser(ModelMap model)
@@ -65,12 +66,14 @@ public class InternalUserController {
 		}
 		Long accno= 0L ;
 		try{
+			logger.info("Adding an external user - "+UserInfo.getUserName()+" with role- "+role);
 			final String tempPwd = emailService.generatePassword();
 			UserInfo.setPassword(encoder.encode(tempPwd));
 			System.out.println("sec answer 3 : "+UserInfo.getSq3());
 			accno=userService.addNewExternalUuser(UserInfo,role,accountType);
 			emailService.Send(UserInfo.getUserName(),tempPwd, UserInfo.getEmaiID(),accno);
 			model.addAttribute("accno", accno);
+			logger.info("Added customer successfully!");
 		}catch(UserAccountExist exception){
 			model.addAttribute("exception", exception.getMessage());
 		}catch(CustomException exception){
@@ -99,9 +102,11 @@ public class InternalUserController {
 		String role=request.getParameter("role").toString();
 		System.out.println("in dele method with user role : "+role);
 		if(role!=null){
+			logger.info("Deleting user");
 			userInfo.setRole(role);
 			userService.deleteUserInfo(userInfo);
 			model.addAttribute("success", "Successfully deleted!");
+			logger.info("Successfull");
 		}
 		return "viewEmpProfile";
 	}
@@ -113,6 +118,7 @@ public class InternalUserController {
 		model.addAttribute("usernameerror",null);
 		if(userInfo.getUserName()!=null)
 		{
+			logger.info("Viewing customer with username - "+userInfo.getUserName());
 			if(!(userInfo.getUserName()).matches("^[a-z0-9_-]{3,16}$"))
 			{
 				model.addAttribute("usernameerror","Please enter a valid username");

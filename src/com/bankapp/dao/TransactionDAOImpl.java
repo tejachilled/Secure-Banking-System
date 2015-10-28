@@ -36,7 +36,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 	public List<Transaction> getPendingTransactionsForRE() {
 		// TODO Auto-generated method stub
 		List<Transaction> trList = new ArrayList<Transaction>();
-		String query = "SELECT transaction_id, account_id, transaction_type, isCritical, amount, date_of_transaction_initiation,  date_of_transaction_approval FROM tbl_transactions where isCritical='L' and internal_user_approval='P' ";
+		String query = "SELECT transaction_id, account_id, transaction_type, isCritical, amount, date_of_transaction_initiation,  date_of_transaction_approval, remark FROM tbl_transactions where isCritical='L' and internal_user_approval='P' ";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		trList = jdbcTemplate.query(query, new TransactionRowMapper());
 		return trList;
@@ -78,12 +78,12 @@ public class TransactionDAOImpl implements TransactionDAO {
 	public List<Transaction> getTransactionHistory(String userName) {
 		String sql = "SELECT * FROM tbl_transactions WHERE initiated_by = ? or account_id IN (SELECT account_id FROM tbl_accounts WHERE user_name= ?)";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		try{
+		try {
 			List<Transaction> transactions = jdbcTemplate.query(sql,
 				new TransactionRowMapper(), new Object[] { userName, userName });
 			return transactions;
-		} catch (EmptyResultDataAccessException e){
-			//logger
+		} catch (EmptyResultDataAccessException e) {
+			// logger
 			return null;
 		}
 	}
@@ -109,21 +109,21 @@ public class TransactionDAOImpl implements TransactionDAO {
 	 * Transaction)
 	 */
 	@Override
-	public Boolean approveTransactions(String[] tIdList, String approvedBy, String status) {
-		Boolean result=false;
+	public Boolean approveTransactions(String[] tIdList, String approvedBy,
+			String status) {
+		Boolean result = false;
 		try {
-		for(String tId:tIdList) {
-			
-			List<Transaction> tempList= getTransaction(tId);
-			for(Transaction trans: tempList) {
-				approveTransaction(trans, approvedBy, status);
+			for (String tId : tIdList) {
+
+				List<Transaction> tempList = getTransaction(tId);
+				for (Transaction trans : tempList) {
+					approveTransaction(trans, approvedBy, status);
+				}
+
 			}
-			 
-		}
-		
-		result =true;
-		}
-		catch(Exception e){
+
+			result = true;
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
@@ -153,28 +153,28 @@ public class TransactionDAOImpl implements TransactionDAO {
 							transaction.getAmount(),
 							transaction.getDateInitiated(), approvalStatus,
 							accounts.getUsername() });
-		}
-		else {
-		
+		} else {
+
 			System.out.println("Inside insert new transaction dao: mani");
 			try {
-			String sql = "Insert into tbl_transactions (transaction_id,account_id,transaction_type,isCritical,amount,date_of_transaction_initiation,date_of_transaction_approval,internal_user_approval,initiated_by,approved_by) Values(?,?,?,?,?,?,?,?,?,?)";
-			res = jdbcTemplate.update(
-					sql,
-					new Object[] { transaction.getTransactionID(),
-							transaction.getAccountId(), transaction.getType(),
-							transaction.getIsCritical(),
-							transaction.getAmount(),
-							transaction.getDateInitiated(), transaction.getDateInitiated(),approvalStatus,
-							accounts.getUsername(), "Automatic" });
-			}
-			catch(Exception e) {
+				String sql = "Insert into tbl_transactions (transaction_id,account_id,transaction_type,isCritical,amount,date_of_transaction_initiation,date_of_transaction_approval,internal_user_approval,initiated_by,approved_by) Values(?,?,?,?,?,?,?,?,?,?)";
+				res = jdbcTemplate.update(
+						sql,
+						new Object[] { transaction.getTransactionID(),
+								transaction.getAccountId(),
+								transaction.getType(),
+								transaction.getIsCritical(),
+								transaction.getAmount(),
+								transaction.getDateInitiated(),
+								transaction.getDateInitiated(), approvalStatus,
+								accounts.getUsername(), "Automatic" });
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
 		}
 		if (res > 0) {
-			
+
 			return true;
 
 		}
@@ -182,10 +182,12 @@ public class TransactionDAOImpl implements TransactionDAO {
 	}
 
 	@Override
-	public List <Useraccounts> getUserAccountsInfoByUserName(String UserName) {
+	public List<Useraccounts> getUserAccountsInfoByUserName(String UserName) {
 		String sql = "SELECT * FROM tbl_accounts WHERE user_name = ?";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		List<Useraccounts> userAccounts = jdbcTemplate.query(sql, new Object[] { UserName }, new UseraccountsRowMapper());
+		List<Useraccounts> userAccounts = jdbcTemplate.query(sql,
+				new Object[] { UserName }, new UseraccountsRowMapper());
+		System.out.println("In DAO");
 		return userAccounts;
 	}
 
@@ -193,8 +195,11 @@ public class TransactionDAOImpl implements TransactionDAO {
 	public Boolean updateBalance(Useraccounts userAccounts) {
 		String query = "UPDATE tbl_accounts SET balance = ? WHERE account_id=? ";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		int res=jdbcTemplate.update(query, new Object[] { userAccounts.getBalance(),userAccounts.getAccountno() });
-		if(res>0)
+		int res = jdbcTemplate.update(
+				query,
+				new Object[] { userAccounts.getBalance(),
+						userAccounts.getAccountno() });
+		if (res > 0)
 			return true;
 		return false;
 	}
@@ -203,55 +208,77 @@ public class TransactionDAOImpl implements TransactionDAO {
 	public void deleteTransaction(Transaction transaction) {
 		String query = "Delete from tbl_transactions WHERE transaction_id=? ";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		jdbcTemplate.update(query, new Object[] {transaction.getTransactionID() });
+		jdbcTemplate.update(query,
+				new Object[] { transaction.getTransactionID() });
 	}
 
 	@Override
 	public List<Transaction> getTransaction(String tId) {
-		String query = "SELECT transaction_id, account_id, transaction_type, isCritical, amount, date_of_transaction_initiation,  date_of_transaction_approval FROM tbl_transactions where transaction_id=? and internal_user_approval='P' ";
+		String query = "SELECT transaction_id, account_id, transaction_type, isCritical, amount, date_of_transaction_initiation,  date_of_transaction_approval, remark FROM tbl_transactions where transaction_id=? and internal_user_approval='P' ";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		return jdbcTemplate.query(query, new TransactionRowMapper(), tId);
 	}
-	
-	private void approveTransaction(Transaction trans, String approvedBy, String status) {
+
+	private void approveTransaction(Transaction trans, String approvedBy,
+			String status) {
 		String query = "UPDATE tbl_transactions SET internal_user_approval = ? , date_of_transaction_approval=?, approved_by = ? WHERE transaction_id=? ";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		int res=jdbcTemplate.update(query, new Object[] { status, new Date(), approvedBy, trans.getTransactionID()});
-		if(res>0&&status=="A") {
-			if(trans.getType().equals("C")) {
+		int res = jdbcTemplate.update(query, new Object[] { status, new Date(),
+				approvedBy, trans.getTransactionID() });
+		if (res > 0 && status == "A") {
+			if (trans.getType().equals("C")) {
 				String balquery = "UPDATE tbl_accounts SET balance = balance+? WHERE account_id=? ";
-				res=jdbcTemplate.update(balquery, new Object[] {trans.getAmount(), trans.getAccountId() });
-			}
-			else if(trans.getType().equals("D")) {
+				res = jdbcTemplate
+						.update(balquery, new Object[] { trans.getAmount(),
+								trans.getAccountId() });
+			} else if (trans.getType().equals("D")) {
 				Double availBal = getAvailBal(trans.getAccountId());
-				if(availBal - trans.getAmount()>=500) {
-				String balquery = "UPDATE tbl_accounts SET balance = balance - ? WHERE account_id=? ";
-				res=jdbcTemplate.update(balquery, new Object[] {trans.getAmount(), trans.getAccountId()});
-				}
-				else {
-					   query = "UPDATE tbl_transactions SET internal_user_approval = 'R' , date_of_transaction_approval=?, approved_by = ? WHERE transaction_id=? ";
-						jdbcTemplate = new JdbcTemplate(dataSource);
-					    res=jdbcTemplate.update(query, new Object[] { status, new Date(), approvedBy, trans.getTransactionID()});
+				if (availBal - trans.getAmount() >= 500) {
+					String balquery = "UPDATE tbl_accounts SET balance = balance - ? WHERE account_id=? ";
+					res = jdbcTemplate.update(
+							balquery,
+							new Object[] { trans.getAmount(),
+									trans.getAccountId() });
+				} else {
+					query = "UPDATE tbl_transactions SET internal_user_approval = 'R' , date_of_transaction_approval=?, approved_by = ? WHERE transaction_id=? ";
+					jdbcTemplate = new JdbcTemplate(dataSource);
+					res = jdbcTemplate.update(query, new Object[] { status,
+							new Date(), approvedBy, trans.getTransactionID() });
 				}
 			}
-			
+
 		}
 	}
 
 	@Override
-
-	public Useraccounts getUserAccountsInfoByAccid(Long accid) {
-		String sql = "SELECT * FROM tbl_accounts WHERE account_id = ?";
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		Useraccounts userAccounts = jdbcTemplate.queryForObject(sql, new Object[] { accid }, new UseraccountsRowMapper());
-		System.out.println("Null Here");
-		return userAccounts;
-	}
 	public Double getAvailBal(long accountId) {
 		String sql = "SELECT * FROM tbl_accounts WHERE account_id = ?";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		List<Useraccounts> userAccounts = jdbcTemplate.query(sql, new Object[] {accountId}, new UseraccountsRowMapper());
+		List<Useraccounts> userAccounts = jdbcTemplate.query(sql,
+				new Object[] { accountId }, new UseraccountsRowMapper());
 		return userAccounts.get(0).getBalance();
+	}
 
-	}	
+	@Override
+	public List<Transaction> getMerchTransactions(Long accid) {
+		String sql = "SELECT * FROM tbl_transactions WHERE account_id = ? AND iscritical='M'";
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		try {
+			List<Transaction> transactions = jdbcTemplate.query(sql,
+					new TransactionRowMapper(), new Object[] { accid });
+			return transactions;
+		} catch (EmptyResultDataAccessException e) {
+			// logger
+			return null;
+		}
+	}
+
+	@Override
+	public Useraccounts getUserAccountsInfoByAccid(Long accid) {
+		String sql = "SELECT * FROM tbl_accounts WHERE account_id = ?";
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		Useraccounts userAccounts = jdbcTemplate.queryForObject(sql,
+				new Object[] { accid }, new UseraccountsRowMapper());
+		return userAccounts;
+	}
 }

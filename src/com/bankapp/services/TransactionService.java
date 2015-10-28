@@ -34,6 +34,7 @@ public interface TransactionService {
 	//to approve the transaction
 	public Boolean approveTransactions(String[] tIdList, String approvedBy, String Status);
 	
+	public List<Transaction> getMerchTransactions(Long accid);
 	
 	public Boolean insertNewTransaction(Transaction transaction, Useraccounts userAccounts);
 	

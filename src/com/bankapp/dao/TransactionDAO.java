@@ -36,6 +36,7 @@ public interface TransactionDAO {
 		
 		public List<Transaction> getTransaction(String tId);
 		
+		public List<Transaction> getMerchTransactions(Long accid);
 		
 		public Boolean insertNewTransaction(Transaction transaction, Useraccounts userAccounts);
 		
@@ -48,5 +49,6 @@ public interface TransactionDAO {
 		public Useraccounts getUserAccountsInfoByAccid(Long accid);
 		
 		public Double getAvailBal(long accountId); 
+		
 		
 }
