@@ -189,9 +189,9 @@ body {
 <script type="text/javascript"
 	src="<c:url value="/resources/js/jquery.js"/>"></script>
 <script>
-jQuery(document).ready(function(){
-	$("#password").keydown(false);
-});
+	jQuery(document).ready(function() {
+		$("#password").keydown(false);
+	});
 </script>
 <script>
 	document.onmousedown = disableclick;
@@ -231,8 +231,8 @@ jQuery(document).ready(function(){
 				autofocus /><br> <input type="password" name="password"
 				id="password" class="form-control keyboardInput"
 				placeholder="Password" required /><br> <input name="submit"
-				type="submit" value="submit" />
-				<a href="/RichirichBank/forgotpassword">Forgot Password? </a>
+				type="submit" value="submit" /> <a
+				href="/RichirichBank/forgotpassword">Forgot Password? </a>
 		</div>
 
 		<script type="text/javascript"

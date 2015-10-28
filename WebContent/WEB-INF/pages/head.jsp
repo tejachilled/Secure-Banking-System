@@ -1,4 +1,3 @@
-
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://www.springframework.org/security/tags"
@@ -41,10 +40,12 @@
 								<li><a href="/RichirichBank/register">Add a new account</a></li>
 							</sec:authorize>
 							<sec:authorize access="hasRole('ROLE_SM')">
-								<li><a href="/RichirichBank/ViewEmpProfile">View/Delete Customer</a></li>
+								<li><a href="/RichirichBank/ViewEmpProfile">View/Delete
+										Customer</a></li>
 							</sec:authorize>
 							<sec:authorize access="hasRole('ROLE_SM')">
-								<li><a href="/RichirichBank/EditEmpProfile">Edit Customer</a></li>
+								<li><a href="/RichirichBank/EditEmpProfile">Edit
+										Customer</a></li>
 							</sec:authorize>
 						</ul></li>
 				</sec:authorize>
@@ -67,8 +68,8 @@
 							class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<sec:authorize access="hasRole('ROLE_SA')">
-								<li><a href="/RichirichBank/addInternalUser">Add
-										a new internal employee</a></li>
+								<li><a href="/RichirichBank/addInternalUser">Add a new
+										internal employee</a></li>
 							</sec:authorize>
 							<sec:authorize access="hasRole('ROLE_SA')">
 								<li><a href="/RichirichBank/ViewInternalEmpProfile">View/Delete
@@ -84,7 +85,7 @@
 					<li><a href="/RichirichBank/viewSystemLogs">System Logs</a></li>
 				</sec:authorize>
 			</ul>
-            
+
 
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="/RichirichBank/logout">Logout</a></li>

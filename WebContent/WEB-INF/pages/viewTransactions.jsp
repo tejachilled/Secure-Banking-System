@@ -7,56 +7,55 @@
 	prefix="sec"%>
 <html>
 <head>
-	<link href="<c:url value="/resources/css/theme.css"/>" rel="stylesheet">
-	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-	<script type="text/javascript"
-		src="<c:url value="/resources/js/bootstrap.js"/>"></script>
-	<title>View Recent Transactions</title>
-	<jsp:include page="extHome.jsp"></jsp:include>
-	<style>
-	table {
-		width: 100%;
-	}
+<link href="<c:url value="/resources/css/theme.css"/>" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script type="text/javascript"
+	src="<c:url value="/resources/js/bootstrap.js"/>"></script>
+<title>View Recent Transactions</title>
+<jsp:include page="extHome.jsp"></jsp:include>
+<style>
+table {
+	width: 100%;
+}
 
-	td {
-		border: 1px black solid;
-		padding: 10px;
-	}
-	</style>
+td {
+	border: 1px black solid;
+	padding: 10px;
+}
+</style>
 </head>
 <body>
 	<table>
+		<tr>
+			<td><b>TRANSACTION ID</b></td>
+			<td><b>ACCOUNT ID</b></td>
+			<td><b>CREDIT/DEBIT</b></td>
+			<td><b>AMOUNT</b></td>
+			<td><b>DATE APPROVED</b></td>
+			<td><b>REMARKS</b></td>
+		</tr>
+
+
+
+		<c:forEach var="transactionHistory" items="${TransactionList}">
 			<tr>
-				<td><b>TRANSACTION ID</b></td>
-				<td><b>ACCOUNT ID</b></td>
-				<td><b>CREDIT/DEBIT</b></td>
-				<td><b>AMOUNT</b></td>
-				<td><b>DATE APPROVED</b></td>
-				<td><b>REMARKS</b></td>
+				<td>${transactionHistory.transactionID}</td>
+				<td>${transactionHistory.accountId}</td>
+
+				<c:if test="${transactionHistory.type eq 'C'}">
+					<td>Credit</td>
+				</c:if>
+				<c:if test="${transactionHistory.type eq 'D'}">
+					<td>Debit</td>
+				</c:if>
+				<td>${transactionHistory.amount}</td>
+				<td>${transactionHistory.dataApproved}</td>
+				<td>${transactionHistory.remark}</td>
 			</tr>
-
-		
-
-				<c:forEach var="transactionHistory" items="${TransactionList}">
-					<tr>
-						<td>${transactionHistory.transactionID}</td>
-						<td>${transactionHistory.accountId}</td>
-						
-						<c:if test="${transactionHistory.type eq 'C'}">
-							<td>Credit</td>
-						</c:if>
-						<c:if test="${transactionHistory.type eq 'D'}">
-							<td>Debit</td>
-						</c:if>
-						<td>${transactionHistory.amount}</td>
-						<td>${transactionHistory.dataApproved}</td>
-						<td>${transactionHistory.remark}</td>
-					</tr>
-				</c:forEach>
-		</table>
-		<!--<form:form class="form-horizontal"	action="/RichirichBank/downloadTransaction" method="post">
-			<button type="submit" class="btn btn-primary">Download as PDF</button>
-		</form:form> -->
-		<h3><a href="/RichirichBank/downloadTransaction">Download as PDF</a></h3>
+		</c:forEach>
+	</table>
+	<h3>
+		<a href="/RichirichBank/downloadTransaction">Download as PDF</a>
+	</h3>
 </body>
 </html>

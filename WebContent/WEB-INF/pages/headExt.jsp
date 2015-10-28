@@ -39,7 +39,8 @@
 							<li><a href="submitPayment">Submit Payments</a></li>
 						</sec:authorize>
 						<sec:authorize access="hasRole('ROLE_M')">
-							<li><a href="approvedTransactions">Check Approved Transactions</a></li>
+							<li><a href="approvedTransactions">Check Approved
+									Transactions</a></li>
 						</sec:authorize>
 					</ul></li>
 			</ul>

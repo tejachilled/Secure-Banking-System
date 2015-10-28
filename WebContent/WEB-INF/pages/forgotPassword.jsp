@@ -29,6 +29,8 @@
 					action="/RichirichBank/forgotpassword" method="post"
 					commandName="extUser" name="f">
 
+					<input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" />
 
 					<fieldset>
 						<c:if test="${not empty error}">
@@ -54,7 +56,8 @@
 							<div class="form-group">
 								<label class="col-lg-2 control-label"> UserName</label>
 								<div class="col-lg-10">
-									<input name="userName" class="form-control" id="userName" value="${username}" readonly/>
+									<input name="userName" class="form-control" id="userName"
+										value="${username}" readonly />
 									<form:errors path="userName"
 										cssClass="alert alert-dismissable alert-danger"></form:errors>
 								</div>

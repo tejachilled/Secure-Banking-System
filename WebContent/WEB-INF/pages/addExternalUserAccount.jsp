@@ -25,6 +25,8 @@
 					action="/RichirichBank/addExtUser" method="post"
 					commandName="extUser" name="f">
 
+					<input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" />
 
 					<fieldset>
 
@@ -44,7 +46,9 @@
 								</div>
 							</div>
 						</c:if>
-	<h5>*For creating both accounts, please give same exact information in all fields and select a different account for user id*</h5>
+						<h5>*For creating both accounts, please give same exact
+							information in all fields and select a different account for user
+							id*</h5>
 						<legend>New Account</legend>
 						<div class="form-group">
 							<label class="col-lg-2 control-label">Firstname</label>
@@ -131,25 +135,28 @@
 						</div>
 
 						<div class="form-group">
-							<label class="col-lg-2 control-label">Security Question 1 : What is your first car name ?</label>
+							<label class="col-lg-2 control-label">Security Question 1
+								: What is your first car name ?</label>
 							<div class="col-lg-10">
-								<input name="sq1" id="sq1" class="form-control" required/>
+								<input name="sq1" id="sq1" class="form-control" required />
 								<form:errors path="sq1"
 									cssClass="alert alert-dismissable alert-danger"></form:errors>
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-lg-2 control-label">Security Question 2 : What is your pet name ?</label>
+							<label class="col-lg-2 control-label">Security Question 2
+								: What is your pet name ?</label>
 							<div class="col-lg-10">
-								<input name="sq2" id="sq2" class="form-control" required/>
+								<input name="sq2" id="sq2" class="form-control" required />
 								<form:errors path="sq2"
 									cssClass="alert alert-dismissable alert-danger"></form:errors>
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-lg-2 control-label">Security Question 3 : What is your mother's name ?</label>
+							<label class="col-lg-2 control-label">Security Question 3
+								: What is your mother's name ?</label>
 							<div class="col-lg-10">
-								<input name="sq3" id="sq3" class="form-control" required/>
+								<input name="sq3" id="sq3" class="form-control" required />
 								<form:errors path="sq3"
 									cssClass="alert alert-dismissable alert-danger"></form:errors>
 							</div>

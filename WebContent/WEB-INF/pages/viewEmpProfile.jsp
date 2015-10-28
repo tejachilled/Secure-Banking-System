@@ -15,9 +15,13 @@
 	<jsp:include page="internalHome.jsp"></jsp:include>
 	<form:form class="form-horizontal" commandName="accessInfo"
 		method="post" action="/RichirichBank/ViewEmpProfile">
+
+		<input type="hidden" name="${_csrf.parameterName}"
+			value="${_csrf.token}" />
+
 		<fieldset>
 			<legend>Enter User Credentials to Access Account Details</legend>
-			
+
 			<c:if test="${not empty success }">
 				<div style="width: 40%;">
 					<div class="alert alert-dismissable alert-success">

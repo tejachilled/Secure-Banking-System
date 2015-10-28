@@ -8,10 +8,10 @@
 <html>
 <head>
 
-<link href="<c:url value="/resources/css/theme.css"/>"
-	rel="stylesheet">
-<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>	
-<script type="text/javascript" src="<c:url value="/resources/js/bootstrap.js"/>"></script>
+<link href="<c:url value="/resources/css/theme.css"/>" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script type="text/javascript"
+	src="<c:url value="/resources/js/bootstrap.js"/>"></script>
 
 <title>Home</title>
 </head>
@@ -36,41 +36,49 @@
 						<li><a href="/RichirichBank/Debit">Debit</a></li>
 						<li><a href="/RichirichBank/Credit">Credit</a></li>
 						<li><a href="/RichirichBank/Transfer">Transfer</a></li>
-			</ul>	</li></ul>	
+					</ul></li>
+			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="/RichirichBank/logout">Logout</a></li>
 			</ul>
 		</div>
 	</div>
-				<form:form action="/RichirichBank/initiateCredit" class="form-horizontal" method="post" commandName="debit" name="debit" ModelAttribute="debit">
-				<fieldset>
-					<legend>${errorMessage}</legend>
+	<form:form action="/RichirichBank/initiateCredit"
+		class="form-horizontal" method="post" commandName="debit" name="debit"
+		ModelAttribute="debit">
 
-					div class="form-group col-lg-2">
-						<form:select path="accType"> 
-						<form:option value="Savings">${account_savings}</form:option>
-						<form:option value="Checking">${account_checking}</form:option>
-						</form:select>
-					</div>
-					<div class="form-group">
-						<label for="amtInvolved" class="col-lg-2 control-label">Amount to Debit</label>
-						<div class="col-lg-10">
-							<form:input path="amount" />	
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="col-lg-10 col-lg-offset-2">
-
-							<button type="submit" class="btn btn-primary">Submit</button>
-						</div>
-					</div>
-				</fieldset>
-				<input type="hidden" name="${_csrf.parameterName}"
+		<input type="hidden" name="${_csrf.parameterName}"
 			value="${_csrf.token}" />
-			</form:form>
-			<c:if test="${not empty msg}">
-   			<c:out value="${msg}"/>
-		</c:if>
+
+		<fieldset>
+			<legend>${errorMessage}</legend>
+
+			div class="form-group col-lg-2">
+			<form:select path="accType">
+				<form:option value="Savings">${account_savings}</form:option>
+				<form:option value="Checking">${account_checking}</form:option>
+			</form:select>
+			</div>
+			<div class="form-group">
+				<label for="amtInvolved" class="col-lg-2 control-label">Amount
+					to Debit</label>
+				<div class="col-lg-10">
+					<form:input path="amount" />
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-lg-10 col-lg-offset-2">
+
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</div>
+			</div>
+		</fieldset>
+		<input type="hidden" name="${_csrf.parameterName}"
+			value="${_csrf.token}" />
+	</form:form>
+	<c:if test="${not empty msg}">
+		<c:out value="${msg}" />
+	</c:if>
 </body>
 </html>
 

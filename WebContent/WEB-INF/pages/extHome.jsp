@@ -18,22 +18,24 @@
 <body>
 	<jsp:include page="headExt.jsp"></jsp:include>
 	<div class="btn-group btn-group-justified">
-	<sec:authorize access="hasAnyRole('ROLE_M','ROLE_U')">
-		<a href="/RichirichBank/viewMyProfile" class="btn btn-default">View</a>
-		<a href="/RichirichBank/updatePersonalInfo" class="btn btn-default">Update Personal Info</a> 
-		<a href="/RichirichBank/transactionReviewRequest"
-			class="btn btn-default">Review Transactions Request</a>
-		<a href="/RichirichBank/viewTransactions"
-			class="btn btn-default">View Recent Transactions</a>
-	</sec:authorize>
-	<sec:authorize access="hasRole('ROLE_M')">
-		<a href="/RichirichBank/newMerchantRequest" class="btn btn-default">Initiate Credit-Debit Request</a>
-		<a href="/RichirichBank/merchTransactionHistory"
-			class="btn btn-default">View Transaction History</a>
-	</sec:authorize>
+		<sec:authorize access="hasAnyRole('ROLE_M','ROLE_U')">
+			<a href="/RichirichBank/viewMyProfile" class="btn btn-default">View</a>
+			<a href="/RichirichBank/updatePersonalInfo" class="btn btn-default">Update
+				Personal Info</a>
+			<a href="/RichirichBank/transactionReviewRequest"
+				class="btn btn-default">Review Transactions Request</a>
+			<a href="/RichirichBank/viewTransactions" class="btn btn-default">View
+				Recent Transactions</a>
+		</sec:authorize>
+		<sec:authorize access="hasRole('ROLE_M')">
+			<a href="/RichirichBank/newMerchantRequest" class="btn btn-default">Initiate
+				Credit-Debit Request</a>
+			<a href="/RichirichBank/merchTransactionHistory"
+				class="btn btn-default">View Transaction History</a>
+		</sec:authorize>
 	</div>
-		<c:if test="${not empty merchantTxnMsg}">
-   			<c:out value="${merchantTxnMsg}"/>
-		</c:if>
+	<c:if test="${not empty merchantTxnMsg}">
+		<c:out value="${merchantTxnMsg}" />
+	</c:if>
 </body>
 </html>

@@ -4,7 +4,7 @@
 	prefix="sec"%>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -16,6 +16,10 @@ pageEncoding="ISO-8859-1"%>
 	<form:form class="form-horizontal" commandName="accessInfo"
 		method="post" action="/RichirichBank/EditInternalEmpProfile">
 		<fieldset>
+
+			<input type="hidden" name="${_csrf.parameterName}"
+				value="${_csrf.token}" />
+
 			<legend>Enter User name to Edit employee Details</legend>
 			<c:if test="${not empty success }">
 				<div style="width: 40%;">
@@ -29,7 +33,6 @@ pageEncoding="ISO-8859-1"%>
 				<div class="col-lg-10">
 					<form:input path="userName" class="form-control" id="usernameid"
 						placeholder="User Name" />
-					<label style="color: red">${usernameerror}</label>
 				</div>
 			</div>
 			<div class="form-group">
@@ -44,6 +47,10 @@ pageEncoding="ISO-8859-1"%>
 			and email id is editable</h4>
 		<form:form commandName="accessInfo"
 			action="/RichirichBank/EditInternalEmpProfile" method="post">
+
+			<input type="hidden" name="${_csrf.parameterName}"
+				value="${_csrf.token}" />
+
 			<c:if test="${not empty success }">
 				<div style="width: 40%;">
 					<div class="alert alert-dismissable alert-success">
