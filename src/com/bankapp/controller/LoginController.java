@@ -14,14 +14,19 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.HttpSessionRequiredException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.bankapp.model.UserInfo;
 import com.bankapp.services.UserService;
 import com.bankapp.services.UserValidator;
+
 
 @Controller
 public class LoginController {
@@ -55,12 +60,7 @@ public class LoginController {
 	@RequestMapping(value="/logout",method=RequestMethod.GET)
 	public String logout(ModelMap model)
 	{
-		SecurityContextHolder.getContext().setAuthentication(null);
-		return "login";
-	}
-	@RequestMapping(value="/loginFailed", method=RequestMethod.GET)
-	public String loginFailed(ModelMap model, Principal user)
-	{
+
 		SecurityContextHolder.getContext().setAuthentication(null);
 		System.out.println("login failed");
 		model.addAttribute("error", "Invalid credentials");
@@ -147,5 +147,21 @@ public class LoginController {
 
 		return "forgotPassword";
 	}
-
+	@ExceptionHandler(HttpSessionRequiredException.class)
+	@ResponseBody
+	public String handleSessionExpired(ModelMap model){
+		model.addAttribute("error", "Session expired");
+	  return "login";
+	}
+	@ExceptionHandler(NullPointerException.class)
+	@ResponseBody
+	public String handleException1(NullPointerException ex,Model model)
+	{
+		System.out.println("Handle exception");
+		model.addAttribute("error", "There was an error");
+	    return "login";
+	}
+	
 }
+
+	

@@ -217,10 +217,6 @@ jQuery(document).ready(function(){
 
 		</div>
 
-		<c:if test="${not empty msg}">
-			<div class="msg">${msg}</div>
-		</c:if>
-
 		<div class="login">
 
 			<c:if test="${not empty error}">
