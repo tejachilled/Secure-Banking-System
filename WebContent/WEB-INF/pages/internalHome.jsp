@@ -32,5 +32,4 @@
 		</div>
 	</sec:authorize>
 </body>
->>>>>>> Stashed changes
 </html>
