@@ -46,7 +46,8 @@
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 
-		<property name="url" value="jdbc:mysql://45.55.229.197:3306/ssdb?zeroDateTimeBehavior=convertToNull" />
+		<property name="url"
+			value="jdbc:mysql://45.55.229.197:3306/ssdb?zeroDateTimeBehavior=convertToNull" />
 		<property name="username" value="ssdb" />
 		<property name="password" value="ssdb" />
 	</bean>
@@ -54,17 +55,17 @@
 	<bean id="transactionDAO" class="com.bankapp.dao.TransactionDAOImpl" />
 	<bean id="transactionService" class="com.bankapp.services.TransactionServiceImpl" />
 	<bean id="transaction" class="com.bankapp.model.Transaction" />
-	<bean id="transfer" class="com.bankapp.model.Transfer"/>
-	<bean id="userAccounts" class="com.bankapp.model.Useraccounts"/>
-	<bean id="userAccountsExtractor" class="com.bankapp.jdbc.UseraccountsExtracter"/>
+	<bean id="transfer" class="com.bankapp.model.Transfer" />
+	<bean id="userAccounts" class="com.bankapp.model.Useraccounts" />
+	<bean id="userAccountsExtractor" class="com.bankapp.jdbc.UseraccountsExtracter" />
 
 	<bean id="userDAO" class="com.bankapp.dao.UserDAOImpl" />
 	<bean id="userService" class="com.bankapp.services.UserServiceImpl" />
 	<bean id="userValidator" class="com.bankapp.services.UserValidator"></bean>
-	
+
 	<bean id="merchantDAO" class="com.bankapp.dao.MerchantDAOImpl" />
 	<bean id="merchantService" class="com.bankapp.services.MerchantServiceImpl" />
-	
+
 	<bean id="pdfCreator" class="com.bankapp.util.PdfCreator" />
 
 	<!-- web.servlet.view.ResourceBundleViewResolver -->
@@ -72,5 +73,19 @@
 	<bean id="messageSource"
 		class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
 		p:basename="/WEB-INF/message" />
+
+
+	<bean class="com.bankapp.userexceptions.FooBarHandlerExceptionResolver">
+		<property name="order" value="1" />
+	</bean>
+	<bean
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver"
+		p:order="2" p:defaultErrorView="login">
+		<property name="exceptionMappings">
+			<props>
+				<prop key="java.lang.NullPointerException">login</prop>
+			</props>
+		</property>
+	</bean>
 
 </beans>

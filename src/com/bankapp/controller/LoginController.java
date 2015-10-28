@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -150,9 +151,20 @@ public class LoginController {
 
 		return "forgotPassword";
 	}
-	@ExceptionHandler(HttpSessionRequiredException.class)	
+	@ExceptionHandler(HttpSessionRequiredException.class)
+	@ResponseBody
 	public String handleSessionExpired(ModelMap model){
 		model.addAttribute("error", "Session expired");
 	  return "login";
 	}
+	@ExceptionHandler(NullPointerException.class)
+	@ResponseBody
+	public String handleException1(NullPointerException ex,Model model)
+	{
+		System.out.println("Handle exception");
+		model.addAttribute("error", "There was an error");
+	    return "login";
+	}
+	
 }
+
