@@ -1,5 +1,6 @@
 package com.bankapp.controller;
 
+import java.io.File;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.bankapp.model.GovtActionModel;
 import com.bankapp.model.GovtRequestsModel;
+import com.bankapp.services.EmailServiceImpl;
 import com.bankapp.services.GovtRequestsService;
-import com.bankapp.services.OTPService;
 
 @Controller
 public class GovtRequestsController {
@@ -20,7 +21,7 @@ public class GovtRequestsController {
 	GovtRequestsService govtRequestsService;
 
 	@Autowired
-	OTPService otp;
+	EmailServiceImpl email;
 
 	/*
 	 * Home page and the only page of a Govt user. It displays the list of

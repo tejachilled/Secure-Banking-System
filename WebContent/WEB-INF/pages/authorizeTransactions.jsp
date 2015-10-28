@@ -15,18 +15,17 @@
 </head>
 <body>
 <jsp:include page="head.jsp"></jsp:include>
+
 <div class="btn-group btn-group-justified">
-    <a href="/UserAccountManagement" class="btn btn-default">View</a>
-  	<a href="/EditExtProfile" class="btn btn-default">Edit</a>
-	<a href="/UserAccountManagementActivity" class="btn btn-default">Review Transactions</a>
-	<a href="/ExtUserRequests" class="btn btn-default">External User Requests</a>
+<sec:authorize access="hasAnyRole('ROLE_RE','ROLE_SM')">
+    <a href="/RichirichBank/viewMyIntProfile" class="btn btn-default">View</a>
+    </sec:authorize>
 	<sec:authorize access="hasRole('ROLE_RE')">
 	<a href="/RichirichBank/pendingTransactionsRE" class="btn btn-default">Authorize Transactions </a>
 	</sec:authorize>
 	<sec:authorize access="hasRole('ROLE_SM')">
 	<a href="/RichirichBank/pendingTransactionsSM" class="btn btn-default">Authorize Transactions (Critical)</a>
 	</sec:authorize>
-	<a href="/ExtUserProfileViewReq" class="btn btn-default">Profile View Request</a>
  </div>
  <sec:authorize access="hasRole('ROLE_RE')">
  <div style="width: 100%; text-align: center">
@@ -100,10 +99,13 @@
 						</c:if>
 						<td>${trListItem.dateInitiated}</td>
 						<c:if test="${trListItem.isCritical eq 'H'}">
-							<td>Critical</td>
+							<td>Critical [User-Initiated]</td>
+						</c:if>
+						<c:if test="${trListItem.isCritical eq 'M'}">
+							<td>Merchant Initiated</td>
 						</c:if>
 						<c:if test="${trListItem.isCritical eq 'L'}">
-							<td>Non-Critical</td>
+							<td>Non-Critical [User Inititated]</td>
 						</c:if>
 						<td><form:checkbox path="TidList" value="${trListItem.transactionID}" /></td>
 					</tr>

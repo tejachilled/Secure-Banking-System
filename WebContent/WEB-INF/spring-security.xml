@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <beans:beans xmlns="http://www.springframework.org/schema/security"
 	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
@@ -94,6 +95,99 @@
 				<beans:ref bean="daoAuthenticationProvider" />
 			</beans:list>
 		</beans:constructor-arg>
+=======
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+
+	<http auto-config="true" use-expressions="true">
+		<intercept-url pattern="/logout" access="permitAll" />
+		<intercept-url pattern="/login" access="permitAll" />
+		<intercept-url pattern="/forgotpassword" access="permitAll" />
+		<intercept-url pattern="/changePassword" access="permitAll" />
+		<intercept-url pattern="/loginFailed" access="permitAll" />
+		<intercept-url pattern="/403" access="permitAll" />
+		<intercept-url pattern="/home" access="hasAnyRole('ROLE_SA','ROLE_RE', 'ROLE_M', 'ROLE_U')"/>
+
+		<!-- Admin Roles -->
+		<intercept-url pattern="/adminHome" access="hasRole('ROLE_SA')" />
+		<intercept-url pattern="/addInternalUser" access="hasRole('ROLE_SA')" />
+		<intercept-url pattern="/EditInternalEmpProfile" access="hasRole('ROLE_SA')" />
+		<intercept-url pattern="/ViewInternalEmpProfile" access="hasRole('ROLE_SA')" />
+		<intercept-url pattern="/piiaccessinfo" access="hasRole('ROLE_SA')"/>
+		<intercept-url pattern="/newPiiRequest" access="hasRole('ROLE_SA')"/>	
+		<intercept-url pattern="/sendPiiAccessRequest" access="hasRole('ROLE_SA')"/>	
+		<intercept-url pattern="/downloadLogFile/*" access="hasRole('ROLE_SA')"/>	
+		<intercept-url pattern="/viewSystemLogs" access="hasRole('ROLE_SA')"/>	
+
+		<!-- Manager Roles --> 
+		<intercept-url pattern="/addExternalUserAccount" access="hasRole('ROLE_SM')" />
+		<intercept-url pattern="/DeleteEmpProfile" access="hasRole('ROLE_SM')" />
+		<intercept-url pattern="/ViewEmpProfile" access="hasRole('ROLE_SM')" />
+		<intercept-url pattern="/EditEmpProfile" access="hasRole('ROLE_SM')" />
+		<intercept-url pattern="/intHome" access="hasAnyRole('ROLE_SM','ROLE_RE')" />
+		<intercept-url pattern="/pendingTransactionsRE" access="hasRole('ROLE_RE')" />
+		<intercept-url pattern="/approveTransactionsRE" access="hasRole('ROLE_RE')" />
+		<intercept-url pattern="/pendingTransactionsSM" access="hasRole('ROLE_SM')" />
+		<intercept-url pattern="/approveTransactionsSM" access="hasRole('ROLE_SM')" />
+		<intercept-url pattern="/register" access="hasRole('ROLE_SM')" />
+		<intercept-url pattern="/addExtUser" access="hasRole('ROLE_SM')" />
+		<intercept-url pattern="/viewMyIntProfile" access="hasAnyRole('ROLE_SM','ROLE_RE')" />
+
+		<!-- User and Merchant Pages -->
+		<intercept-url pattern="/extHome" access="hasAnyRole('ROLE_U','ROLE_M')" />
+		<intercept-url pattern="/Credit" access="hasAnyRole('ROLE_U','ROLE_M')" />
+		<intercept-url pattern="/Debit" access="hasAnyRole('ROLE_U','ROLE_M')" />
+		<intercept-url pattern="/initiateCredit" access="hasAnyRole('ROLE_U','ROLE_M')" />
+		<intercept-url pattern="/initiateDebit" access="hasAnyRole('ROLE_U','ROLE_M')" />
+		<intercept-url pattern="/merchHome" access="hasAnyRole('ROLE_M')"/>
+		<intercept-url pattern="/initiateTransfer" access="hasAnyRole('ROLE_U','ROLE_M')" />
+		<intercept-url pattern="/Transfer" access="hasAnyRole('ROLE_U','ROLE_M')" />
+		
+
+		<!-- Govt Pages -->
+		<intercept-url pattern="/govt" access="hasRole('ROLE_G')" />
+		<intercept-url pattern="/acceptRequests" access="hasRole('ROLE_G')" />
+		
+		
+		
+		<form-login login-page="/login" authentication-failure-url="/loginFailed"
+			authentication-success-handler-ref="roleBasedControl" />
+		<access-denied-handler error-page="/403" />
+		<logout logout-success-url="/logout" />
+		<csrf />
+	</http>
+
+	<beans:bean id="roleBasedControl"
+		class="com.bankapp.services.RoleBasedSecurityService">
+
+	</beans:bean>
+
+	<authentication-manager>
+		<authentication-provider user-service-ref="loginService">
+			<password-encoder ref="encoder" />
+		</authentication-provider>
+	</authentication-manager>
+
+	<beans:bean id="encoder"
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+	<beans:bean id="daoAuthenticationProvider"
+		class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+		<beans:property name="userDetailsService" ref="loginService"></beans:property>
+	</beans:bean>
+
+
+	<beans:bean id="authenticationManager"
+		class="org.springframework.security.authentication.ProviderManager">
+		<beans:constructor-arg>
+			<beans:list>
+				<beans:ref bean="daoAuthenticationProvider" />
+			</beans:list>
+		</beans:constructor-arg>
+>>>>>>> branch 'master' of https://github.com/manikandan-eshwar/SoftwareSecurity.git
 	</beans:bean>
 
 </beans:beans>

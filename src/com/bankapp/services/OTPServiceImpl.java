@@ -21,7 +21,7 @@ public class OTPServiceImpl implements OTPService {
 
 	@Autowired
 	OTPDAO otpDao;
-	
+
 	@Autowired
 	EmailService emailService;
 
@@ -29,14 +29,12 @@ public class OTPServiceImpl implements OTPService {
 	public boolean sendOTP(String toEmailAddress, String userName) {
 		final String OTP = new BigInteger(40, new SecureRandom()).toString(32);
 		otpDao.storeOTP(userName, OTP);
-		return emailService.sendEmailWithAttachment(userName, "SunDevil Bank", toEmailAddress, "SunDevilBankASU@gmail.com",
+		return emailService.sendEmailSendGrid(userName, "SunDevil Bank", toEmailAddress, "SunDevilBankASU@gmail.com",
 				"OTP for SunDevil Bank Operation",
 				"Dear User,\n\nUse " + OTP
 						+ " as your OTP for logging into the Secure Banking System for Richie Rich Bank!\n\nHave a great day!",
-				null);
+				null, "");
 	}
-
-	
 
 	@Override
 	public boolean checkOTP(String userName, String userOTP) throws CustomException {

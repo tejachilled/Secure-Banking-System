@@ -152,6 +152,7 @@ public class AdminController {
 		}
 		logger.info("Adding an Internal Employee: with username"+UserInfo.getUserName().toUpperCase() + " with role: "+ role );
 		
+		UserInfo.setPassword(encoder.encode(UserInfo.getPassword()));
 		try {
 			userService.addNewInternaluser(UserInfo, role);
 			model.addAttribute("success", "Added new user successfully!");
