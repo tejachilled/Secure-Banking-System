@@ -36,7 +36,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 	public List<Transaction> getPendingTransactionsForRE() {
 		// TODO Auto-generated method stub
 		List<Transaction> trList = new ArrayList<Transaction>();
-		String query = "SELECT transaction_id, account_id, transaction_type, isCritical, amount, date_of_transaction_initiation,  date_of_transaction_approval FROM tbl_transactions where isCritical='L' and internal_user_approval='P' ";
+		String query = "SELECT transaction_id, account_id, transaction_type, isCritical, amount, date_of_transaction_initiation,  date_of_transaction_approval, remark FROM tbl_transactions where isCritical='L' and internal_user_approval='P' ";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		trList = jdbcTemplate.query(query, new TransactionRowMapper());
 		return trList;
@@ -209,7 +209,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 
 	@Override
 	public List<Transaction> getTransaction(String tId) {
-		String query = "SELECT transaction_id, account_id, transaction_type, isCritical, amount, date_of_transaction_initiation,  date_of_transaction_approval FROM tbl_transactions where transaction_id=? and internal_user_approval='P' ";
+		String query = "SELECT transaction_id, account_id, transaction_type, isCritical, amount, date_of_transaction_initiation,  date_of_transaction_approval, remark FROM tbl_transactions where transaction_id=? and internal_user_approval='P' ";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		return jdbcTemplate.query(query, new TransactionRowMapper(), tId);
 	}
@@ -240,19 +240,11 @@ public class TransactionDAOImpl implements TransactionDAO {
 	}
 
 	@Override
-
-	public Useraccounts getUserAccountsInfoByAccid(Long accid) {
-		String sql = "SELECT * FROM tbl_accounts WHERE account_id = ?";
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		Useraccounts userAccounts = jdbcTemplate.queryForObject(sql, new Object[] { accid }, new UseraccountsRowMapper());
-		return userAccounts;
-	}
 	public Double getAvailBal(long accountId) {
 		String sql = "SELECT * FROM tbl_accounts WHERE account_id = ?";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		List<Useraccounts> userAccounts = jdbcTemplate.query(sql, new Object[] {accountId}, new UseraccountsRowMapper());
 		return userAccounts.get(0).getBalance();
-
 	}
 
 	@Override

@@ -1,3 +1,4 @@
+
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://www.springframework.org/security/tags"
@@ -20,8 +21,6 @@
 	<sec:authorize access="hasAnyRole('ROLE_RE','ROLE_SM')">
 		<div class="btn-group btn-group-justified">
 			<a href="/RichirichBank/viewMyIntProfile" class="btn btn-default">View</a>
-			<a href="/ExtUserRequests" class="btn btn-default">External User
-				Requests</a>
 			<sec:authorize access="hasRole('ROLE_RE')">
 				<a href="/RichirichBank/pendingTransactionsRE"
 					class="btn btn-default">Authorize Transactions </a>
@@ -33,4 +32,5 @@
 		</div>
 	</sec:authorize>
 </body>
+>>>>>>> Stashed changes
 </html>
