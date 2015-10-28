@@ -77,12 +77,17 @@ public class MerchantDAOImpl implements MerchantDAO {
 	}
 
 	@Override
-	public Useraccounts getUserAccountsInfoByUserName(String userName) {
+	public List<Useraccounts> getUserAccountsInfoByUserName(String userName) {
 		String sql = "SELECT * FROM tbl_accounts WHERE user_name = ?";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		Useraccounts userAccounts = jdbcTemplate.queryForObject(sql,
-				new Object[] { userName }, new UseraccountsRowMapper());
+		List<Useraccounts> userAccounts = jdbcTemplate.query(sql, new Object[] { userName }, new UseraccountsRowMapper());
 		return userAccounts;
+	}
+
+	public Boolean updateBalance(Useraccounts merchAccount, double balance) {
+		String query = "UPDATE tbl_accounts SET balance = ? WHERE account_id=? ";
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		return jdbcTemplate.update(query, new Object[] { merchAccount, merchAccount.getAccountno() }) > 0;
 	}
 
 }

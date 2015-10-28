@@ -76,11 +76,11 @@ public class TransactionDAOImpl implements TransactionDAO {
 	 */
 	@Override
 	public List<Transaction> getTransactionHistory(String userName) {
-		String sql = "SELECT * FROM tbl_transactions WHERE initiated_by = ?";
+		String sql = "SELECT * FROM tbl_transactions WHERE initiated_by = ? or account_id IN (SELECT account_id FROM tbl_accounts WHERE user_name= ?)";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		try{
 			List<Transaction> transactions = jdbcTemplate.query(sql,
-				new TransactionRowMapper(), new Object[] { userName });
+				new TransactionRowMapper(), new Object[] { userName, userName });
 			return transactions;
 		} catch (EmptyResultDataAccessException e){
 			//logger
