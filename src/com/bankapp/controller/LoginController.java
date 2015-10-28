@@ -14,9 +14,12 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.HttpSessionRequiredException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.bankapp.model.UserInfo;
@@ -147,5 +150,9 @@ public class LoginController {
 
 		return "forgotPassword";
 	}
-
+	@ExceptionHandler(HttpSessionRequiredException.class)	
+	public String handleSessionExpired(ModelMap model){
+		model.addAttribute("error", "Session expired");
+	  return "login";
+	}
 }
