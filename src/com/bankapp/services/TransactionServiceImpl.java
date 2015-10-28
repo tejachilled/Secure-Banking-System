@@ -106,5 +106,10 @@ public class TransactionServiceImpl implements TransactionService {
 		return transactionDAO.getUserAccountsInfoByAccid(accid);
 	}
 
+	@Override
+	public List<Transaction> getMerchTransactions(Long accid) {
+		return transactionDAO.getMerchTransactions(accid);
+	}
+
 
 }

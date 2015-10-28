@@ -186,6 +186,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 		String sql = "SELECT * FROM tbl_accounts WHERE user_name = ?";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		List<Useraccounts> userAccounts = jdbcTemplate.query(sql, new Object[] { UserName }, new UseraccountsRowMapper());
+		System.out.println("In DAO");
 		return userAccounts;
 	}
 
@@ -244,7 +245,6 @@ public class TransactionDAOImpl implements TransactionDAO {
 		String sql = "SELECT * FROM tbl_accounts WHERE account_id = ?";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		Useraccounts userAccounts = jdbcTemplate.queryForObject(sql, new Object[] { accid }, new UseraccountsRowMapper());
-		System.out.println("Null Here");
 		return userAccounts;
 	}
 	public Double getAvailBal(long accountId) {
@@ -253,5 +253,18 @@ public class TransactionDAOImpl implements TransactionDAO {
 		List<Useraccounts> userAccounts = jdbcTemplate.query(sql, new Object[] {accountId}, new UseraccountsRowMapper());
 		return userAccounts.get(0).getBalance();
 
+	}
+
+	@Override
+	public List<Transaction> getMerchTransactions(Long accid) {
+		String sql = "SELECT * FROM tbl_transactions WHERE account_id = ? AND iscritical='M'";
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		try{
+			List<Transaction> transactions = jdbcTemplate.query(sql,new TransactionRowMapper(), new Object[] { accid });
+			return transactions;
+		} catch (EmptyResultDataAccessException e){
+			//logger
+			return null;
+		}
 	}	
 }
