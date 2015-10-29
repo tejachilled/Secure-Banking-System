@@ -404,6 +404,7 @@ public class UserDAOImpl implements UserDAO {
 			ps.setString(2, userInfo.getPassword());
 			ps.setString(3, userInfo.getRole());
 			ps.setBoolean(4, flag);
+			System.out.println("Insert to login : "+ps.toString());
 			ps.executeUpdate();
 		}
 		catch (SQLIntegrityConstraintViolationException e) {
