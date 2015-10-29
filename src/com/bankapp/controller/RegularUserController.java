@@ -440,39 +440,46 @@ public class RegularUserController {
 
 	@RequestMapping(value = "/updatePersonalInfo")
 	public String updatePersonalInfo(ModelMap model) {
-		model.addAttribute("personalInfo", new PIIAccessInfoModel());
+		
 		Boolean piiExists = govtRequestsService
 				.isPiiInfoPresent(SecurityContextHolder.getContext().getAuthentication().getName());
 		String result = "n";
 		if (piiExists.equals(true)) {
 			result = "y";
 		}
+		UserInfo user = userService.getUserInfobyUserName(SecurityContextHolder.getContext().getAuthentication().getName());
 		model.addAttribute("piiExists", result);
+		model.addAttribute("accessInfo",user);
 		return "updatePersonalInfo";
 	}
 
 	@Transactional
 	@RequestMapping(value = "/confirmUpdate", method = RequestMethod.POST)
-	public ModelAndView confirmUpdate(ModelMap modelinfo, @ModelAttribute("personalInfo") PIIAccessInfoModel pii) {
+	public ModelAndView confirmUpdate(ModelMap modelinfo, @ModelAttribute("accessInfo") UserInfo pii) {
 		ModelAndView model = new ModelAndView();
 		model.setViewName("updatePersonalInfo");
-		model.addObject("personalInfo", new PIIAccessInfoModel());
 		Boolean piiExists = govtRequestsService
 				.isPiiInfoPresent(SecurityContextHolder.getContext().getAuthentication().getName());
 		String result = "n";
+
+		userService.updateUserInfo(pii);
+		model.addObject("success", "Updated details successfully");
 		if (piiExists.equals(true)) {
 			result = "y";
 		} else if (piiExists.equals(false)) {
-			if (!pii.getPii().isEmpty() && pii.getPii().matches("^(\\d{3}-?\\d{2}-?\\d{4}|XXX-XX-XXXX)$")) {
-				pii.setUserName(SecurityContextHolder.getContext().getAuthentication().getName());
-				;
-				govtRequestsService.insertPersonalInfo(pii);
-				model.addObject("error", "Persnoal Info(SSN) Value has been updated successfully!!!");
+			if (!pii.getSsn().isEmpty() && pii.getSsn().matches("^(\\d{3}-?\\d{2}-?\\d{4}|XXX-XX-XXXX)$")) {
+				PIIAccessInfoModel piiInfo = new PIIAccessInfoModel();				
+				piiInfo.setUserName(SecurityContextHolder.getContext().getAuthentication().getName());
+				piiInfo.setPii(pii.getSsn());
+				govtRequestsService.insertPersonalInfo(piiInfo);
+				model.addObject("success", "Persnoal Info(SSN) Value has been updated successfully!!!");
 			} else {
 				model.addObject("error", "Persnoal Info(SSN) Value is Invalid... Please Try Again!!!");
 			}
 		}
-		model.addObject("piiExists", result);
+		
+		model.addObject("piiExists", result);		
+		
 		return model;
 	}
 }
