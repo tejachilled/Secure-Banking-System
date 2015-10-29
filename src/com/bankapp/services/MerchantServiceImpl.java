@@ -6,14 +6,13 @@ package com.bankapp.services;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.bankapp.dao.MerchantDAOImpl;
-import com.bankapp.jdbc.UseraccountsRowMapper;
 import com.bankapp.model.Transaction;
 import com.bankapp.model.Useraccounts;
-import com.bankapp.userexceptions.MinimumBalanceException;
+
 
 /**
  * @author sunny
@@ -26,6 +25,7 @@ public class MerchantServiceImpl implements MerchantService {
 	@Autowired
 	Transaction transaction;
 	
+	private static final Logger logger = Logger.getLogger(MerchantService.class);
 	/* (non-Javadoc)
 	 * @see com.bankapp.services.MerchantService#isAccountValid(java.lang.Long)
 	 */
@@ -49,7 +49,8 @@ public class MerchantServiceImpl implements MerchantService {
 			transaction.setIsCritical(isCritical);
 			return merchantDAO.insertNewTransaction(transaction, accUserAccount);
 		} catch(Exception e){
-			System.out.println(e);
+			System.out.println("Error in inserting merchant txn :: "+e);
+			logger.error("Error in inserting merchant txn :: "+e);
 			//do logging
 			return false;
 		}
@@ -67,6 +68,10 @@ public class MerchantServiceImpl implements MerchantService {
 
 	public Boolean updateBalance(Useraccounts merchAccount, double balance) {
 		return merchantDAO.updateBalance(merchAccount, balance);
+	}
+
+	public Useraccounts getUserAccountsInfoByAccountId(Long accountId) {
+		return merchantDAO.getUserAccountsInfoByAccountId(accountId);
 	}
 
 }

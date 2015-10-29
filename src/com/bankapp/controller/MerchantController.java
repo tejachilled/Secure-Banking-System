@@ -67,6 +67,7 @@ public class MerchantController {
 		logger.info("In Initiate Merchant Transaction.");
 
 		ModelAndView modelView = new ModelAndView();
+		modelView.setViewName("extHome");// it will go to this page in any case
 		String remark = request.getParameter("remark");
 		String type = "C";// by default
 
@@ -80,77 +81,91 @@ public class MerchantController {
 			System.out.println("Exception "+e);
 			modelView.addObject("merchantTxnMsg", "Check Account/AmountNumber Format."
 					+ "Credit/Debit Transaction not Initiated");
-			modelView.setViewName("extHome");
 			return modelView;
 		}
 		accountType=request.getParameter("accType");
-
-		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-		if(merchantService.isAccountValid(accountId, userName) && amountVal>0){ 
-			if(request.getParameter("radios") != null) {
-	            if(request.getParameter("radios").equals("radio2")) {
-	            	type="D";
-	            }
-	        }
-			//get appropriate merchAccounts - Savings or checkings
-			Useraccounts merchAccount=null;
-			List<Useraccounts> merchAccounts= merchantService.getUserAccountsInfoByUserName(userName);
-			for (Useraccounts currUserAcc: merchAccounts){
-				if(currUserAcc.getAccountType().equals(accountType)){
-					merchAccount = currUserAcc;
-					break;
+		try{
+			String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+			if(merchantService.isAccountValid(accountId, userName) && amountVal>0){ 
+				if(request.getParameter("radios") != null) {
+					if(request.getParameter("radios").equals("radio2")) {
+						type="D";
+					}
 				}
-			}
-			
-			String isCritical; //two possible critical flags for merch
-			boolean txnStatus=false; // just to show message on screen
-			// credit to user
-			if(type=="C"){
-				isCritical= "N";
-				// check balance of merch a/c in case of credit req
-				if(merchAccount.getBalance()-amountVal<500){
-					//add some error message
-					modelView.addObject("merchantTxnMsg", "Debit Cannot be performed"
-							+ " as the Amount after debit is lesser than the minimum balance of $500 !!!");
-					modelView.setViewName("extHome");
-					return modelView;
-				} else{
-					txnStatus= merchantService.insertNewTransaction(accountId, amountVal, 
-							remark, type, userName, accountType, merchAccount, isCritical);//try-clause
-					if(txnStatus){
-						//do debit from merch a/c
-						Boolean val=merchantService.updateBalance(merchAccount, merchAccount.getBalance()-amountVal);
-						if(!val){
-							txnStatus= false;
-							//delete txn
-							// but hope this never happend
+				//get appropriate merchAccounts - Savings or checkings
+				Useraccounts merchAccount=null;
+				List<Useraccounts> merchAccounts= merchantService.getUserAccountsInfoByUserName(userName);
+				
+				if(merchAccounts.size()==1){
+					merchAccount =merchAccounts.get(0);
+				}
+				else{
+					for (Useraccounts currUserAcc: merchAccounts){
+						if(currUserAcc.getAccountType().equals(accountType)){
+							merchAccount = currUserAcc;
+							break;
 						}
 					}
 				}
-			} else{ //type=="D" // debit to user
-				isCritical= "M";
-				txnStatus = merchantService.insertNewTransaction(accountId, amountVal, 
+				
+				String isCritical; //two possible critical flags for merch
+				boolean txnStatus=false; // just to show message on screen
+				// credit to user
+				if(type=="C"){
+					isCritical= "N";
+					// check balance of merch a/c in case of credit req
+					if(merchAccount.getBalance()-amountVal<500){
+						//add some error message
+						modelView.addObject("merchantTxnMsg", "Credit Cannot be performed"
+							+ " as the Amount after debit is lesser than the minimum balance of $500 !!!");
+						logger.warn("Credit Cannot be performed by merchant since low balance");
+						System.out.println("Credit Cannot be performed by merchant since low balance");
+						return modelView;
+					} else{
+						txnStatus= merchantService.insertNewTransaction(accountId, amountVal, 
+							remark, type, userName, accountType, merchAccount, isCritical);//try-clause
+						if(txnStatus){
+							//do debit from merch a/c
+							Boolean val=merchantService.updateBalance(merchAccount, merchAccount.getBalance()-amountVal);
+							//credit for user
+							Useraccounts userAccount= merchantService.getUserAccountsInfoByAccountId(accountId);
+							val|=merchantService.updateBalance(userAccount, userAccount.getBalance()+amountVal);
+							if(!val){
+								txnStatus= false;
+								//delete txn
+								// but hope this never happend
+							}
+						}
+					}
+				} else{ //type=="D" // debit to user
+					isCritical= "M";
+					txnStatus = merchantService.insertNewTransaction(accountId, amountVal, 
 						   remark, type, userName, accountType, merchAccount, isCritical);
 				
-			}
+				}
 			
-			if(txnStatus){
-				modelView.addObject("merchantTxnMsg", "Credit/Debit Transaction Initiated");
-			} else {
-				modelView.addObject("merchantTxnMsg", "Credit/Debit Transaction not Initiated");
-				System.out.println("something wrong with txn values");
+				if(txnStatus){
+					modelView.addObject("merchantTxnMsg", "Credit/Debit Transaction Initiated");
+				} else {
+					modelView.addObject("merchantTxnMsg", "Credit/Debit Transaction not Initiated");
+					System.out.println("something wrong with txn values");
+				}
+			} else{
+				//add some error message
+				modelView.addObject("merchantTxnMsg", "Account Id/Amount Value is/are not valid."
+						+ "Credit/Debit Transaction not Initiated");
+				logger.error("Account Id/Amount Value is/are not valid."
+						+ "Credit/Debit Transaction not Initiated");
 			}
-		} else{
+	
+			return modelView;
+		} catch(Exception e){
+			logger.fatal("something wrong happened in merch controller:: "+e);
+			//e.printStackTrace();
 			//add some error message
-			modelView.addObject("merchantTxnMsg", "Account Id/Amount Value is/are not valid."
-					+ "Credit/Debit Transaction not Initiated");
-		    logger.error("Account Id/Amount Value is/are not valid."
-					+ "Credit/Debit Transaction not Initiated");
+			modelView.addObject("merchantTxnMsg", "Credit/Debit Transaction not Initiated");
+			return modelView;
 		}
-
-		modelView.setViewName("extHome");
-		return modelView;
-
 	}
 	
 }

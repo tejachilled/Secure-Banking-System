@@ -84,10 +84,18 @@ public class MerchantDAOImpl implements MerchantDAO {
 		return userAccounts;
 	}
 
-	public Boolean updateBalance(Useraccounts merchAccount, double balance) {
+	public Boolean updateBalance(Useraccounts merchAccount, Double balance) {
 		String query = "UPDATE tbl_accounts SET balance = ? WHERE account_id=? ";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		return jdbcTemplate.update(query, new Object[] { merchAccount, merchAccount.getAccountno() }) > 0;
+		return jdbcTemplate.update(query, new Object[] { balance, merchAccount.getAccountno() }) > 0;
+	}
+
+	public Useraccounts getUserAccountsInfoByAccountId(Long accountId) {
+		String sql = "SELECT * FROM tbl_accounts WHERE account_id = ?";
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		List<Useraccounts> userAccounts = jdbcTemplate.query(sql, new Object[] { accountId }, new UseraccountsRowMapper());
+		return userAccounts.get(0);
+
 	}
 
 }
