@@ -103,10 +103,12 @@ public class RegularUserController {
 		Useraccounts accUserAccount = null;
 
 		for (Useraccounts currUserAcc : userAccounts) {
-			if (currUserAcc.getAccountType().equals(transaction.getAccType())) {
+			if (currUserAcc.getAccountType().equalsIgnoreCase(transaction.getAccType())) {
 				accUserAccount = currUserAcc;
 			}
 		}
+		
+		System.out.println("Mani came here");
 		try {
 			if (transaction.getAmount() < 0) {
 				throw new NegativeAmountException("Amount cannot be a negative Value!!!");
@@ -154,6 +156,7 @@ public class RegularUserController {
 			modelAndView.addObject("msg", mi.getMessage());
 			return modelAndView;
 		} catch (Exception e) {
+			e.printStackTrace();
 			modelAndView.addObject("msg",
 					"Unexpected Error Occurred or Invalid Input format..Please Try Again.. If problem persists contact the customer support!!!");
 			return modelAndView;
