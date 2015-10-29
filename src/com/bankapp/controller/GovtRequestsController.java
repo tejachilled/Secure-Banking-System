@@ -30,7 +30,7 @@ public class GovtRequestsController {
 		logger.info("Government User Logged in.");
 		ModelAndView model = new ModelAndView();
 		model.addObject("title", "Welcome Govt User!");
-		model.addObject("bank_name", "Richie Rich Bank");
+		model.addObject("bank_name", "SunDevilBank");
 		model.setViewName("govt");
 		List<GovtRequestsModel> govtRequestsList = govtRequestsService.getGovtRequestsList();
 		model.addObject("govtRequestsList", govtRequestsList);

@@ -30,8 +30,8 @@ public class PIIAccessInfoController {
 	@RequestMapping("/piiaccessinfo")
 	public ModelAndView getGovernmentRequests(@ModelAttribute("govtAction") GovtActionModel govtActionModel) {
 		ModelAndView model = new ModelAndView();
-		model.addObject("title", "Welcome to Richie Rich Bank!");
-		model.addObject("bank_name", "Richie Rich Bank");
+		model.addObject("title", "Welcome to SunDevilBank!");
+		model.addObject("bank_name", "SunDevilBank");
 		model.setViewName("piiaccessinfo");
 		List<PIIAccessInfoModel> piiAccessInfoList = piiAccessInfoService
 				.getPIIAccessInfoList(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -42,8 +42,8 @@ public class PIIAccessInfoController {
 	@RequestMapping("/newPiiRequest")
 	public ModelAndView newPiiRequestPage(@ModelAttribute("piiRequestModel") PIIRequestModel piiRequestModel) {
 		ModelAndView model = new ModelAndView();
-		model.addObject("title", "Welcome to Richie Rich Bank!");
-		model.addObject("bank_name", "Richie Rich Bank");
+		model.addObject("title", "Welcome to SunDevilBank!");
+		model.addObject("bank_name", "SunDevilBank");
 		model.setViewName("newPiiRequest");
 		model.addObject("piiRequestModel", piiRequestModel);
 		return model;

@@ -251,7 +251,7 @@ public class CertServiceImpl implements CertService {
 	
 	//generate keystore which can be used to create pfx file
 	public KeyPair generateRSAKeyPair() throws Exception {
-	    KeyPairGenerator kpGen = KeyPairGenerator.getInstance("RSA", "BC");
+	    KeyPairGenerator kpGen = KeyPairGenerator.getInstance("RSA");
 	    kpGen.initialize(1024, new SecureRandom());
 	    return kpGen.generateKeyPair();
 	  }
@@ -262,7 +262,7 @@ public class CertServiceImpl implements CertService {
 	 @SuppressWarnings("deprecation")
 	public X509Certificate generateV3Certificate(KeyPair pair, String username) throws Exception {
 		
-		 Security.addProvider(new BouncyCastleProvider());
+		 //Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 		
 		 
 		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
@@ -290,7 +290,7 @@ public class CertServiceImpl implements CertService {
 		  certGen.addExtension(X509Extensions.SubjectAlternativeName, false, new GeneralNames(
 		      new GeneralName(GeneralName.rfc822Name, "test@test.test")));
 		  
-		  return certGen.generateX509Certificate(pair.getPrivate(), "BC");
+		  return certGen.generateX509Certificate(pair.getPrivate());
 	}
 
 	

@@ -7,18 +7,12 @@
 .error {
 	width: 200px;
 	height: 15px;
-	background: transparent;
-	background-color: #b3b4a9;
-	border: 2px solid rgba(255, 255, 255, 0.6);
-	border-radius: 1px;
-	color: #D8000C;
-	font-family: 'Exo', sans-serif;
-	font-size: 16px;
-	font-weight: 200;
+	background-color: #fff;
+	color: #ff0000;
 	padding: 6px;
 }
 
-.msg {
+/*.msg {
 	width: 200px;
 	height: 15px;
 	background: transparent;
@@ -45,8 +39,7 @@ body {
 	color: #fff;
 	font-family: Arial;
 	font-size: 12px;
-}
-
+}*/
 .body {
 	position: absolute;
 	top: -20px;
@@ -56,9 +49,9 @@ body {
 	width: auto;
 	height: auto;
 	background-image:
-		url(http://ginva.com/wp-content/uploads/2012/07/city-skyline-wallpapers-008.jpg);
+		url(http://www.enchantedbrides.com/wp-content/uploads/2015/07/new-york-night-skyline-wallpaper-39006-in-city-telusers-new-york-skyline.jpg);
 	background-size: cover;
-	-webkit-filter: blur(5px);
+	-webkit-filter: blur(10px);
 	z-index: 0;
 }
 
@@ -92,9 +85,9 @@ body {
 	font-weight: 200;
 }
 
-.header div span {
+/*.header div span {
 	color: #5379fa !important;
-}
+}*/
 
 .login {
 	position: absolute;
@@ -190,6 +183,20 @@ body {
 <script type="text/javascript"
 	src="<c:url value="/resources/js/jquery.js"/>"></script>
 
+<script type="text/javascript"
+	src="<c:url value="/resources/js/keyboard.js"/>"></script>
+<script
+	src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script type="text/javascript"
+	src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
+
+<!-- Plugin JavaScript -->
+<script type="text/javascript"
+	src="<c:url value="/resources/js/jquery.easing.min.js"/>"></script>
+
+
 <script>
 	document.onmousedown = disableclick;
 	status = "Right Click Disabled";
@@ -200,6 +207,7 @@ body {
 		}
 	}
 </script>
+
 <body>
 
 	<form name='loginForm' action="<c:url value='/login' />" method='POST'
@@ -209,9 +217,8 @@ body {
 		<div class="grad"></div>
 		<div class="header">
 			<div>
-				<span>Sun</span>Devil<span>Bank</span>
+				SunDevilBank 
 			</div>
-
 		</div>
 
 		<div class="login">
@@ -231,22 +238,9 @@ body {
 			<div class="g-recaptcha"
 				data-sitekey="6LdO2w8TAAAAAKaAmTBWN9KAJrHsmZ2r405oUiVf"></div>
 			<br> <input name="submit" type="submit" value="Login" /> <br>
-			<br> <a style="color:white" href="/RichirichBank/forgotpassword">Forgot
-				Password? </a>
+			<br> <a style="color: white"
+				href="/RichirichBank/forgotpassword">Forgot Password? </a>
 		</div>
-
-		<script type="text/javascript"
-			src="<c:url value="/resources/js/keyboard.js"/>"></script>
-		<script
-			src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-
-		<!-- Bootstrap Core JavaScript -->
-		<script type="text/javascript"
-			src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
-
-		<!-- Plugin JavaScript -->
-		<script type="text/javascript"
-			src="<c:url value="/resources/js/jquery.easing.min.js"/>"></script>
 
 		<input type="hidden" name="${_csrf.parameterName}"
 			value="${_csrf.token}" />
