@@ -152,6 +152,7 @@ public class AdminController {
 			final String tempPwd = emailService.generatePassword();
 			UserInfo.setPassword(encoder.encode(tempPwd));
 			userService.addNewInternaluser(UserInfo, role);
+			emailService.Send(UserInfo.getUserName(), tempPwd, UserInfo.getEmaiID());
 			model.addAttribute("success", "Added new user successfully!");
 			logger.info("Employee created successfully!");
 		} catch (CustomException exception) {

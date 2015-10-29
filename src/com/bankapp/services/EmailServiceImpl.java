@@ -47,7 +47,7 @@ public class EmailServiceImpl implements EmailService {
 		return pass.toString();
 	}
 
-	public void Send(String userName, final String tempPassword, String recipientEmail, Long accNo)
+	public void Send(String userName, final String tempPassword, String recipientEmail)
 			throws AddressException, MessagingException {
 		final String FromEmail = "SunDevilBankASU";
 		final String password = "SunDevilBank";
