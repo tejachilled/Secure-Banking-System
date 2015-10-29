@@ -462,10 +462,12 @@ public class RegularUserController {
 		String piiExists = govtRequestsService
 				.isPiiInfoPresent(SecurityContextHolder.getContext().getAuthentication().getName());
 		String result = "n";
+		UserInfo user = userService.getUserInfobyUserName(SecurityContextHolder.getContext().getAuthentication().getName());
+		
 		if (piiExists!=null && piiExists.length()>3) {
 			result = "y";
-		}
-		UserInfo user = userService.getUserInfobyUserName(SecurityContextHolder.getContext().getAuthentication().getName());
+			user.setSsn(piiExists);
+		}		
 		model.addAttribute("piiExists", result);
 		model.addAttribute("accessInfo",user);
 		return "updatePersonalInfo";
