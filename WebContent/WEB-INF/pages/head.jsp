@@ -50,18 +50,6 @@
 						</ul></li>
 				</sec:authorize>
 
-				<sec:authorize access="hasRole('ROLE_SM')">
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown">Transaction Management<b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<sec:authorize access="hasRole('ROLE_SM')">
-								<li><a href="/ReviewPIIChange">PII Change Req</a></li>
-							</sec:authorize>
-						</ul></li>
-				</sec:authorize>
-
-
-
 				<sec:authorize access="hasRole('ROLE_SA')">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown">Internal Employee Management<b
