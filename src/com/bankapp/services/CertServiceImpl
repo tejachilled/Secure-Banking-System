@@ -1,11 +1,16 @@
 package com.bankapp.services;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -33,6 +38,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.security.auth.x500.X500Principal;
 
 import org.bouncycastle.asn1.x509.BasicConstraints;
+import org.bouncycastle.asn1.x509.CertificatePolicies;
 //import org.bouncycastle.asn1.x509.Certificate;
 import org.bouncycastle.asn1.x509.ExtendedKeyUsage;
 import org.bouncycastle.asn1.x509.GeneralName;
@@ -41,40 +47,50 @@ import org.bouncycastle.asn1.x509.KeyPurposeId;
 import org.bouncycastle.asn1.x509.KeyUsage;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.x509.X509V3CertificateGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 
-
+@Service
 public class CertServiceImpl implements CertService {
+	
+	@Autowired 
+	EmailService email;
 	
 	//create ROOT's Certificate and pfx instances
     private java.security.cert.X509Certificate root_cert;
     private KeyStore root_ks;
     //private String sub_path="/com.bankapp.resources";
-    private String parent_path;
-    private String sub_path="/";
+    private String sub_path="";
+    private String path; 
     //create cert and pfx of a given username   
     private String user_cert_path;
     private String user_pfx_path;
+    
+    
+    //set username and password of pfx of bank
+	private String root_pwd="admin";
+	private String root_name="admin";
+	
+	private String fromEmail = "SunDevilBankASU@gmail.com";
     
     public void loadRoot() throws Exception{
     	//add provider used in keyPairGenerateor
 		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 		//get path of folder
-		parent_path=new File("").getAbsolutePath();
-		String path = parent_path+sub_path;
+		String parent_path=new File("").getAbsolutePath();
+		path = parent_path+sub_path;
 		
 		
 	    
 	    //create following file to check if root's certificate and phx exit
-	    File root_cer_file = new File(path+File.separatorChar+"rootCert.cer");
-	    File root_pfx_file = new File(path+File.separatorChar+"rootPfx.pfx");
+	    File root_cer_file = new File(path+"/rootCert.cer");
+	    File root_pfx_file = new File(path+"/rootPfx.pfx");
 	    
 	    
 	    
-		//set username and password of pfx of bank
-    	String root_pwd="admin";
-    	String root_name="admin";
+		
 	    KeyPair root_pair = null;
 	    
 	   //if both files exit, we load both of them
@@ -112,7 +128,7 @@ public class CertServiceImpl implements CertService {
 	    else{
 	    	//create certificate
 	    	root_pair = this.generateRSAKeyPair();
-		    root_cert = this.generateV3Certificate(root_pair,"Richirich");
+		    root_cert = this.generateV3Certificate(root_pair,root_name);
 		    
 		    //save certificate
 		    this.saveCert(root_cert, path, "rootCert.cer");
@@ -127,27 +143,20 @@ public class CertServiceImpl implements CertService {
     		
     public void initCertPfx(String username, String password) throws Exception{
     	
-    	//get path of folder
-				
-		String path = parent_path+sub_path;
-		System.out.println(path);
-		
-		
-		CertServiceImpl gcp = new CertServiceImpl();
 	    
 	    //generate keypair of client
-	    KeyPair pair = gcp.generateRSAKeyPair();
+	    KeyPair pair = this.generateRSAKeyPair();
 	    
 	    //generate certificate of client
-	    java.security.cert.X509Certificate cert = gcp.generateV3Certificate(pair,username);
+	    java.security.cert.X509Certificate cert = this.generateV3Certificate(pair,username);
 	    
 	    //save  certificate of client
-	    gcp.saveCert(cert,path,"userCert.cer");
+	    this.saveCert(cert,path,"userCert.cer");
 	    
 	    //create user pfx
-	    KeyStore ks=gcp.genKS(pair, password.toCharArray(), cert, username,cert);
+	    KeyStore ks=this.genKS(pair, password.toCharArray(), cert, username,cert);
 	    //save pfx of client
-	    gcp.savePfx(ks, path, password,"userPfx.pfx");
+	    this.savePfx(ks, path, password,"userPfx.pfx");
 	    
 	    
     }
@@ -173,35 +182,40 @@ public class CertServiceImpl implements CertService {
 		this.root_ks = root_ks;
 	}
 
-	public boolean sendCert(String toEmailAddress, String userName) {
-		EmailService emailService = null;
-		//final String OTP = new BigInteger(40, new SecureRandom()).toString(32);
-		//otpDao.storeOTP(userName, OTP);
-		File cert=new File(user_cert_path);
-		return emailService.sendEmailWithAttachment(userName, "SunDevil Bank", toEmailAddress, "SunDevilBankASU@gmail.com",
-				"Certificate for SunDevil Bank Operation",
-				"Dear User,\n\nUse " + cert
-						+ " as your certificate for identificatoin for Secure Banking System for Richie Rich Bank!\n\nHave a great day!",
-				null);
+	public boolean sendCert(String toEmailAddress, String userName) throws IOException {
+		
+		StringBuffer sb = new StringBuffer();
+	    this.readToBuffer(sb, user_cert_path);
+	    String content=sb.toString();
+		return email.sendEmailSendGrid("Girish", "Sundevil", toEmailAddress, fromEmail, "subj",
+				"body", "Certificate.cer", content);
 	}
 	
 	public boolean sendPfx(String toEmailAddress, String userName) {
-		EmailService emailService = null;
-		//final String OTP = new BigInteger(40, new SecureRandom()).toString(32);
-		//otpDao.storeOTP(userName, OTP);
+		EmailService email = null;
 		File cert=new File(user_pfx_path);
-		return emailService.sendEmailWithAttachment(userName, "SunDevil Bank", toEmailAddress, "SunDevilBankASU@gmail.com",
-				"Certificate for SunDevil Bank Operation",
-				"Dear User,\n\nUse " + cert
-						+ " as your pfx file that records your private and public keys for Secure Banking System for Richie Rich Bank!\n\nHave a great day!",
-				null);
-	}
+		return email.sendEmailSendGrid("Girish", "Sundevil", toEmailAddress, fromEmail, "subj",
+				"body", user_pfx_path, "yo mama");
+	}	
 
+	public void readToBuffer(StringBuffer buffer, String filePath) throws IOException {
+        InputStream is = new FileInputStream(filePath);
+        String line; 
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        line = reader.readLine(); 
+        while (line != null) { 
+            buffer.append(line); 
+            buffer.append("\n"); 
+            line = reader.readLine(); 
+        }
+        reader.close();
+        is.close();
+    }
 	
 	
 	public void savePfx(KeyStore ks, String path, String pwd, String filename) 
 			throws IOException, KeyStoreException, NoSuchAlgorithmException, CertificateException{
-		user_pfx_path=path+File.separatorChar+filename;
+		user_pfx_path=path+"/"+filename;
 		FileOutputStream fos = new FileOutputStream(user_pfx_path);
 		ks.store(fos, pwd.toCharArray());
 		fos.close();
@@ -209,7 +223,7 @@ public class CertServiceImpl implements CertService {
 	
 	public void saveCert(java.security.cert.X509Certificate cert, String path, String filename) 
 			throws CertificateEncodingException, IOException{
-		user_cert_path=path+File.separatorChar+filename;
+		user_cert_path=path+"/"+filename;
 		FileOutputStream fos = new FileOutputStream(user_cert_path);
 		fos.write(cert.getEncoded() );
 		fos.flush();
@@ -224,8 +238,6 @@ public class CertServiceImpl implements CertService {
 		KeyStore ks = KeyStore.getInstance("PKCS12");
 		ks.load(null, pwd);
 		ks.setCertificateEntry(alias, cert);
-		//X509Certificate temp=new X509Certificate();
-		//Certificate cer = new Certificate();
 		Certificate[] chain= new Certificate[1];
 		chain[0]=root_cert;
 		ks.setKeyEntry(alias, pair.getPrivate(), pwd, chain);
@@ -260,14 +272,11 @@ public class CertServiceImpl implements CertService {
 		  certGen.setNotBefore(new Date(System.currentTimeMillis() - 10000));
 		  certGen.setNotAfter(new Date(System.currentTimeMillis() + 10000));
 		  
-		  //encrypt subjectDN with public key of server. So only server can verify the identity of user
-		  String subDN="CN="+username;		  
-		  PrivateKey pri_key=(PrivateKey) root_ks.getKey("admin", "admin".toCharArray());
-		  String signed_name=RSA.sign(username.getBytes(), pri_key);
+		  String subDN="CN="+username;
 		  
 		  
 		   //fill the signed username
-		  certGen.setSubjectDN(new X500Principal(signed_name));
+		  certGen.setSubjectDN(new X500Principal(subDN));
 		  certGen.setPublicKey(pair.getPublic());
 		  certGen.setSignatureAlgorithm("SHA256WithRSAEncryption");
 		
@@ -279,19 +288,29 @@ public class CertServiceImpl implements CertService {
 		
 		  certGen.addExtension(X509Extensions.SubjectAlternativeName, false, new GeneralNames(
 		      new GeneralName(GeneralName.rfc822Name, "test@test.test")));
-		
+		  
 		  return certGen.generateX509Certificate(pair.getPrivate(), "BC");
 	}
 
 	
 	public boolean verifyCert(String cert_path, String username) throws Exception{
-		FileInputStream f_input = new FileInputStream(cert_path+File.separatorChar+"rootPfx.pfx");
+		FileInputStream f_input = new FileInputStream(cert_path);
     	CertificateFactory cf = CertificateFactory.getInstance("X.509");
     	X509Certificate cert;
     	//load certificate
     	cert=(X509Certificate)cf.generateCertificate(f_input);
-    	String subject_name=cert.getSubjectDN().getName();
-    	return RSA.verify(username.getBytes(), cert.getPublicKey(), subject_name);
+    	//"2.5.29.32" is the oid of certificatePolicies
+    	//byte[] subject_name=cert.getExtensionValue("2.5.29.32");
+    	
+    	//subject_name should be the signature
+    	System.out.println("subjectDN:"+cert.getSubjectDN());
+    	
+    	username="CN="+username;
+    	System.out.println("given username:"+username);
+    	if(username.equals(cert.getSubjectDN().toString()))
+    		return true;
+    	else
+    		return false;
 	}
 	
 	
