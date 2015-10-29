@@ -26,6 +26,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import com.bankapp.model.UserInfo;
 import com.bankapp.services.UserService;
 import com.bankapp.services.UserValidator;
+import com.bankapp.userexceptions.ResourceNotFoundException;
 
 @Controller
 public class LoginController {
@@ -54,55 +55,55 @@ public class LoginController {
 		logger.info("In Login Controller");
 		return "login";
 	}
-
-	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout(ModelMap model) {
+	@RequestMapping(value="/logout",method=RequestMethod.GET)
+	public String logout(ModelMap model)
+	{
 		SecurityContextHolder.getContext().setAuthentication(null);
 		logger.info("Logged out");
 		return "login";
 	}
-
-	@RequestMapping(value = "/loginFailed", method = RequestMethod.GET)
-	public String loginFailed(ModelMap model, Principal user) {
+	@RequestMapping(value="/loginFailed", method=RequestMethod.GET)
+	public String loginFailed(ModelMap model, Principal user){
 		SecurityContextHolder.getContext().setAuthentication(null);
 		logger.info("Invalid credentials or Captcha");
 		model.addAttribute("error", "Invalid Credentials/Captcha");
 		return "login";
 	}
 
-	@RequestMapping(value = "/atFirstLogin")
-	public String userAtFirstLogin(Model model, HttpServletRequest request) {
+	@RequestMapping(value="/atFirstLogin")
+	public String userAtFirstLogin(Model model,HttpServletRequest request){
 		return "changePassword";
 	}
-
 	@RequestMapping(value = "/changePassword", method = RequestMethod.POST)
-	public ModelAndView changePassword(HttpServletRequest request, HttpSession session) {
+	public ModelAndView changePassword(HttpServletRequest request,HttpSession session) {
 		ModelAndView model = null;
-		try {
-			String password = (String) request.getParameter("newPassword");
-			String confirmPassword = (String) request.getParameter("confirmPassword");
-			System.out.println("pass=" + password);
-			System.out.println("conf pass=" + confirmPassword);
-			if (!password.equals(confirmPassword))
+		try
+		{
+			String password = (String)request.getParameter("newPassword");
+			String confirmPassword = (String)request.getParameter("confirmPassword");
+			System.out.println("pass="+password);
+			System.out.println("conf pass="+confirmPassword);
+			if(!password.equals(confirmPassword))
 				throw new Exception("Passwords do not match!");
-			else if (!password.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,10}$")) {
-				throw new Exception(
-						"Invalid password, must be 4-10 characters and contain one capital letter and a number. Special characters are not allowed");
+			else if(!password.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,10}$")){
+				throw new Exception("Invalid password, must be 4-10 characters and contain one capital letter and a number. Special characters are not allowed");
 			}
 			String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-			model = new ModelAndView("login");
-			if (userName != null || request.getSession().getAttribute("userName") != null) {
-				if (request.getSession().getAttribute("userName") != null) {
+			model= new ModelAndView("login");
+			if(userName!=null || request.getSession().getAttribute("userName")!=null){	
+				if(request.getSession().getAttribute("userName")!=null){
 					userName = request.getSession().getAttribute("userName").toString();
 				}
-				System.out.println("in changepassword method un : " + userName);
+				System.out.println("in changepassword method un : "+userName);
 				userService.changePassword(confirmPassword, userName);
 				SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
-				model.addObject("success", "Successfully updated");
+				model.addObject("success","Successfully updated");
 
 			}
 			return model;
-		} catch (Exception e) {
+		}
+		catch(Exception e)
+		{
 			model = new ModelAndView("changePassword");
 			model.addObject("errorMessage", e.getMessage());
 			return model;
@@ -110,46 +111,47 @@ public class LoginController {
 		}
 
 	}
-
-	@RequestMapping(value = "/forgotpassword", method = RequestMethod.GET)
-	public String forgotPasswordClicked(Model model) {
+	@RequestMapping(value="/forgotpassword",method=RequestMethod.GET)
+	public String forgotPasswordClicked(Model model)
+	{
 		model.addAttribute("extUser", new UserInfo());
 		System.out.println("in forgot password");
 		return "forgotPassword";
 	}
 
-	@RequestMapping(value = "/forgotpassword", method = RequestMethod.POST)
-	public String forgotPasswordNextClicked(ModelMap model, @ModelAttribute("extUser") @Validated UserInfo UserInfo,
-			BindingResult result, HttpSession session) {
-		System.out.println("in forgot password Post" + " " + UserInfo);
-		if (!UserInfo.getUserName().matches("^[a-z0-9_-]{3,16}$")) {
+	@RequestMapping(value="/forgotpassword",method=RequestMethod.POST)
+	public String forgotPasswordNextClicked(ModelMap model,@ModelAttribute ("extUser") @Validated UserInfo UserInfo, BindingResult result,HttpSession session)
+	{
+		System.out.println("in forgot password Post"+" "+UserInfo);
+		if(!UserInfo.getUserName().matches("^[a-z0-9_-]{3,16}$"))
+		{
 			model.addAttribute("error", "Username is not valid!");
 			model.addAttribute("extUser", new UserInfo());
 			System.out.println("error");
 			return "forgotPassword";
 		}
 		UserInfo user = userService.getUserInfobyUserName(UserInfo.getUserName());
-		if (user != null) {
+		if(user!=null)
+		{			
 			model.addAttribute("username", UserInfo.getUserName());
 
-			if (UserInfo.getEmaiID() != null) {
-				if (!(UserInfo.getSq3().equalsIgnoreCase(user.getSq3())
-						&& UserInfo.getSq2().equalsIgnoreCase(user.getSq2())
-						&& UserInfo.getSq1().equalsIgnoreCase(user.getSq1())
-						&& UserInfo.getEmaiID().equalsIgnoreCase(user.getEmaiID()))) {
+			if(UserInfo.getEmaiID()!=null){
+				if(!(UserInfo.getSq3().equalsIgnoreCase(user.getSq3())  && UserInfo.getSq2().equalsIgnoreCase(user.getSq2())  && UserInfo.getSq1().equalsIgnoreCase(user.getSq1())  && UserInfo.getEmaiID().equalsIgnoreCase(user.getEmaiID()))){
 					model.addAttribute("error", "Provided information didnot match!");
 					return "forgotPassword";
 				}
 				session.setAttribute("userName", UserInfo.getUserName());
 				return "changePassword";
 			}
-		} else {
+		}
+		else
+		{
 			model.addAttribute("error", "Username is not valid!");
 		}
 
 		return "forgotPassword";
 	}
-
+	
 	@ExceptionHandler(HttpSessionRequiredException.class)
 	@ResponseBody
 	public String handleSessionExpired(ModelMap model) {
@@ -164,13 +166,19 @@ public class LoginController {
 		model.addAttribute("error", "There was an error");
 		return "login";
 	}
-	
+
 	@ExceptionHandler(NoHandlerFoundException.class)
 	@ResponseBody
-    public String handle(Exception ex,Model model) {
-
+	public String handle1(Exception ex,Model model) {
+		System.out.println("handle1");
 		model.addAttribute("error", "No page found");
-       return "login";
+
+		return "login";
+	}
+	@ExceptionHandler(ResourceNotFoundException.class)
+	public String handle2() {
+		System.out.println("handle2");
+		return "login";
 	}
 
 }
