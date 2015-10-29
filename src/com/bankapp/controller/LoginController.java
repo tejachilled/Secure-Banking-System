@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import com.bankapp.model.UserInfo;
 import com.bankapp.services.UserService;
@@ -163,6 +163,14 @@ public class LoginController {
 		System.out.println("Handle exception");
 		model.addAttribute("error", "There was an error");
 		return "login";
+	}
+	
+	@ExceptionHandler(NoHandlerFoundException.class)
+	@ResponseBody
+    public String handle(Exception ex,Model model) {
+
+		model.addAttribute("error", "No page found");
+       return "login";
 	}
 
 }
