@@ -93,17 +93,16 @@ public class MerchantController {
 					}
 				}
 				//get appropriate merchAccounts - Savings or checkings
-				Useraccounts merchAccount=null;
 				List<Useraccounts> merchAccounts= merchantService.getUserAccountsInfoByUserName(userName);
 				
-				merchAccount =merchAccounts.get(0);
+				Useraccounts merchAccount =merchAccounts.get(0);//default one
+				
 				for (Useraccounts currUserAcc: merchAccounts){
 					if(currUserAcc.getAccountType().equalsIgnoreCase(accountType)){
 						merchAccount = currUserAcc;
 						break;
 					}
 				}
-			
 				
 				String isCritical; //two possible critical flags for merch
 				boolean txnStatus=false; // just to show message on screen

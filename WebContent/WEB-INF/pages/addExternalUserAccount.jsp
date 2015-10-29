@@ -11,7 +11,16 @@
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script type="text/javascript"
 	src="<c:url value="/resources/js/bootstrap.js"/>"></script>
-
+<script>
+	document.onmousedown = disableclick;
+	status = "Right Click Disabled";
+	function disableclick(event) {
+		if (event.button == 2) {
+			alert(status);
+			return false;
+		}
+	}
+</script>
 <title>Register</title>
 </head>
 <body>

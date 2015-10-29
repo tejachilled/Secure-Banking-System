@@ -7,7 +7,16 @@
 <%@taglib uri="http://www.springframework.org/security/tags"
 	prefix="sec"%>
 <html>
-
+<script>
+	document.onmousedown = disableclick;
+	status = "Right Click Disabled";
+	function disableclick(event) {
+		if (event.button == 2) {
+			alert(status);
+			return false;
+		}
+	}
+</script>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>${title}</title>

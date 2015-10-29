@@ -14,7 +14,18 @@
 <title>Insert title here</title>
 <jsp:include page="extHome.jsp"></jsp:include>
 </head>
+<script>
+	document.onmousedown = disableclick;
+	status = "Right Click Disabled";
+	function disableclick(event) {
+		if (event.button == 2) {
+			alert(status);
+			return false;
+		}
+	}
+</script>
 <body>
+
 	<sec:authorize access="hasRole('ROLE_M')">
 		<form:form class="form-horizontal"
 			action="/RichirichBank/initiateMerchTrans" method="post" name="f">

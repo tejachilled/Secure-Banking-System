@@ -4,7 +4,6 @@
 	prefix="sec"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 
@@ -15,48 +14,81 @@
 
 <title>User Home</title>
 </head>
+<script>
+	document.onmousedown = disableclick;
+	status = "Right Click Disabled";
+	function disableclick(event) {
+		if (event.button == 2) {
+			alert(status);
+			return false;
+		}
+	}
+</script>
 <body>
 	<jsp:include page="headExt.jsp"></jsp:include>
-	<c:if test="${piiExists  eq 'n'}">
-		<div style="width: 100%;">
-			<form:form class="form-horizontal" commandName="personalInfo"
-				method="post" action="/RichirichBank/confirmUpdate">
+	<c:if test="${not empty success }">
+		<div style="width: 40%;">
+			<div class="alert alert-dismissable alert-success">
+				<strong>${success}</strong>
+			</div>
 
-				<input type="hidden" name="${_csrf.parameterName}"
-					value="${_csrf.token}" />
-
-				<fieldset>
-					<legend>Enter Your SSN: </legend>
-					<c:if test="${not empty success }">
-						<div style="width: 40%;">
-							<div class="alert alert-dismissable alert-success">
-								<strong>${success}</strong>
-							</div>
-
-						</div>
-					</c:if>
-					<div>
-						<div class="col-lg-10">
-							<form:input path="pii" class="form-control" id="piiId"
-								placeholder="Format: 'XXXXXXXXX'" />
-							<label style="color: red">${piierror}</label>
-						</div>
-
-					</div>
-					<div class="form-group">
-						<div class="col-lg-10 col-lg-offset-2">
-							<button type="submit" class="btn btn-primary">Submit</button>
-						</div>
-					</div>
-				</fieldset>
-			</form:form>
 		</div>
 	</c:if>
-	<c:if test="${piiExists  eq 'y'}">
-	    You have already updated your Personal Info!!! Please contact the bank for modifying it!!!
-	 </c:if>
+
 	<c:if test="${not empty error}">
 		<c:out value="${error}" />
 	</c:if>
+	<div>
+		<h4>Please note that only the Address information, Phone number, email id
+			and SSN (one time) is editable</h4>
+		<form:form commandName="accessInfo"
+			action="/RichirichBank/confirmUpdate" method="post" autocomplete="off">
+			<c:if test="${piiExists  eq 'n'}">
+				<div>
+					<div class="panel panel-default">
+						<div class="panel-heading">Enter Your SSN:</div>
+						<input name="ssn" class="form-control" id="ssn"
+							placeholder="Format: 'XXXXXXXXX'" required/>
+						<label style="color: red">${error}</label>
+					</div>
+				</div>
+			</c:if>
+			<c:if test="${piiExists  eq 'y'}">
+	    You have already updated your Personal Info!!! Please contact the bank for modifying it!!!
+	 		</c:if>
+			<div class="panel panel-default">
+				<div class="panel-heading">User Name</div>
+				<form:input path="userName" readonly="true" />
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading">First Name</div>
+				<form:input path="firstName" readonly="true" />
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading">Last Name</div>
+				<form:input path="lastName" readonly="true" />
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading">Updated Email ID</div>
+				<form:input path="emaiID" />
+				<label style="color: red">${emailid}</label>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading">Address line1</div>
+				<form:input path="address1" />
+				<label style="color: red">${addresserror}</label>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading">Address line 2</div>
+				<form:input path="address2" />
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading">Phone Number</div>
+				<form:input path="phoneNumber" />
+				<label style="color: red">${phoneNumber}</label>
+			</div>
+			<input type="submit" class="btn btn-primary" value="Update Details" />
+		</form:form>
+	</div>
 </body>
 </html>

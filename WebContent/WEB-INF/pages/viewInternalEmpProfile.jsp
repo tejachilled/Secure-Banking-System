@@ -11,6 +11,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>View/Delete Internal Employee Profile</title>
 </head>
+<script>
+	document.onmousedown = disableclick;
+	status = "Right Click Disabled";
+	function disableclick(event) {
+		if (event.button == 2) {
+			alert(status);
+			return false;
+		}
+	}
+</script>
 <body>
 	<jsp:include page="internalHome.jsp"></jsp:include>
 	<form:form class="form-horizontal" commandName="accessInfo"
