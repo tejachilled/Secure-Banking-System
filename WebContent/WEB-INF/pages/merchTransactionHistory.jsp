@@ -25,6 +25,16 @@ td {
 }
 </style>
 </head>
+<script>
+	document.onmousedown = disableclick;
+	status = "Right Click Disabled";
+	function disableclick(event) {
+		if (event.button == 2) {
+			alert(status);
+			return false;
+		}
+	}
+</script>
 <body>
 	<sec:authorize access="hasRole('ROLE_M')">
 		<table>

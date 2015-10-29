@@ -14,6 +14,16 @@
 	src="<c:url value="/resources/js/bootstrap.js"/>"></script>
 
 <title>Home</title>
+<script>
+	document.onmousedown = disableclick;
+	status = "Right Click Disabled";
+	function disableclick(event) {
+		if (event.button == 2) {
+			alert(status);
+			return false;
+		}
+	}
+</script>
 </head>
 <body>
 	<jsp:include page="head.jsp"></jsp:include>

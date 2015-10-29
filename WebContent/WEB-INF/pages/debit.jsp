@@ -15,6 +15,16 @@
 	src="<c:url value="/resources/js/jquery.js"/>"></script>
 <link href="<c:url value="/resources/css/theme.css"/>" rel="stylesheet">
 <title>Home</title>
+<script>
+	document.onmousedown = disableclick;
+	status = "Right Click Disabled";
+	function disableclick(event) {
+		if (event.button == 2) {
+			alert(status);
+			return false;
+		}
+	}
+</script>
 </head>
 <body>
 	<jsp:include page="headExt.jsp"></jsp:include>

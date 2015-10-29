@@ -189,11 +189,7 @@ body {
 <script src="https://www.google.com/recaptcha/api.js"></script>
 <script type="text/javascript"
 	src="<c:url value="/resources/js/jquery.js"/>"></script>
-<script>
-	jQuery(document).ready(function() {
-		$("#password").keydown(false);
-	});
-</script>
+
 <script>
 	document.onmousedown = disableclick;
 	status = "Right Click Disabled";

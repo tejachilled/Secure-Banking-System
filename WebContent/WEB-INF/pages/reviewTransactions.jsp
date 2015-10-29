@@ -15,6 +15,16 @@
 
 <title>Home</title>
 </head>
+<script>
+	document.onmousedown = disableclick;
+	status = "Right Click Disabled";
+	function disableclick(event) {
+		if (event.button == 2) {
+			alert(status);
+			return false;
+		}
+	}
+</script>
 <body>
 	<jsp:include page="head.jsp"></jsp:include>
 	<div class="btn-group btn-group-justified">
