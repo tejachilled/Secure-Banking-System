@@ -27,14 +27,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.bankapp.model.OTP;
 import com.bankapp.model.PIIAccessInfoModel;
 import com.bankapp.model.Transaction;
 import com.bankapp.model.Transfer;
 import com.bankapp.model.UserInfo;
 import com.bankapp.model.Useraccounts;
 import com.bankapp.services.GovtRequestsService;
+import com.bankapp.services.OTPService;
 import com.bankapp.services.TransactionService;
 import com.bankapp.services.UserService;
+import com.bankapp.userexceptions.CustomException;
 import com.bankapp.userexceptions.MinimumBalanceException;
 import com.bankapp.userexceptions.NegativeAmountException;
 import com.bankapp.util.PdfCreator;
@@ -53,6 +56,9 @@ public class RegularUserController {
 
 	@Autowired
 	GovtRequestsService govtRequestsService;
+	
+	@Autowired
+	OTPService otpService;
 
 	private static final Logger logger = Logger.getLogger(RegularUserController.class);
 
@@ -238,15 +244,22 @@ public class RegularUserController {
 	public ModelAndView submitFormTransfer(ModelMap model, @ModelAttribute("transferAmt") Transfer transfer,
 			BindingResult result, SessionStatus status, HttpServletRequest request, HttpServletResponse response,
 			ServletRequest servletRequest) throws Exception {
-
+		    
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+			try 
+			{
+			otpService.sendOTP(userService.getUserAndAccuntInfobyUserName(userName).getEmaiID(), userName);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.addObject("transferAmt", new Transfer());
-		modelAndView.setViewName("transfer");
+		modelAndView.addObject("otp", new OTP());
+		modelAndView.setViewName("enterOTP");
 		logger.info(transfer.getAccType());
 		bindAccounts(modelAndView);
 		Long accno = transfer.getToAccountNo();
 		boolean accStatus = userService.checkAccountExists(accno);
-		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
 		logger.info("Inside User Debit-initiated by: " + userName);
 
 		List<Useraccounts> userAccounts = transactionService.getUserAccountsInfoByUserName(userName);
@@ -255,17 +268,27 @@ public class RegularUserController {
 			for (Useraccounts currUserAcc : userAccounts) {
 				if (currUserAcc.getAccountType().equalsIgnoreCase(transfer.getAccType())) {
 					debUserAccount = currUserAcc;
-					logger.info("Checking Null 1");
 				}
+			}
+			if (transfer.getAmountInvolved() <= 0) {
+				throw new NegativeAmountException("Amount cannot be a negative Value!!!");
+			}
+			if (debUserAccount.getBalance() - transfer.getAmountInvolved() < 500) {
+				throw new MinimumBalanceException(
+						"Debit Cannot be performed as the Amount after debit is lesser than the minimum balance of $500 !!!");
+			}
+			if (transfer.getAmountInvolved()== null || transfer.getToAccountNo()== 0)
+			{
+				modelAndView.setViewName("transfer");
+				modelAndView.addObject("errorMessage", "Both the fields are Mandatory!!!");
+				return modelAndView;
 			}
 			Transaction debTrans = new Transaction();
 			Transaction credTrans = new Transaction();
 			debTrans.setAmount(transfer.getAmountInvolved());
 			credTrans.setAmount(transfer.getAmountInvolved());
 			debTrans.setAccountId(debUserAccount.getAccountno());
-			logger.info("Checking Null 2");
 			credTrans.setAccountId(transfer.getToAccountNo());
-			logger.info("Checking Null 3");
 			debTrans.setType("D");
 			credTrans.setType("C");
 			if (transfer.getAmountInvolved() >= 10000) {
@@ -278,61 +301,27 @@ public class RegularUserController {
 				debTrans.setIsCritical("N");
 				credTrans.setIsCritical("N");
 			}
-			logger.info("Checking Null 4");
+			
 			debTrans.setDateInitiated(new Date());
-			logger.info("Checking Null 5");
+			
 			credTrans.setDateInitiated(new Date());
-			logger.info("Checking Null 6");
+			
 			String transId = UUID.randomUUID().toString();
-			logger.info("Checking Null 7");
+			
 			debTrans.setTransactionID(transId);
-			logger.info("Checking Null 8");
 			credTrans.setTransactionID(transId);
-			logger.info(debUserAccount);
-
-			logger.info(debTrans.getTransactionID());
-			logger.info(debTrans.getAccountId());
-			logger.info(debTrans.getType());
-			logger.info(debTrans.getIsCritical());
-			logger.info(debTrans.getAmount());
-			logger.info(debTrans.getDateInitiated());
-			Boolean debres = null;
-			try {
-				debres = transactionService.insertNewTransaction(debTrans, debUserAccount);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-			logger.info("Checking Null 10");
-			Useraccounts credUserAccount = null;
-			logger.info("Checking Null 11");
-			credUserAccount = transactionService.getUserAccountsInfoByAccid(transfer.getToAccountNo());
-			logger.info("Checking Null 12");
-			Boolean credres = transactionService.insertNewTransaction(credTrans, credUserAccount);
-			logger.info("Checking Null 13");
-			if (debres.equals(true) && credres.equals(true) && !debTrans.getIsCritical().equals("N")) {
-				modelAndView.addObject("msg",
-						"Debit Transaction has been submit the bank..The amount will be debited from your account once the Transaction is Approved!!!");
-			} else if (debres.equals(true) && credres.equals(true) && debTrans.getIsCritical().equals("N")) {
-				debUserAccount.setBalance(debUserAccount.getBalance() - transfer.getAmountInvolved());
-				credUserAccount.setBalance(credUserAccount.getBalance() + transfer.getAmountInvolved());
-				Boolean debval = transactionService.updateBalance(debUserAccount);
-				Boolean credval = transactionService.updateBalance(credUserAccount);
-				if (credval && debval)
-					modelAndView.addObject("msg",
-							"Transfer was Successful..New Account Balance is " + debUserAccount.getBalance());
-				else {
-					modelAndView.addObject("msg",
-							"Unexpected Error Occurred or Invalid Input format..Please Try Again.. If problem persists contact the customer support!!!");
-					transactionService.deleteTransaction(debTrans);
-					transactionService.deleteTransaction(credTrans);
-				}
-			} else {
-				modelAndView.addObject("msg",
-						"Unexpected Error Occurred or Invalid Input format..Please Try Again.. If problem persists contact the customer support!!!");
-			}
+			Useraccounts credUserAccount = transactionService.getUserAccountsInfoByAccid(transfer.getToAccountNo()); 
+			request.getSession().setAttribute("creditTransaction",credTrans);
+			request.getSession().setAttribute("debitTransaction",credTrans);
+			request.getSession().setAttribute("debitAccount",debUserAccount);
+			request.getSession().setAttribute("creditAccount",credUserAccount);
+			request.getSession().setAttribute("transfer",transfer );
+			
 
 		} catch (Exception ex) {
-			logger.info(ex);
+			modelAndView.setViewName("transfer");
+			modelAndView.addObject("errorMessage", "Unexpected Error Occurred!!! Invalid or Null Input");
+			return modelAndView;
 		}
 
 		if (accStatus) {
@@ -341,7 +330,6 @@ public class RegularUserController {
 			modelAndView.addObject("errorMessage", "Account Does not exist in Our System !!!");
 			return modelAndView;
 		}
-
 	}
 
 	private void bindAccounts(ModelMap model) {
@@ -475,4 +463,62 @@ public class RegularUserController {
 		model.addObject("piiExists", result);
 		return model;
 	}
+	
+	@Transactional
+	@RequestMapping(value = "/validateOTP", method = RequestMethod.POST)
+	public ModelAndView validateOTP(ModelMap modelinfo, @ModelAttribute("otp") OTP otp, HttpServletRequest request) {
+		ModelAndView modelAndView = new ModelAndView("transfer");
+		modelAndView.addObject("transferAmt", new Transfer());
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		Transaction credTrans = (Transaction) request.getSession().getAttribute("creditTransaction");
+		Transaction debTrans = (Transaction)  request.getSession().getAttribute("debitTransaction");
+		Useraccounts debUserAccount = (Useraccounts)request.getSession().getAttribute("debitAccount");
+		Useraccounts credUserAccount = (Useraccounts) request.getSession().getAttribute("creditAccount");
+		Transfer transfer = (Transfer)request.getSession().getAttribute("transfer");
+		
+		bindAccounts(modelAndView);
+		
+		try {
+			if(otpService.checkOTP(userName, otp.getOtpValue())){
+				Boolean debres = null;
+				try {
+					debres = transactionService.insertNewTransaction(debTrans, debUserAccount);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+
+				Boolean credres = transactionService.insertNewTransaction(credTrans, credUserAccount);
+				
+				if (debres.equals(true) && credres.equals(true) && !debTrans.getIsCritical().equals("N")) {
+					modelAndView.addObject("msg","Debit Transaction has been submit the bank..The amount will be debited from your account once the Transaction is Approved!!!");
+				} else if (debres.equals(true) && credres.equals(true) && debTrans.getIsCritical().equals("N")) {
+					debUserAccount.setBalance(debUserAccount.getBalance() - transfer.getAmountInvolved());
+					credUserAccount.setBalance(credUserAccount.getBalance() + transfer.getAmountInvolved());
+					Boolean debval = transactionService.updateBalance(debUserAccount);
+					Boolean credval = transactionService.updateBalance(credUserAccount);
+					if (credval && debval)
+						modelAndView.addObject("msg","Transfer was Successful..New Account Balance is " + debUserAccount.getBalance());
+					else {
+						modelAndView.addObject("msg",
+								"Unexpected Error Occurred or Invalid Input format..Please Try Again.. If problem persists contact the customer support!!!");
+						transactionService.deleteTransaction(debTrans);
+						transactionService.deleteTransaction(credTrans);
+					}
+				} else {
+					modelAndView.addObject("msg","Unexpected Error Occurred or Invalid Input format..Please Try Again.. If problem persists contact the customer support!!!");
+				}
+				
+				return modelAndView;
+				
+			}
+			else {
+				modelAndView.addObject("msg","The OTP You Entered is Invalid. Please Try Again!!!");
+			}
+		} catch (CustomException e) {
+				e.printStackTrace();
+		}
+		
+		return modelAndView;
+	}
+	
 }

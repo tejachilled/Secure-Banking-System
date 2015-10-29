@@ -5,6 +5,6 @@ import com.bankapp.userexceptions.CustomException;
 public interface OTPService {
 
 	boolean sendOTP(String toEmailAddress, String userName);
-	boolean checkOTP(String userName,String userOTP) throws CustomException;
+	boolean checkOTP(String userName,Long userOTP) throws CustomException;
 
 }

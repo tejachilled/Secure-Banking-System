@@ -78,6 +78,9 @@
 		<input type="hidden" name="${_csrf.parameterName}"
 			value="${_csrf.token}" />
 	</form:form>
+	<c:if test="${not empty msg}">
+		<c:out value="${msg}" />
+	</c:if>
 </body>
 </html>
 
