@@ -235,7 +235,8 @@ body {
 			<div class="g-recaptcha"
 				data-sitekey="6LdO2w8TAAAAAKaAmTBWN9KAJrHsmZ2r405oUiVf"></div>
 			<br> <input name="submit" type="submit" value="Login" /> <br>
-			<a href="/RichirichBank/forgotpassword">Forgot Password? </a>
+			<br> <a style="color:white" href="/RichirichBank/forgotpassword">Forgot
+				Password? </a>
 		</div>
 
 		<script type="text/javascript"
