@@ -3,6 +3,7 @@ package com.bankapp.controller;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -31,6 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.bankapp.model.PIIAccessInfoModel;
 import com.bankapp.model.Transaction;
+import com.bankapp.model.TransactionList;
 import com.bankapp.model.Transfer;
 import com.bankapp.model.UserInfo;
 import com.bankapp.model.Useraccounts;
@@ -399,21 +401,16 @@ public class RegularUserController {
 		ModelAndView model = new ModelAndView();
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
 		logger.info(userName);
-		if (userName.equals("anonymousUser")) {
+		if (userName==null || userName.equals("anonymousUser")) {
 			model.setViewName("login");
 			return model;
 		}
-		if (userName == null) {
-			System.out.println("username is null. requires logger");
-			// logger
-		} else {
-			List<Transaction> listTransaction = transactionService.getTransactionHistory(userName);
-			if (listTransaction != null) {
-				listTransaction = listTransaction.subList(0, listTransaction.size() > 10 ? 10 : listTransaction.size());
-			}
-
-			model.addObject("TransactionList", listTransaction);
+		List<Transaction> listTransaction = transactionService.getTransactionHistory(userName);
+		if (listTransaction != null) {
+			listTransaction = listTransaction.subList(0, listTransaction.size() > 10 ? 10 : listTransaction.size());
 		}
+
+		model.addObject("TransactionList", listTransaction);
 		model.setViewName("viewTransactions");
 		return model;
 	}
@@ -497,5 +494,24 @@ public class RegularUserController {
 		model.addObject("piiExists", result);		
 		
 		return model;
+	}
+	
+	@RequestMapping(value = "/transactionReviewRequest", method = RequestMethod.GET)
+	public ModelAndView transactionReviewRequest(Model model) {
+		ModelAndView modelView= new ModelAndView();
+		modelView.setViewName("reviewTransactions");
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		List<Useraccounts> userAccounts = transactionService.getUserAccountsInfoByUserName(userName);
+		List<Transaction> listTransaction= new ArrayList<>();
+		for(Useraccounts account: userAccounts){
+			List<Transaction> txn= transactionService.getMerchTransactions(account.getAccountno());
+			if(txn!=null){
+				listTransaction.addAll(txn);
+			}
+		}
+
+		modelView.addObject("trList", listTransaction);
+		modelView.addObject("transactionIdList", new TransactionList());
+		return modelView;
 	}
 }

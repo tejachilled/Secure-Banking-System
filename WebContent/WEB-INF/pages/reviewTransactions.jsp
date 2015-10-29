@@ -74,7 +74,7 @@
 							</c:if>
 							<td>${trListItem.dateInitiated}</td>
 							<c:if test="${trListItem.isCritical eq 'M'}">
-								<td><form:checkbox path="transactionIdList"
+								<td><form:checkbox path="TidList"
 										value="${trListItem.transactionID}" /></td>
 							</c:if>
 						</tr>
