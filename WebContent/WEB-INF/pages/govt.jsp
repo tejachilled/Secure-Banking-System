@@ -74,10 +74,7 @@ td {
 					</form:form>
 				</table>
 			</c:if>
-			<c:if test="${fn:length(govtRequestsList) eq 0}">
-		No requests to display.
-		</c:if>
-
+			<c:if test="${fn:length(govtRequestsList) eq 0}">No requests to display.</c:if>
 		</div>
 	</sec:authorize>
 </body>

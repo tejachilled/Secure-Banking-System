@@ -31,7 +31,11 @@ public class RoleBasedSecurityService implements AuthenticationSuccessHandler{
 		// TODO Auto-generated method stub
 		redirect=new DefaultRedirectStrategy();
 		boolean flag=true;
-		if(authentication.isAuthenticated())
+		String gRecaptchaResponse = request
+                .getParameter("g-recaptcha-response");
+		boolean captcha = CaptchaService.verify(gRecaptchaResponse);
+		 
+		if(authentication.isAuthenticated()&&captcha)
 		{
 			if(userService.isFirstLogin(authentication.getName())){
 				redirect.sendRedirect(request, response, "/atFirstLogin");
@@ -66,7 +70,10 @@ public class RoleBasedSecurityService implements AuthenticationSuccessHandler{
 				}
 			}
 		}
-
+          
+		    if(!captcha) {
+		    	redirect.sendRedirect(request, response, "/loginFailed");
+		    }
 	}
 
 }

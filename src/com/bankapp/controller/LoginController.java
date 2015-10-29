@@ -68,8 +68,8 @@ public class LoginController {
 	@RequestMapping(value="/loginFailed", method=RequestMethod.GET)
 		public String loginFailed(ModelMap model, Principal user){
 			SecurityContextHolder.getContext().setAuthentication(null);
-			logger.info("Invalid credentials");
-			model.addAttribute("error", "Invalid credentials");
+			logger.info("Invalid credentials or Captcha");
+			model.addAttribute("error", "Invalid Credentials/Captcha");
 		return "login";
 	}
 	@RequestMapping(value="/atFirstLogin")
