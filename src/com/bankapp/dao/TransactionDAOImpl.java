@@ -76,7 +76,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 	 */
 	@Override
 	public List<Transaction> getTransactionHistory(String userName) {
-		String sql = "SELECT * FROM tbl_transactions WHERE initiated_by = ? or account_id IN (SELECT account_id FROM tbl_accounts WHERE user_name= ?)";
+		String sql = "SELECT * FROM tbl_transactions WHERE (initiated_by = ? or account_id IN (SELECT account_id FROM tbl_accounts WHERE user_name= ?)) AND internal_user_approval <> 'R'";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		try {
 			List<Transaction> transactions = jdbcTemplate.query(sql,
@@ -261,7 +261,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 
 	@Override
 	public List<Transaction> getMerchTransactions(Long accid) {
-		String sql = "SELECT * FROM tbl_transactions WHERE account_id = ? AND iscritical='M'";
+		String sql = "SELECT * FROM tbl_transactions WHERE account_id = ? AND iscritical='M' AND approved_by is null";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		try {
 			List<Transaction> transactions = jdbcTemplate.query(sql,

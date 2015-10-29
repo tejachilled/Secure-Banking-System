@@ -26,6 +26,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
@@ -529,5 +530,44 @@ public class RegularUserController {
 		modelView.addObject("trList", listTransaction);
 		modelView.addObject("transactionIdList", new TransactionList());
 		return modelView;
+	}
+	
+	@Transactional
+	@RequestMapping(value = "/approveTransactionsMerchant", method = RequestMethod.POST)
+	public ModelAndView approveTransactionsMerchant(ModelMap modelinfo, 
+			@ModelAttribute("transactionIdList") TransactionList TidList,
+			@RequestParam String toDo) {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("reviewTransactions");
+		String status = "";
+		try{
+			if(toDo.equalsIgnoreCase("Approve")) {
+				status = "A";
+				transactionService.approveTransactions(TidList.getTidList(),
+						SecurityContextHolder.getContext().getAuthentication().getName(), status);
+				model.addObject("msg", "Selected Transactions has been Approved and Processed !!!");
+			} else if(toDo.equalsIgnoreCase("Reject")){
+				status = "R";
+				transactionService.approveTransactions(TidList.getTidList(),
+						SecurityContextHolder.getContext().getAuthentication().getName(), status);
+				model.addObject("msg", "Selected Transactions has been Rejected !!!");
+			}
+		} catch(Exception e){
+			model.addObject("msg", "Unexpected Error Occurred in the System.. Please Try Again!!!");
+			logger.error("something happened while approve/reject txn:: "+ e);
+		}
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		List<Useraccounts> userAccounts = transactionService.getUserAccountsInfoByUserName(userName);
+		List<Transaction> listTransaction= new ArrayList<>();
+		for(Useraccounts account: userAccounts){
+			List<Transaction> txn= transactionService.getMerchTransactions(account.getAccountno());
+			if(txn!=null){
+				listTransaction.addAll(txn);
+			}
+		}
+
+		model.addObject("trList", listTransaction);
+		model.addObject("transactionIdList", new TransactionList());
+		return model;
 	}
 }
