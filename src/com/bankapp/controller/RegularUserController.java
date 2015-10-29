@@ -459,10 +459,10 @@ public class RegularUserController {
 	@RequestMapping(value = "/updatePersonalInfo")
 	public String updatePersonalInfo(ModelMap model) {
 		
-		Boolean piiExists = govtRequestsService
+		String piiExists = govtRequestsService
 				.isPiiInfoPresent(SecurityContextHolder.getContext().getAuthentication().getName());
 		String result = "n";
-		if (piiExists.equals(true)) {
+		if (piiExists!=null && piiExists.length()>3) {
 			result = "y";
 		}
 		UserInfo user = userService.getUserInfobyUserName(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -476,20 +476,27 @@ public class RegularUserController {
 	public ModelAndView confirmUpdate(ModelMap modelinfo, @ModelAttribute("accessInfo") UserInfo pii) {
 		ModelAndView model = new ModelAndView();
 		model.setViewName("updatePersonalInfo");
-		Boolean piiExists = govtRequestsService
+		String piiExists = govtRequestsService
 				.isPiiInfoPresent(SecurityContextHolder.getContext().getAuthentication().getName());
 		String result = "n";
 
 		userService.updateUserInfo(pii);
 		model.addObject("success", "Updated details successfully");
-		if (piiExists.equals(true)) {
+		if (piiExists!=null && piiExists.length()>3) {
 			result = "y";
-		} else if (piiExists.equals(false)) {
+		} else{
+			System.out.println("Pii input: "+pii.getSsn());
 			if (!pii.getSsn().isEmpty() && pii.getSsn().matches("^(\\d{3}-?\\d{2}-?\\d{4}|XXX-XX-XXXX)$")) {
 				PIIAccessInfoModel piiInfo = new PIIAccessInfoModel();				
 				piiInfo.setUserName(SecurityContextHolder.getContext().getAuthentication().getName());
-				piiInfo.setPii(pii.getSsn());
+				String ssn = pii.getSsn();
+				piiInfo.setPii(ssn);
+				System.out.println("Inserting Pii information");
 				govtRequestsService.insertPersonalInfo(piiInfo);
+				pii = userService.getUserInfobyUserName(SecurityContextHolder.getContext().getAuthentication().getName());
+				pii.setSsn(ssn);
+				model.addObject("accessInfo",pii);
+				result = "y";
 				model.addObject("success", "Persnoal Info(SSN) Value has been updated successfully!!!");
 			} else {
 				model.addObject("error", "Persnoal Info(SSN) Value is Invalid... Please Try Again!!!");

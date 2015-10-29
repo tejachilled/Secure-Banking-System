@@ -38,7 +38,7 @@ public class GovtRequestsServiceImpl implements GovtRequestsService {
 	}
 
 	@Override
-	public Boolean isPiiInfoPresent(String username) {
+	public String isPiiInfoPresent(String username) {
 		return govtRequestsDAO.isPiiInfoPresent(username);
 	}
 

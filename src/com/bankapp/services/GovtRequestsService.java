@@ -11,7 +11,7 @@ public interface GovtRequestsService {
 
 	boolean update(String[] govtActionModel);
 	
-	public Boolean isPiiInfoPresent(String username);
+	public String isPiiInfoPresent(String username);
 	
 	public void insertPersonalInfo(PIIAccessInfoModel pii);
 

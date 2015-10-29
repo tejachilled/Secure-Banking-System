@@ -110,7 +110,7 @@
 						<div class="form-group">
 							<label class="col-lg-2 control-label">Phone Number</label>
 							<div class="col-lg-10">
-								<form:input path="phoneNumber" cssClass="form-control" />
+								<input type="number" id="phoneNumber" name="phoneNumber" class="form-control" min ="1" max ="9999999999" required />
 								<form:errors path="phoneNumber"
 									cssClass="alert alert-dismissable alert-danger"></form:errors>
 							</div>

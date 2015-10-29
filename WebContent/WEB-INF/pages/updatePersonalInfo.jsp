@@ -26,36 +26,42 @@
 </script>
 <body>
 	<jsp:include page="headExt.jsp"></jsp:include>
-	<c:if test="${not empty success }">
-		<div style="width: 40%;">
-			<div class="alert alert-dismissable alert-success">
-				<strong>${success}</strong>
-			</div>
 
-		</div>
-	</c:if>
 
 	<c:if test="${not empty error}">
 		<c:out value="${error}" />
 	</c:if>
 	<div>
-		<h4>Please note that only the Address information, Phone number, email id
-			and SSN (one time) is editable</h4>
+		<h4>Please note that only the Address information, Phone number,
+			email id and SSN (one time) is editable</h4>
 		<form:form commandName="accessInfo"
-			action="/RichirichBank/confirmUpdate" method="post" autocomplete="off">
+			action="/RichirichBank/confirmUpdate" method="post"
+			autocomplete="off">
 			<c:if test="${piiExists  eq 'n'}">
 				<div>
 					<div class="panel panel-default">
 						<div class="panel-heading">Enter Your SSN:</div>
 						<input name="ssn" class="form-control" id="ssn"
-							placeholder="Format: 'XXXXXXXXX'" required/>
-						<label style="color: red">${error}</label>
+							placeholder="Format: 'XXXXXXXXX'" required /> <label
+							style="color: red">${error}</label>
 					</div>
 				</div>
 			</c:if>
 			<c:if test="${piiExists  eq 'y'}">
+				<c:if test="${not empty success }">
+					<div style="width: 40%;">
+						<div class="alert alert-dismissable alert-success">
+							<strong>${success}</strong>
+						</div>
+					</div>
+				</c:if>
 	    You have already updated your Personal Info!!! Please contact the bank for modifying it!!!
-	 		</c:if>
+	    <div class="panel panel-default">
+					<div class="panel-heading">SSN</div>
+					<form:input path="ssn" readonly="true" />
+				</div>
+			</c:if>
+
 			<div class="panel panel-default">
 				<div class="panel-heading">User Name</div>
 				<form:input path="userName" readonly="true" />
