@@ -49,7 +49,7 @@
 		<intercept-url pattern="/merchHome" access="hasAnyRole('ROLE_M')" />
 		<intercept-url pattern="/initiateTransfer" access="hasAnyRole('ROLE_U','ROLE_M')" />
 		<intercept-url pattern="/Transfer" access="hasAnyRole('ROLE_U','ROLE_M')" />
-
+		<intercept-url pattern="/transactionReviewRequest" access="hasAnyRole('ROLE_U','ROLE_M')" />
 
 		<!-- Govt Pages -->
 		<intercept-url pattern="/govt" access="hasRole('ROLE_G')" />
