@@ -26,7 +26,7 @@ public interface GovtRequestsDAO {
 	 */
 	void updateGovtAction(String internalUserName, String externalUserName);
 
-	public Boolean isPiiInfoPresent(String username);
+	public String isPiiInfoPresent(String username);
 	
 	public void insertPersonalInfo(PIIAccessInfoModel pii);
 }

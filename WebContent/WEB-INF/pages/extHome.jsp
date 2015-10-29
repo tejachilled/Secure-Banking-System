@@ -62,6 +62,11 @@
 	<c:if test="${not empty accountBalCheckings}">
 		<legend><c:out value="${accountBalCheckings}" /></legend>
 	</c:if>
+	<br>
+	<c:if test="${not empty merchantTxnMsg}">
+		<legend><c:out value="${merchantTxnMsg}" /></legend>
+	</c:if>
+	<br>
 	</div>
 </body>
 </html>

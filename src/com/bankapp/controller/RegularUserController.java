@@ -26,6 +26,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
@@ -462,13 +463,15 @@ public class RegularUserController {
 	@RequestMapping(value = "/updatePersonalInfo")
 	public String updatePersonalInfo(ModelMap model) {
 		
-		Boolean piiExists = govtRequestsService
+		String piiExists = govtRequestsService
 				.isPiiInfoPresent(SecurityContextHolder.getContext().getAuthentication().getName());
 		String result = "n";
-		if (piiExists.equals(true)) {
-			result = "y";
-		}
 		UserInfo user = userService.getUserInfobyUserName(SecurityContextHolder.getContext().getAuthentication().getName());
+		
+		if (piiExists!=null && piiExists.length()>3) {
+			result = "y";
+			user.setSsn(piiExists);
+		}		
 		model.addAttribute("piiExists", result);
 		model.addAttribute("accessInfo",user);
 		return "updatePersonalInfo";
@@ -479,20 +482,27 @@ public class RegularUserController {
 	public ModelAndView confirmUpdate(ModelMap modelinfo, @ModelAttribute("accessInfo") UserInfo pii) {
 		ModelAndView model = new ModelAndView();
 		model.setViewName("updatePersonalInfo");
-		Boolean piiExists = govtRequestsService
+		String piiExists = govtRequestsService
 				.isPiiInfoPresent(SecurityContextHolder.getContext().getAuthentication().getName());
 		String result = "n";
 
 		userService.updateUserInfo(pii);
 		model.addObject("success", "Updated details successfully");
-		if (piiExists.equals(true)) {
+		if (piiExists!=null && piiExists.length()>3) {
 			result = "y";
-		} else if (piiExists.equals(false)) {
+		} else{
+			System.out.println("Pii input: "+pii.getSsn());
 			if (!pii.getSsn().isEmpty() && pii.getSsn().matches("^(\\d{3}-?\\d{2}-?\\d{4}|XXX-XX-XXXX)$")) {
 				PIIAccessInfoModel piiInfo = new PIIAccessInfoModel();				
 				piiInfo.setUserName(SecurityContextHolder.getContext().getAuthentication().getName());
-				piiInfo.setPii(pii.getSsn());
+				String ssn = pii.getSsn();
+				piiInfo.setPii(ssn);
+				System.out.println("Inserting Pii information");
 				govtRequestsService.insertPersonalInfo(piiInfo);
+				pii = userService.getUserInfobyUserName(SecurityContextHolder.getContext().getAuthentication().getName());
+				pii.setSsn(ssn);
+				model.addObject("accessInfo",pii);
+				result = "y";
 				model.addObject("success", "Persnoal Info(SSN) Value has been updated successfully!!!");
 			} else {
 				model.addObject("error", "Persnoal Info(SSN) Value is Invalid... Please Try Again!!!");
@@ -579,5 +589,44 @@ public class RegularUserController {
 		modelView.addObject("trList", listTransaction);
 		modelView.addObject("transactionIdList", new TransactionList());
 		return modelView;
+	}
+	
+	@Transactional
+	@RequestMapping(value = "/approveTransactionsMerchant", method = RequestMethod.POST)
+	public ModelAndView approveTransactionsMerchant(ModelMap modelinfo, 
+			@ModelAttribute("transactionIdList") TransactionList TidList,
+			@RequestParam String toDo) {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("reviewTransactions");
+		String status = "";
+		try{
+			if(toDo.equalsIgnoreCase("Approve")) {
+				status = "A";
+				transactionService.approveTransactions(TidList.getTidList(),
+						SecurityContextHolder.getContext().getAuthentication().getName(), status);
+				model.addObject("msg", "Selected Transactions has been Approved and Processed !!!");
+			} else if(toDo.equalsIgnoreCase("Reject")){
+				status = "R";
+				transactionService.approveTransactions(TidList.getTidList(),
+						SecurityContextHolder.getContext().getAuthentication().getName(), status);
+				model.addObject("msg", "Selected Transactions has been Rejected !!!");
+			}
+		} catch(Exception e){
+			model.addObject("msg", "Unexpected Error Occurred in the System.. Please Try Again!!!");
+			logger.error("something happened while approve/reject txn:: "+ e);
+		}
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		List<Useraccounts> userAccounts = transactionService.getUserAccountsInfoByUserName(userName);
+		List<Transaction> listTransaction= new ArrayList<>();
+		for(Useraccounts account: userAccounts){
+			List<Transaction> txn= transactionService.getMerchTransactions(account.getAccountno());
+			if(txn!=null){
+				listTransaction.addAll(txn);
+			}
+		}
+
+		model.addObject("trList", listTransaction);
+		model.addObject("transactionIdList", new TransactionList());
+		return model;
 	}
 }

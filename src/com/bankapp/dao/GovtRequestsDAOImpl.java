@@ -40,18 +40,19 @@ public class GovtRequestsDAOImpl implements GovtRequestsDAO {
 	}
 
 	@Override
-	public Boolean isPiiInfoPresent(String username) {
+	public String isPiiInfoPresent(String username) {
 		List<PIIAccessInfoModel> piiAccessInfoList = new ArrayList<PIIAccessInfoModel>();
 		String query = "SELECT user_name_e, ssn_e FROM tbl_government";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		piiAccessInfoList = jdbcTemplate.query(query, new PIIAccessInfoRowMapper());
-		Boolean result=false;
+		
+		String piiVal = "";
 		for(PIIAccessInfoModel pii:piiAccessInfoList) {
 			if(pii.getUserName().equals(username))  {
-				result=true;
+				piiVal = pii.getPii();
 			}
 		}
-		return result;
+		return piiVal;
 	}
 
 	@Override
