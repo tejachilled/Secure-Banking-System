@@ -231,7 +231,7 @@ body {
 				autofocus /><br> <input type="password" name="password"
 				id="password" class="form-control keyboardInput"
 				placeholder="Password" required /><br> <input name="submit"
-				type="submit" value="submit" /> <a
+				type="submit" value="Login" /> <a
 				href="/RichirichBank/forgotpassword">Forgot Password? </a>
 		</div>
 
