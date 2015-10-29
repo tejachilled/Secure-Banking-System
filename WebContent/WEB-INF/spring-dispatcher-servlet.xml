@@ -68,6 +68,7 @@
 	<bean id="merchantService" class="com.bankapp.services.MerchantServiceImpl" />
 
 	<bean id="pdfCreator" class="com.bankapp.util.PdfCreator" />
+	<bean id="CertService" class="com.bankapp.services.CertServiceImpl" />
 
 	<!-- web.servlet.view.ResourceBundleViewResolver -->
 

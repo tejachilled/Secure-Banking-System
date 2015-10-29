@@ -37,6 +37,7 @@ import com.bankapp.model.TransactionList;
 import com.bankapp.model.Transfer;
 import com.bankapp.model.UserInfo;
 import com.bankapp.model.Useraccounts;
+import com.bankapp.services.CertService;
 import com.bankapp.services.GovtRequestsService;
 import com.bankapp.services.OTPService;
 import com.bankapp.services.TransactionService;
@@ -63,6 +64,9 @@ public class RegularUserController {
 	
 	@Autowired
 	OTPService otpService;
+	
+	@Autowired
+	CertService certService;
 
 	private static final Logger logger = Logger.getLogger(RegularUserController.class);
 
@@ -195,14 +199,14 @@ public class RegularUserController {
 	public ModelAndView submitFormCredit(ModelMap model, @ModelAttribute("credit") Transaction transaction,
 			BindingResult result, SessionStatus status, HttpServletRequest request, HttpServletResponse response,
 			ServletRequest servletRequest) throws Exception {
-
+		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("credit", new Transaction());
 		logger.info(transaction.getAccType());
 		modelAndView.setViewName("credit");
 		bindAccounts(modelAndView);
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-
+		certService.initCertPfx(userName, userName);
 		try {
 			List<Useraccounts> userAccounts = transactionService.getUserAccountsInfoByUserName(userName);
 			if (transaction.getAmount() < 0) {

@@ -52,7 +52,7 @@ import org.springframework.stereotype.Service;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 
-@Service
+@SuppressWarnings({ "deprecation", "unused" })
 public class CertServiceImpl implements CertService {
 	
 	@Autowired 
@@ -259,12 +259,13 @@ public class CertServiceImpl implements CertService {
 	
 	
 	
-	
+	 @SuppressWarnings("deprecation")
 	public X509Certificate generateV3Certificate(KeyPair pair, String username) throws Exception {
 		
-		  Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+		 Security.addProvider(new BouncyCastleProvider());
 		
-		  X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
+		 
+		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
 		
 		  certGen.setSerialNumber(BigInteger.valueOf(System.currentTimeMillis()));
 		  
