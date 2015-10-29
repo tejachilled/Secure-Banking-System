@@ -34,4 +34,5 @@ public interface MerchantService {
 	public List<Transaction> getTransactionHistory(String userName);
 	
 	public List<Useraccounts> getUserAccountsInfoByUserName(String UserName);
+
 }

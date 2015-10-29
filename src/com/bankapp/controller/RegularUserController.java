@@ -1,5 +1,6 @@
 package com.bankapp.controller;
 
+import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -421,15 +423,15 @@ public class RegularUserController {
 	public void downloadTransaction(HttpServletRequest request, HttpServletResponse response,
 			ServletRequest servletRequest) throws Exception {
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		String filePath="";
 		if (userName == null) {
-			System.out.println("username is null. requires logger");
-			// logger
+			logger.fatal("username is null");
 		} else {
 			List<Transaction> listTransaction = transactionService.getTransactionHistory(userName);
 			if (listTransaction != null) {
 				listTransaction = listTransaction.subList(0, listTransaction.size() > 15 ? 15 : listTransaction.size());
 			}
-			String filePath = pdfCreator.createPdf(listTransaction);
+			filePath = pdfCreator.createPdf(listTransaction);
 			FileSystemResource fsr = new FileSystemResource(filePath);
 			response.setContentType("application/pdf");
 			response.setHeader("Content-Disposition", "attachment; filename=TransactionHistory.pdf");
@@ -443,7 +445,13 @@ public class RegularUserController {
 			inputStream.close();
 			outStream.close();
 		}
-
+		// delete that file
+		try{
+			File file= new File(filePath);
+			//FileUtils.forceDelete(file);
+		} catch(Exception e){
+			logger.error("cannot delete pdf file"+e);
+		}
 	}
 
 	@RequestMapping(value = "/updatePersonalInfo")
