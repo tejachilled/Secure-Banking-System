@@ -70,7 +70,7 @@ public class InternalUserController {
 			UserInfo.setPassword(encoder.encode(tempPwd));
 			System.out.println("sec answer 3 : " + UserInfo.getSq3());
 			accno = userService.addNewExternalUuser(UserInfo, role, accountType);
-			emailService.Send(UserInfo.getUserName(), tempPwd, UserInfo.getEmaiID(), accno);
+			emailService.Send(UserInfo.getUserName(), tempPwd, UserInfo.getEmaiID());
 			model.addAttribute("accno", accno);
 			logger.info("Added customer successfully!");
 		} catch (UserAccountExist exception) {

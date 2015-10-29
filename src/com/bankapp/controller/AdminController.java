@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.bankapp.model.UserInfo;
+import com.bankapp.services.EmailService;
 import com.bankapp.services.UserService;
 import com.bankapp.services.UserValidator;
 import com.bankapp.userexceptions.CustomException;
@@ -48,6 +49,9 @@ public class AdminController {
 
 	@Autowired
 	UserValidator userValidator;
+	
+	@Autowired
+	EmailService emailService;
 
 	private static final Logger logger = Logger.getLogger(AdminController.class);
 
@@ -145,7 +149,10 @@ public class AdminController {
 				+ role);
 
 		try {
+			final String tempPwd = emailService.generatePassword();
+			UserInfo.setPassword(encoder.encode(tempPwd));
 			userService.addNewInternaluser(UserInfo, role);
+			emailService.Send(UserInfo.getUserName(), tempPwd, UserInfo.getEmaiID());
 			model.addAttribute("success", "Added new user successfully!");
 			logger.info("Employee created successfully!");
 		} catch (CustomException exception) {

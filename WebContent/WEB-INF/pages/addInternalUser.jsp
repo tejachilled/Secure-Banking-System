@@ -4,7 +4,6 @@
 	prefix="sec"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <link href="<c:url value="/resources/css/theme.css"/>" rel="stylesheet">
@@ -28,6 +27,14 @@
 						value="${_csrf.token}" />
 
 					<fieldset>
+						<c:if test="${not empty success }">
+							<div style="width: 40%;">
+								<div class="alert alert-dismissable alert-success">
+									<strong> ${success} </strong>
+								</div>
+
+							</div>
+						</c:if>
 						<c:if test="${not empty exception}">
 							<div style="width: 40%;">
 								<div class="alert alert-dismissable alert-danger">
@@ -114,7 +121,7 @@
 							<label class="col-lg-2 control-label">Security Question 1
 								: What is your first car name ?</label>
 							<div class="col-lg-10">
-								<form:input path="sq1" cssClass="form-control" />
+								<input name="sq1" id="sq1" class="form-control" required />
 								<form:errors path="sq1"
 									cssClass="alert alert-dismissable alert-danger"></form:errors>
 							</div>
@@ -123,7 +130,7 @@
 							<label class="col-lg-2 control-label">Security Question 2
 								: What is your pet name ?</label>
 							<div class="col-lg-10">
-								<form:input path="sq2" cssClass="form-control" />
+								<input name="sq2" id="sq2" class="form-control" required />
 								<form:errors path="sq2"
 									cssClass="alert alert-dismissable alert-danger"></form:errors>
 							</div>
@@ -132,7 +139,7 @@
 							<label class="col-lg-2 control-label">Security Question 3
 								: What is your mother's name ?</label>
 							<div class="col-lg-10">
-								<form:input path="sq3" cssClass="form-control" />
+								<input name="sq3" id="sq3" class="form-control" required />
 								<form:errors path="sq3"
 									cssClass="alert alert-dismissable alert-danger"></form:errors>
 							</div>
