@@ -33,8 +33,12 @@
 				<label class="col-lg-2 control-label">Account Type:</label>
 				<div class="col-lg-10">
 					<form:select path="accType">
-						<form:option value="Savings">${account_savings}</form:option>
-						<form:option value="Checking">${account_checking}</form:option>
+						<c:if test="${not empty account_savings }">
+							<form:option value="Savings">${account_savings}</form:option>
+						</c:if>
+						<c:if test="${not empty account_checking }">
+							<form:option value="Checking">${account_checking}</form:option>
+						</c:if>
 					</form:select>
 				</div>
 			</div>
@@ -42,7 +46,7 @@
 			<div class="form-group">
 				<label class="col-lg-2 control-label">Amount to credit</label>
 				<div class="col-lg-10">
-					<input name="amount" id="amount" class="keyboardInput" required />
+					<form:input path="amount" id="amount" class="keyboardInput" />
 				</div>
 			</div>
 
