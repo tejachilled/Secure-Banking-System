@@ -44,8 +44,24 @@
 				class="btn btn-default">View Transaction History</a>
 		</sec:authorize>
 	</div>
-	<c:if test="${not empty merchantTxnMsg}">
-		<c:out value="${merchantTxnMsg}" />
+	<div style="width: 100%; text-align: center">
+	<br>
+	<c:if test="${not empty accountIdSavings}">
+		<legend><c:out value="${accountIdSavings}" /></legend>
 	</c:if>
+	<br>
+	<c:if test="${not empty accountBalSavings}">
+		<legend><c:out value="${accountBalSavings}" /></legend>
+	</c:if>
+	
+	<br>
+	<c:if test="${not empty accountIdCheckings}">
+		<legend><c:out value="${accountIdCheckings}" /></legend>
+	</c:if>
+	<br>
+	<c:if test="${not empty accountBalCheckings}">
+		<legend><c:out value="${accountBalCheckings}" /></legend>
+	</c:if>
+	</div>
 </body>
 </html>

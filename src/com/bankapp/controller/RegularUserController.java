@@ -60,6 +60,22 @@ public class RegularUserController {
 
 	@RequestMapping("/extHome")
 	public String externalCustomer(Model model, HttpSession session, HttpServletRequest request) {
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		List<Useraccounts> userAccounts = transactionService.getUserAccountsInfoByUserName(userName);	
+		
+		for (Useraccounts userAccount : userAccounts) {
+			String accountid = String.valueOf(userAccount.getAccountno());
+			logger.info(accountid);
+			if (userAccount.getAccountType().equalsIgnoreCase("savings")) {
+				model.addAttribute("accountIdSavings", "Savings Account ID: "+ accountid);
+				model.addAttribute("accountBalSavings",
+						"Savings Account Balance: $ " +userAccount.getBalance());
+			} else if (userAccount.getAccountType().equalsIgnoreCase("checking")) {
+				model.addAttribute("accountIdCheckings", "Checkings Account ID:"+accountid);
+				model.addAttribute("accountBalCheckings",
+						"Checking Account Balance: $ " +userAccount.getBalance());
+			}
+		}
 		return "extHome";
 	}
 
