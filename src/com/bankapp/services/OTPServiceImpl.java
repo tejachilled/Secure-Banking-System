@@ -4,8 +4,8 @@
 
 package com.bankapp.services;
 
-import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,10 @@ public class OTPServiceImpl implements OTPService {
 
 	@Override
 	public boolean sendOTP(String toEmailAddress, String userName) {
-		final String OTP = new BigInteger(40, new SecureRandom()).toString(32);
+		Random rnd = new Random();
+		int n = 100000 + rnd.nextInt(900000);
+		final Long OTP = (long) n;
+		System.out.println(OTP);
 		otpDao.storeOTP(userName, OTP);
 		return emailService.sendEmailSendGrid(userName, "SunDevil Bank", toEmailAddress, "SunDevilBankASU@gmail.com",
 				"OTP for SunDevil Bank Operation",
@@ -34,7 +37,7 @@ public class OTPServiceImpl implements OTPService {
 	}
 
 	@Override
-	public boolean checkOTP(String userName, String userOTP) throws CustomException {
+	public boolean checkOTP(String userName, Long userOTP) throws CustomException {
 		return otpDao.checkOTP(userName, userOTP);
 	}
 }

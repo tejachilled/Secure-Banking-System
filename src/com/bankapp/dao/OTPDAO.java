@@ -8,7 +8,7 @@ import com.bankapp.userexceptions.CustomException;
 
 public interface OTPDAO {
 
-	void storeOTP(String userName, String otp);
-	boolean checkOTP(String userName,String userOTP) throws CustomException;
+	void storeOTP(String userName, Long otp);
+	boolean checkOTP(String userName,Long userOTP) throws CustomException;
 
 }
