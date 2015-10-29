@@ -43,7 +43,7 @@
 			</ul>
 		</div>
 	</div>
-	<form:form action="/RichirichBank/initiateCredit"
+	<form:form action="/RichirichBank/initiateDebit"
 		class="form-horizontal" method="post" commandName="debit" name="debit"
 		ModelAttribute="debit">
 
@@ -53,11 +53,11 @@
 		<fieldset>
 			<legend>${errorMessage}</legend>
 
-			div class="form-group col-lg-2">
-			<form:select path="accType">
-				<form:option value="Savings">${account_savings}</form:option>
-				<form:option value="Checking">${account_checking}</form:option>
-			</form:select>
+			<div class="form-group col-lg-2">
+				<form:select path="accType">
+					<form:option value="Savings">${account_savings}</form:option>
+					<form:option value="Checking">${account_checking}</form:option>
+				</form:select>
 			</div>
 			<div class="form-group">
 				<label for="amtInvolved" class="col-lg-2 control-label">Amount
