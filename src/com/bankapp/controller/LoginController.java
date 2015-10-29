@@ -27,6 +27,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import com.bankapp.model.UserInfo;
 import com.bankapp.services.UserService;
 import com.bankapp.services.UserValidator;
+import com.bankapp.userexceptions.ResourceNotFoundException;
 
 
 @Controller
@@ -66,10 +67,10 @@ public class LoginController {
 		return "login";
 	}
 	@RequestMapping(value="/loginFailed", method=RequestMethod.GET)
-		public String loginFailed(ModelMap model, Principal user){
-			SecurityContextHolder.getContext().setAuthentication(null);
-			logger.info("Invalid credentials or Captcha");
-			model.addAttribute("error", "Invalid Credentials/Captcha");
+	public String loginFailed(ModelMap model, Principal user){
+		SecurityContextHolder.getContext().setAuthentication(null);
+		logger.info("Invalid credentials or Captcha");
+		model.addAttribute("error", "Invalid Credentials/Captcha");
 		return "login";
 	}
 	@RequestMapping(value="/atFirstLogin")
@@ -100,7 +101,7 @@ public class LoginController {
 				userService.changePassword(confirmPassword, userName);
 				SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
 				model.addObject("success","Successfully updated");
-				
+
 			}
 			return model;
 		}
@@ -157,7 +158,7 @@ public class LoginController {
 	@ResponseBody
 	public String handleSessionExpired(ModelMap model){
 		model.addAttribute("error", "Session expired");
-	  return "login";
+		return "login";
 	}
 	@ExceptionHandler(NullPointerException.class)
 	@ResponseBody
@@ -165,17 +166,21 @@ public class LoginController {
 	{
 		System.out.println("Handle exception");
 		model.addAttribute("error", "There was an error");
-	    return "login";
+		return "login";
 	}
-	
+
 	@ExceptionHandler(NoHandlerFoundException.class)
 	@ResponseBody
-    public String handle(Exception ex,Model model) {
-
+	public String handle1(Exception ex,Model model) {
+		System.out.println("handle1");
 		model.addAttribute("error", "No page found");
-       return "login";
-   }
-	
+		return "login";
+	}
+	@ExceptionHandler(ResourceNotFoundException.class)
+	public String handle2() {
+		System.out.println("handle2");
+		return "login";
+	}
+
 }
 
-	
