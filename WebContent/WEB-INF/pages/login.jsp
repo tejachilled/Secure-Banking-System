@@ -186,6 +186,7 @@ body {
 	rel="stylesheet">
 
 </head>
+<script src="https://www.google.com/recaptcha/api.js"></script>
 <script type="text/javascript"
 	src="<c:url value="/resources/js/jquery.js"/>"></script>
 <script>
@@ -230,7 +231,10 @@ body {
 			<input type="text" name="username" placeholder="Username" required
 				autofocus /><br> <input type="password" name="password"
 				id="password" class="form-control keyboardInput"
-				placeholder="Password" required /><br> <input name="submit"
+				placeholder="Password" required /><br> 
+				<div class="g-recaptcha"
+            data-sitekey="6LdO2w8TAAAAAKaAmTBWN9KAJrHsmZ2r405oUiVf"></div>
+            <br><input name="submit"
 				type="submit" value="submit" /> <a
 				href="/RichirichBank/forgotpassword">Forgot Password? </a>
 		</div>
