@@ -25,7 +25,7 @@
 			<div class="header"></div>
 			<div class="grad"></div>
 			<div class="body">
-
+				<label> Amount will be debited/credited from/to Checking's Account </label><br><br>
 				<label>Account Number</label><input type="text" name="accountnum"><br>
 				<label>Amount</label><input type="text" name="amount"><br>
 				<label>Remark</label><input type="text" name="remark"><br>
