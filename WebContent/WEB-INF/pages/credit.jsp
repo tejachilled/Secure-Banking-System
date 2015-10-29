@@ -7,13 +7,18 @@
 <html>
 <head>
 
-<link href="<c:url value="/resources/css/theme.css"/>" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-<script type="text/javascript"
-	src="<c:url value="/resources/js/bootstrap.js"/>"></script>
+
 
 <title>Home</title>
 </head>
+<script type="text/javascript"
+	src="<c:url value="/resources/js/bootstrap.js"/>"></script>
+<link href="<c:url value="/resources/css/keyboard.css"/>"
+	rel="stylesheet">
+
+<script type="text/javascript"
+	src="<c:url value="/resources/js/jquery.js"/>"></script>
+<link href="<c:url value="/resources/css/theme.css"/>" rel="stylesheet">
 <body>
 
 	<jsp:include page="headExt.jsp"></jsp:include>
@@ -37,10 +42,23 @@
 			<div class="form-group">
 				<label class="col-lg-2 control-label">Amount to credit</label>
 				<div class="col-lg-10">
-					<input name="amount" id="amount" required/>
+					<input name="amount" id="amount" class="keyboardInput" required />
 				</div>
 			</div>
-			
+
+			<script type="text/javascript"
+				src="<c:url value="/resources/js/keyboard.js"/>"></script>
+			<script
+				src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
+			<!-- Bootstrap Core JavaScript -->
+			<script type="text/javascript"
+				src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
+
+			<!-- Plugin JavaScript -->
+			<script type="text/javascript"
+				src="<c:url value="/resources/js/jquery.easing.min.js"/>"></script>
+
 			<div class="form-group">
 				<div class="col-lg-10 col-lg-offset-2">
 
