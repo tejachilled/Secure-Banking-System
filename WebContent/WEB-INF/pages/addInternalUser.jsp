@@ -3,7 +3,7 @@
 <%@taglib uri="http://www.springframework.org/security/tags"
 	prefix="sec"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -14,7 +14,7 @@
 <title>Register</title>
 </head>
 <body>
-<jsp:include page="head.jsp"></jsp:include>
+	<jsp:include page="head.jsp"></jsp:include>
 	<div style="width: 70%;">
 		<div class="panel panel-default">
 			<div class="panel-body">
@@ -23,6 +23,10 @@
 				<form:form class="form-horizontal"
 					action="/RichirichBank/addInternalUser" method="post"
 					commandName="intUser" name="f">
+
+					<input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" />
+
 					<fieldset>
 						<c:if test="${not empty exception}">
 							<div style="width: 40%;">
@@ -31,7 +35,7 @@
 								</div>
 							</div>
 						</c:if>
-					
+
 						<legend>New Employee</legend>
 						<div class="form-group">
 							<label class="col-lg-2 control-label">Firstname</label>
@@ -60,7 +64,8 @@
 						</div>
 
 						<div class="form-group">
-							<label class="col-lg-2 control-label">Email (Please give correct email id, temporary password will be sent)</label>
+							<label class="col-lg-2 control-label">Email (Please give
+								correct email id, temporary password will be sent)</label>
 							<div class="col-lg-10">
 								<form:input path="emaiID" cssClass="form-control" />
 								<form:errors path="emaiID"
@@ -106,7 +111,8 @@
 						</div>
 
 						<div class="form-group">
-							<label class="col-lg-2 control-label">Security Question 1 : What is your first car name ?</label>
+							<label class="col-lg-2 control-label">Security Question 1
+								: What is your first car name ?</label>
 							<div class="col-lg-10">
 								<form:input path="sq1" cssClass="form-control" />
 								<form:errors path="sq1"
@@ -114,7 +120,8 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-lg-2 control-label">Security Question 2 : What is your pet name ?</label>
+							<label class="col-lg-2 control-label">Security Question 2
+								: What is your pet name ?</label>
 							<div class="col-lg-10">
 								<form:input path="sq2" cssClass="form-control" />
 								<form:errors path="sq2"
@@ -122,16 +129,17 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-lg-2 control-label">Security Question 3 : What is your mother's name ?</label>
+							<label class="col-lg-2 control-label">Security Question 3
+								: What is your mother's name ?</label>
 							<div class="col-lg-10">
 								<form:input path="sq3" cssClass="form-control" />
 								<form:errors path="sq3"
 									cssClass="alert alert-dismissable alert-danger"></form:errors>
 							</div>
 						</div>
-						
 
-						
+
+
 
 						<div class="form-group">
 							<div class="col-lg-10 col-lg-offset-2">

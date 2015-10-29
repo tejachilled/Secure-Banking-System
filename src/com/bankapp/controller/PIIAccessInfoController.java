@@ -2,6 +2,7 @@ package com.bankapp.controller;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -20,8 +21,11 @@ public class PIIAccessInfoController {
 
 	@Autowired
 	PIIAccessInfoServiceImpl piiAccessInfoService;
+	
 	@Autowired
 	PIIRequestServiceImpl piiRequestService;
+
+	private static final Logger logger = Logger.getLogger(PIIAccessInfoController.class);
 
 	@RequestMapping("/piiaccessinfo")
 	public ModelAndView getGovernmentRequests(@ModelAttribute("govtAction") GovtActionModel govtActionModel) {
@@ -29,7 +33,8 @@ public class PIIAccessInfoController {
 		model.addObject("title", "Welcome to Richie Rich Bank!");
 		model.addObject("bank_name", "Richie Rich Bank");
 		model.setViewName("piiaccessinfo");
-		List<PIIAccessInfoModel> piiAccessInfoList = piiAccessInfoService.getPIIAccessInfoList(SecurityContextHolder.getContext().getAuthentication().getName());
+		List<PIIAccessInfoModel> piiAccessInfoList = piiAccessInfoService
+				.getPIIAccessInfoList(SecurityContextHolder.getContext().getAuthentication().getName());
 		model.addObject("piiAccessInfoList", piiAccessInfoList);
 		return model;
 	}
@@ -46,8 +51,12 @@ public class PIIAccessInfoController {
 
 	@RequestMapping("/sendPiiAccessRequest")
 	public String sendNewPiiRequest(@ModelAttribute("piiRequest") PIIRequestModel piiRequestModel) {
+		logger.info("New PII Access request sent by internal user '"
+				+ SecurityContextHolder.getContext().getAuthentication().getName() + "' for external user '"
+				+ piiRequestModel.getUserNameExternal() + "'");
 		if (piiRequestModel != null)
-			piiRequestService.sendNewRequest(piiRequestModel.getUserNameExternal(), SecurityContextHolder.getContext().getAuthentication().getName());
+			piiRequestService.sendNewRequest(piiRequestModel.getUserNameExternal(),
+					SecurityContextHolder.getContext().getAuthentication().getName());
 		return "redirect:/piiaccessinfo";
 	}
 

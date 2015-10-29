@@ -33,7 +33,7 @@ public class InternalUserController {
 	@Autowired
 	UserService userService;
 
-	@Autowired 
+	@Autowired
 	PasswordEncoder encoder;
 
 	@Autowired
@@ -42,45 +42,44 @@ public class InternalUserController {
 	@Autowired
 	EmailService emailService;
 
-	private static final Logger logger = Logger.getLogger(LoginController.class);
+	private static final Logger logger = Logger.getLogger(InternalUserController.class);
 
-	@RequestMapping(value="/register")
-	public String registerAUser(ModelMap model)
-	{
+	@RequestMapping(value = "/register")
+	public String registerAUser(ModelMap model) {
 		model.addAttribute("extUser", new UserInfo());
 		return "addExternalUserAccount";
 	}
-	
+
 	@Transactional
-	@RequestMapping(value="/addExtUser",method=RequestMethod.POST)
-	public String submitForm(ModelMap model, @ModelAttribute ("extUser") @Validated UserInfo UserInfo, BindingResult result, SessionStatus status, HttpServletRequest request, HttpServletResponse response,ServletRequest servletRequest) throws Exception
-	{
-		String role=request.getParameter("role").toString();
-		String accountType  = request.getParameter("accountType").toString();
-		System.out.println("submitForm: account type :"+ accountType);
+	@RequestMapping(value = "/addExtUser", method = RequestMethod.POST)
+	public String submitForm(ModelMap model, @ModelAttribute("extUser") @Validated UserInfo UserInfo,
+			BindingResult result, SessionStatus status, HttpServletRequest request, HttpServletResponse response,
+			ServletRequest servletRequest) throws Exception {
+		String role = request.getParameter("role").toString();
+		String accountType = request.getParameter("accountType").toString();
+		System.out.println("submitForm: account type :" + accountType);
 		userValidator.validate(UserInfo, result);
-		if(result.hasErrors())
-		{
+		if (result.hasErrors()) {
 			System.out.println("error");
 			return "addExternalUserAccount";
 		}
-		Long accno= 0L ;
-		try{
-			logger.info("Adding an external user - "+UserInfo.getUserName()+" with role- "+role);
+		Long accno = 0L;
+		try {
+			logger.info("Adding an external user - " + UserInfo.getUserName() + " with role- " + role);
 			final String tempPwd = emailService.generatePassword();
 			UserInfo.setPassword(encoder.encode(tempPwd));
-			System.out.println("sec answer 3 : "+UserInfo.getSq3());
-			accno=userService.addNewExternalUuser(UserInfo,role,accountType);
-			emailService.Send(UserInfo.getUserName(),tempPwd, UserInfo.getEmaiID(),accno);
+			System.out.println("sec answer 3 : " + UserInfo.getSq3());
+			accno = userService.addNewExternalUuser(UserInfo, role, accountType);
+			emailService.Send(UserInfo.getUserName(), tempPwd, UserInfo.getEmaiID(), accno);
 			model.addAttribute("accno", accno);
 			logger.info("Added customer successfully!");
-		}catch(UserAccountExist exception){
+		} catch (UserAccountExist exception) {
 			model.addAttribute("exception", exception.getMessage());
-		}catch(CustomException exception){
+		} catch (CustomException exception) {
 			model.addAttribute("exception", exception.getMessage());
 		} catch (UserNameExists exception) {
 			model.addAttribute("exception", exception.getMessage());
-		}catch (MessagingException exception) {
+		} catch (MessagingException exception) {
 			model.addAttribute("exception", exception.getMessage());
 		}
 
@@ -88,20 +87,18 @@ public class InternalUserController {
 	}
 
 	// Manager functionalities
-	@RequestMapping(value="/ViewEmpProfile",method=RequestMethod.GET)
-	public String viewEmpProfile(Model model)
-	{
+	@RequestMapping(value = "/ViewEmpProfile", method = RequestMethod.GET)
+	public String viewEmpProfile(Model model) {
 		model.addAttribute("accessInfo", new UserInfo());
 		return "viewEmpProfile";
 	}
 
-	
-	@RequestMapping(value="/ViewEmpProfile",method=RequestMethod.POST, params = "Delete")
-	public String delEmpProfile(@ModelAttribute ("accessInfo") @Validated UserInfo userInfo,HttpServletRequest request, BindingResult result, SessionStatus status,Model model)
-	{
-		String role=request.getParameter("role").toString();
-		System.out.println("in dele method with user role : "+role);
-		if(role!=null){
+	@RequestMapping(value = "/ViewEmpProfile", method = RequestMethod.POST, params = "Delete")
+	public String delEmpProfile(@ModelAttribute("accessInfo") @Validated UserInfo userInfo, HttpServletRequest request,
+			BindingResult result, SessionStatus status, Model model) {
+		String role = request.getParameter("role").toString();
+		System.out.println("in dele method with user role : " + role);
+		if (role != null) {
 			logger.info("Deleting user");
 			userInfo.setRole(role);
 			userService.deleteUserInfo(userInfo);
@@ -110,115 +107,96 @@ public class InternalUserController {
 		}
 		return "viewEmpProfile";
 	}
-	
-	@RequestMapping(value="/ViewEmpProfile",method=RequestMethod.POST)
-	public String viewEmpProfile(@ModelAttribute ("accessInfo") @Validated UserInfo userInfo, BindingResult result, SessionStatus status,Model model)
-	{
+
+	@RequestMapping(value = "/ViewEmpProfile", method = RequestMethod.POST)
+	public String viewEmpProfile(@ModelAttribute("accessInfo") @Validated UserInfo userInfo, BindingResult result,
+			SessionStatus status, Model model) {
 		model.addAttribute("accessInfo", userInfo);
-		model.addAttribute("usernameerror",null);
-		if(userInfo.getUserName()!=null)
-		{
-			logger.info("Viewing customer with username - "+userInfo.getUserName());
-			if(!(userInfo.getUserName()).matches("^[a-z0-9_-]{3,16}$"))
-			{
-				model.addAttribute("usernameerror","Please enter a valid username");
+		model.addAttribute("usernameerror", null);
+		if (userInfo.getUserName() != null) {
+			logger.info("Viewing customer with username - " + userInfo.getUserName());
+			if (!(userInfo.getUserName()).matches("^[a-z0-9_-]{3,16}$")) {
+				model.addAttribute("usernameerror", "Please enter a valid username");
 				return "viewEmpProfile";
-			}
-			else
-			{
+			} else {
 				UserInfo ui = userService.getUserInfobyUserName(userInfo.getUserName());
-				//validate if reasonable request and username exists
-				if(ui==null)
-				{
-					model.addAttribute("usernameerror","Specified username does not exist");
+				// validate if reasonable request and username exists
+				if (ui == null) {
+					model.addAttribute("usernameerror", "Specified username does not exist");
 					return "viewEmpProfile";
-				}
-				else
-				{
-					if(ui.getRole().equalsIgnoreCase("ROLE_U") || ui.getRole().equalsIgnoreCase("ROLE_M"))
-					{
+				} else {
+					if (ui.getRole().equalsIgnoreCase("ROLE_U") || ui.getRole().equalsIgnoreCase("ROLE_M")) {
 						ui.setRole(userService.setRoleToDisplayUI(ui.getRole()));
 						model.addAttribute("accessInfo", ui);
 						return "viewEmpProfile";
-					}
-					else
-					{
+					} else {
 						model.addAttribute("usernameerror", "Not a valid customer");
 						return "viewEmpProfile";
 					}
 				}
 			}
-		}
-		else
-		{
-			model.addAttribute("usernameerror","Please enter the username");
+		} else {
+			model.addAttribute("usernameerror", "Please enter the username");
 			return "viewEmpProfile";
 		}
 	}
 
-	//Edit Employees
-	@RequestMapping(value="/EditEmpProfile",method=RequestMethod.GET)
-	public String editEmpProfile(Model model)
-	{
+	// Edit Employees
+	@RequestMapping(value = "/EditEmpProfile", method = RequestMethod.GET)
+	public String editEmpProfile(Model model) {
 		model.addAttribute("accessInfo", new UserInfo());
 		return "editEmpProfile";
 	}
 
-	@RequestMapping(value="/EditEmpProfile",method=RequestMethod.POST)
-	public String editEmpProfile(@ModelAttribute ("accessInfo") @Validated UserInfo UserInfo, BindingResult result, SessionStatus status,Model model)
-	{
-		//add objects to model
+	@RequestMapping(value = "/EditEmpProfile", method = RequestMethod.POST)
+	public String editEmpProfile(@ModelAttribute("accessInfo") @Validated UserInfo UserInfo, BindingResult result,
+			SessionStatus status, Model model) {
+		// add objects to model
 		model.addAttribute("accessInfo", UserInfo);
-		System.out.println("editEmpProfile: "+UserInfo.toString());
-		model.addAttribute("usernameerror",null);
-		model.addAttribute("addresserror",null);
-		model.addAttribute("phoneNumber",null);
-		model.addAttribute("emailid",null);
+		System.out.println("editEmpProfile: " + UserInfo.toString());
+		model.addAttribute("usernameerror", null);
+		model.addAttribute("addresserror", null);
+		model.addAttribute("phoneNumber", null);
+		model.addAttribute("emailid", null);
 
-		//validate input format
-		if(UserInfo.getUserName()!=null)
-		{
-			if(UserInfo.getFirstName()!=null)
-			{
-				if(UserInfo.getAddress1()==null || UserInfo.getAddress1().length() ==0 ){
-					model.addAttribute("addresserror","Please enter a valid address having characters numbers and #");
+		// validate input format
+		if (UserInfo.getUserName() != null) {
+			if (UserInfo.getFirstName() != null) {
+				if (UserInfo.getAddress1() == null || UserInfo.getAddress1().length() == 0) {
+					model.addAttribute("addresserror", "Please enter a valid address having characters numbers and #");
 					return "editEmpProfile";
 				}
-				if(UserInfo.getEmaiID()==null ){
-					model.addAttribute("emailid","Please enter a valid email id");
-					return "editEmpProfile";
-				} 
-				String phoneNumber = ""+UserInfo.getPhoneNumber();
-				if(UserInfo.getPhoneNumber()== null || !phoneNumber.matches("\\d{10}")){
-					model.addAttribute("phoneNumber","Please enter a valid 10 digit phone number");
+				if (UserInfo.getEmaiID() == null) {
+					model.addAttribute("emailid", "Please enter a valid email id");
 					return "editEmpProfile";
 				}
-				
-				UserInfo ui = userService.getUserInfobyUserName(UserInfo.getUserName()); 
-				if(ui.getAddress1()!=null){
-					if(!(ui.getAddress1()).matches("^[a-zA-Z0-9_#]*$"))
-					{
-						model.addAttribute("addresserror","Please enter a valid address having characters numbers and #");
+				String phoneNumber = "" + UserInfo.getPhoneNumber();
+				if (UserInfo.getPhoneNumber() == null || !phoneNumber.matches("\\d{10}")) {
+					model.addAttribute("phoneNumber", "Please enter a valid 10 digit phone number");
+					return "editEmpProfile";
+				}
+
+				UserInfo ui = userService.getUserInfobyUserName(UserInfo.getUserName());
+				if (ui.getAddress1() != null) {
+					if (!(ui.getAddress1()).matches("^[a-zA-Z0-9_#]*$")) {
+						model.addAttribute("addresserror",
+								"Please enter a valid address having characters numbers and #");
 						return "editEmpProfile";
 					}
 				}
-				if( UserInfo.getAddress1() != ui.getAddress1())
-				{
+				if (UserInfo.getAddress1() != ui.getAddress1()) {
 					ui.setAddress1(UserInfo.getAddress1());
-				} 
-				if(UserInfo.getAddress2() != ui.getAddress1())
-				{
+				}
+				if (UserInfo.getAddress2() != ui.getAddress1()) {
 					ui.setAddress2(UserInfo.getAddress2());
 				}
-				if(UserInfo.getEmaiID() != ui.getEmaiID())
-				{
+				if (UserInfo.getEmaiID() != ui.getEmaiID()) {
 					ui.setEmaiID(UserInfo.getEmaiID());
 				}
-				if( UserInfo.getPhoneNumber()!= ui.getPhoneNumber())
-				{
+				if (UserInfo.getPhoneNumber() != ui.getPhoneNumber()) {
 					ui.setPhoneNumber(UserInfo.getPhoneNumber());
 				}
-				System.out.println("editEmpProfile: updating info with "+ui.toString());
+				System.out.println("editEmpProfile: updating info with " + ui.toString());
 				userService.updateUserInfo(ui);
 				System.out.println("editEmpProfile : updated user info ");
 				UserInfo = userService.getUserInfobyUserName(UserInfo.getUserName());
@@ -227,49 +205,36 @@ public class InternalUserController {
 				model.addAttribute("success", "Updated details successfully");
 				return "editEmpProfile";
 			}
-			if(!(UserInfo.getUserName()).matches("^[a-z0-9_-]{3,16}$"))
-			{
-				model.addAttribute("usernameerror","Please enter a valid username");
+			if (!(UserInfo.getUserName()).matches("^[a-z0-9_-]{3,16}$")) {
+				model.addAttribute("usernameerror", "Please enter a valid username");
 				return "editEmpProfile";
-			}
-			else
-			{
-				//validate if reasonable request and username exists
-				if(userService.getUserInfobyUserName(UserInfo.getUserName())==null)
-				{
-					model.addAttribute("usernameerror","Specified username does not exist");
+			} else {
+				// validate if reasonable request and username exists
+				if (userService.getUserInfobyUserName(UserInfo.getUserName()) == null) {
+					model.addAttribute("usernameerror", "Specified username does not exist");
 					return "editEmpProfile";
-				}
-				else
-				{
+				} else {
 					UserInfo ui = userService.getUserInfobyUserName(UserInfo.getUserName());
-					//check if the user is an external user
-					if(ui.getRole().equals("ROLE_U") || ui.getRole().equals("ROLE_M"))
-					{
+					// check if the user is an external user
+					if (ui.getRole().equals("ROLE_U") || ui.getRole().equals("ROLE_M")) {
 						ui.setRole(userService.setRoleToDisplayUI(ui.getRole()));
 						model.addAttribute("accessInfo", ui);
 						return "editEmpProfile";
-					}
-					else
-					{
+					} else {
 						model.addAttribute("usernameerror", "Not a valid customer");
 						return "editEmpProfile";
 					}
 				}
 			}
-		}
-		else
-		{
-			model.addAttribute("usernameerror","Please enter the username");
+		} else {
+			model.addAttribute("usernameerror", "Please enter the username");
 			return "viewEmpProfile";
 		}
 	}
-	
-	@RequestMapping(value="/viewMyIntProfile",method=RequestMethod.GET)
-	public String viewMyself(Model model)
-	{
-		String username = SecurityContextHolder.getContext()
-				.getAuthentication().getName();
+
+	@RequestMapping(value = "/viewMyIntProfile", method = RequestMethod.GET)
+	public String viewMyself(Model model) {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		UserInfo user = userService.getUserInfobyUserName(username);
 		model.addAttribute("accessInfo", user);
 		return "viewIntInfo";

@@ -186,12 +186,13 @@ body {
 	rel="stylesheet">
 
 </head>
+<script src="https://www.google.com/recaptcha/api.js"></script>
 <script type="text/javascript"
 	src="<c:url value="/resources/js/jquery.js"/>"></script>
 <script>
-jQuery(document).ready(function(){
-	$("#password").keydown(false);
-});
+	jQuery(document).ready(function() {
+		$("#password").keydown(false);
+	});
 </script>
 <script>
 	document.onmousedown = disableclick;
@@ -217,10 +218,6 @@ jQuery(document).ready(function(){
 
 		</div>
 
-		<c:if test="${not empty msg}">
-			<div class="msg">${msg}</div>
-		</c:if>
-
 		<div class="login">
 
 			<c:if test="${not empty error}">
@@ -234,9 +231,12 @@ jQuery(document).ready(function(){
 			<input type="text" name="username" placeholder="Username" required
 				autofocus /><br> <input type="password" name="password"
 				id="password" class="form-control keyboardInput"
-				placeholder="Password" required /><br> <input name="submit"
-				type="submit" value="submit" />
-				<a href="/RichirichBank/forgotpassword">Forgot Password? </a>
+				placeholder="Password" required /><br>
+			<div class="g-recaptcha"
+				data-sitekey="6LdO2w8TAAAAAKaAmTBWN9KAJrHsmZ2r405oUiVf"></div>
+			<br> <input name="submit" type="submit" value="Login" /> <br>
+			<br> <a style="color:white" href="/RichirichBank/forgotpassword">Forgot
+				Password? </a>
 		</div>
 
 		<script type="text/javascript"

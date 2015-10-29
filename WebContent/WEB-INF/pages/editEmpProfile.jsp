@@ -15,6 +15,10 @@
 	<jsp:include page="internalHome.jsp"></jsp:include>
 	<form:form class="form-horizontal" commandName="accessInfo"
 		method="post" action="/RichirichBank/EditEmpProfile">
+
+		<input type="hidden" name="${_csrf.parameterName}"
+			value="${_csrf.token}" />
+
 		<fieldset>
 			<legend>Enter User name to Edit Account Details</legend>
 			<c:if test="${not empty success }">

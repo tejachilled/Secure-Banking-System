@@ -12,25 +12,30 @@
 <title>${title}</title>
 <link href="<c:url value="/resources/css/theme.css"/>" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-<script type="text/javascript" src="<c:url value="/resources/js/bootstrap.js"/>"></script>
+<script type="text/javascript"
+	src="<c:url value="/resources/js/bootstrap.js"/>"></script>
 </head>
 
 <body>
-<jsp:include page="head.jsp"></jsp:include>
-<sec:authorize access="hasRole('ROLE_SA')">
-<div class="btn-group btn-group-justified">
-	<sec:authorize access="hasAnyRole('ROLE_SA')">
-		<a href="/RichirichBank/newPiiRequest" class="btn btn-default">New PII Request</a>
-		<a href="/RichirichBank/piiaccessinfo" class="btn btn-default">PII Access Info</a>
-	</sec:authorize>
-	</div>
-	<div style="width: 100%; text-align: center">
-	 Click on below links to Download Respective Log File<br/><br/>
-	 <c:forEach var="fileName" items="${FileList}">		
-				<a href="<c:url value='/downloadLogFile/${fileName}' />">${fileName}</a><br/><br/>
-					</c:forEach>
-		
-	</div>
+	<jsp:include page="head.jsp"></jsp:include>
+	<sec:authorize access="hasRole('ROLE_SA')">
+		<div class="btn-group btn-group-justified">
+			<sec:authorize access="hasAnyRole('ROLE_SA')">
+				<a href="/RichirichBank/newPiiRequest" class="btn btn-default">New
+					PII Request</a>
+				<a href="/RichirichBank/piiaccessinfo" class="btn btn-default">PII
+					Access Info</a>
+			</sec:authorize>
+		</div>
+		<div style="width: 100%; text-align: center">
+			Click on below links to Download Respective Log File<br /> <br />
+			<c:forEach var="fileName" items="${FileList}">
+				<a href="<c:url value='/downloadLogFile/${fileName}' />">${fileName}</a>
+				<br />
+				<br />
+			</c:forEach>
+
+		</div>
 	</sec:authorize>
 </body>
 </html>

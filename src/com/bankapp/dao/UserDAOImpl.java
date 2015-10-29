@@ -127,12 +127,14 @@ public class UserDAOImpl implements UserDAO {
 		UserInfo user = null;
 		String password = "";		
 		user = getLoginInfo(username);
-		password = user.getPassword();
+		
 		if(user!=null && ( user.getRole().equalsIgnoreCase(INTERNAL_USER))){
+			password = user.getPassword();
 			user = getInternalUser(user.getUserName());
 			user.setPassword(password);
 		}else if(user!=null && (user.getRole().equalsIgnoreCase(EXTERNAL_USER) 
 				||  user.getRole().equalsIgnoreCase(MERCHANT))){
+			password = user.getPassword();
 			user = getExternalUser(user.getUserName());
 			user.setPassword(password);
 		}

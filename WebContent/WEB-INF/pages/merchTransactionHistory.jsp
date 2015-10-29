@@ -8,26 +8,26 @@
 <html>
 
 <head>
-	<link href="<c:url value="/resources/css/theme.css"/>" rel="stylesheet">
-	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-	<script type="text/javascript"
-		src="<c:url value="/resources/js/bootstrap.js"/>"></script>
-	<title>Transaction History</title>
-	<jsp:include page="extHome.jsp"></jsp:include>
-	<style>
-	table {
-		width: 100%;
-	}
+<link href="<c:url value="/resources/css/theme.css"/>" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script type="text/javascript"
+	src="<c:url value="/resources/js/bootstrap.js"/>"></script>
+<title>Transaction History</title>
+<jsp:include page="extHome.jsp"></jsp:include>
+<style>
+table {
+	width: 100%;
+}
 
-	td {
-		border: 1px black solid;
-		padding: 10px;
-	}
-	</style>
+td {
+	border: 1px black solid;
+	padding: 10px;
+}
+</style>
 </head>
 <body>
- <sec:authorize access="hasRole('ROLE_M')">
-	<table>
+	<sec:authorize access="hasRole('ROLE_M')">
+		<table>
 			<tr>
 				<td><b>CUSTOMER ACCOUNT NUMBER</b></td>
 				<td><b>AMOUNT</b></td>
@@ -35,25 +35,25 @@
 				<td><b>REMARK</b></td>
 			</tr>
 
-		
 
-				<c:forEach var="merchTransactionHistory" items="${TransactionList}">
-					<tr>
-						<td>${merchTransactionHistory.accountId}</td>
-						<td>${merchTransactionHistory.amount}</td>
-						
-						<c:if test="${merchTransactionHistory.type eq 'C'}">
-							<td>Credit</td>
-						</c:if>
-						<c:if test="${merchTransactionHistory.type eq 'D'}">
-							<td>Debit</td>
-						</c:if>
-						<td>${merchTransactionHistory.remark}</td>
-					</tr>
-				</c:forEach>
-				
-			
+
+			<c:forEach var="merchTransactionHistory" items="${TransactionList}">
+				<tr>
+					<td>${merchTransactionHistory.accountId}</td>
+					<td>${merchTransactionHistory.amount}</td>
+
+					<c:if test="${merchTransactionHistory.type eq 'C'}">
+						<td>Credit</td>
+					</c:if>
+					<c:if test="${merchTransactionHistory.type eq 'D'}">
+						<td>Debit</td>
+					</c:if>
+					<td>${merchTransactionHistory.remark}</td>
+				</tr>
+			</c:forEach>
+
+
 		</table>
- </sec:authorize>
+	</sec:authorize>
 </body>
 </html>

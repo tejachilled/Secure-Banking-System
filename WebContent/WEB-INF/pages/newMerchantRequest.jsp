@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://www.springframework.org/security/tags"
@@ -8,38 +8,38 @@
 <html>
 <head>
 <link href="<c:url value="/resources/css/theme.css"/>" rel="stylesheet">
-	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-	<script type="text/javascript"
-		src="<c:url value="/resources/js/bootstrap.js"/>"></script>
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script type="text/javascript"
+	src="<c:url value="/resources/js/bootstrap.js"/>"></script>
 <title>Insert title here</title>
 <jsp:include page="extHome.jsp"></jsp:include>
 </head>
 <body>
-<sec:authorize access="hasRole('ROLE_M')">
-	<form:form class="form-horizontal"	action="/RichirichBank/initiateMerchTrans" method="post"  name="f">
+	<sec:authorize access="hasRole('ROLE_M')">
+		<form:form class="form-horizontal"
+			action="/RichirichBank/initiateMerchTrans" method="post" name="f">
 
-		<div class="header"></div>
-		<div class="grad"></div>
-		<div class="body">
-			
-			<label>Account Number</label><input type="text" name="accountnum"><br> 
-			<label>Amount</label><input type="text" name="amount"><br>
-			<label>Remark</label><input type="text" name="remark"><br>
-			<input type="radio" name="radios" value="radio1" CHECKED>
-             Credit
-            <br>
-            <input type="radio" name="radios" value="radio2">
-             Debit
-            <br>
-			<input type="submit" name="submit" value="submit" />
-		
-		</div>
+			<input type="hidden" name="${_csrf.parameterName}"
+				value="${_csrf.token}" />
 
-		
-		<script
-			src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+			<div class="header"></div>
+			<div class="grad"></div>
+			<div class="body">
 
-	</form:form>
+				<label>Account Number</label><input type="text" name="accountnum"><br>
+				<label>Amount</label><input type="text" name="amount"><br>
+				<label>Remark</label><input type="text" name="remark"><br>
+				<input type="radio" name="radios" value="radio1" CHECKED>
+				Credit <br> <input type="radio" name="radios" value="radio2">
+				Debit <br> <input type="submit" name="submit" value="submit" />
+
+			</div>
+
+
+			<script
+				src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
+		</form:form>
 	</sec:authorize>
 </body>
 </html>

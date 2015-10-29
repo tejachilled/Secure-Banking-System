@@ -15,6 +15,10 @@
 	<jsp:include page="internalHome.jsp"></jsp:include>
 	<form:form class="form-horizontal" commandName="accessInfo"
 		method="post" action="/RichirichBank/ViewInternalEmpProfile">
+
+		<input type="hidden" name="${_csrf.parameterName}"
+			value="${_csrf.token}" />
+
 		<fieldset>
 			<legend>Enter User Credentials to View/Delete Employee
 				Details</legend>
