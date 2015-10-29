@@ -1,7 +1,9 @@
 package com.bankapp.controller;
 
+import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,6 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.bankapp.model.OTP;
 import com.bankapp.model.PIIAccessInfoModel;
 import com.bankapp.model.Transaction;
+import com.bankapp.model.TransactionList;
 import com.bankapp.model.Transfer;
 import com.bankapp.model.UserInfo;
 import com.bankapp.model.Useraccounts;
@@ -64,6 +68,22 @@ public class RegularUserController {
 
 	@RequestMapping("/extHome")
 	public String externalCustomer(Model model, HttpSession session, HttpServletRequest request) {
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		List<Useraccounts> userAccounts = transactionService.getUserAccountsInfoByUserName(userName);	
+		
+		for (Useraccounts userAccount : userAccounts) {
+			String accountid = String.valueOf(userAccount.getAccountno());
+			logger.info(accountid);
+			if (userAccount.getAccountType().equalsIgnoreCase("savings")) {
+				model.addAttribute("accountIdSavings", "Savings Account ID: "+ accountid);
+				model.addAttribute("accountBalSavings",
+						"Savings Account Balance: $ " +userAccount.getBalance());
+			} else if (userAccount.getAccountType().equalsIgnoreCase("checking")) {
+				model.addAttribute("accountIdCheckings", "Checkings Account ID:"+accountid);
+				model.addAttribute("accountBalCheckings",
+						"Checking Account Balance: $ " +userAccount.getBalance());
+			}
+		}
 		return "extHome";
 	}
 
@@ -96,7 +116,7 @@ public class RegularUserController {
 	public ModelAndView submitFormDebit(ModelMap model, @ModelAttribute("debit") Transaction transaction,
 			BindingResult result, SessionStatus status, HttpServletRequest request, HttpServletResponse response,
 			ServletRequest servletRequest) throws Exception {
-		
+
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("debit", new Transaction());
 		modelAndView.setViewName("debit");
@@ -109,10 +129,12 @@ public class RegularUserController {
 		Useraccounts accUserAccount = null;
 
 		for (Useraccounts currUserAcc : userAccounts) {
-			if (currUserAcc.getAccountType().equals(transaction.getAccType())) {
+			if (currUserAcc.getAccountType().equalsIgnoreCase(transaction.getAccType())) {
 				accUserAccount = currUserAcc;
 			}
 		}
+		
+		System.out.println("Mani came here");
 		try {
 			if (transaction.getAmount() < 0) {
 				throw new NegativeAmountException("Amount cannot be a negative Value!!!");
@@ -160,6 +182,7 @@ public class RegularUserController {
 			modelAndView.addObject("msg", mi.getMessage());
 			return modelAndView;
 		} catch (Exception e) {
+			e.printStackTrace();
 			modelAndView.addObject("msg",
 					"Unexpected Error Occurred or Invalid Input format..Please Try Again.. If problem persists contact the customer support!!!");
 			return modelAndView;
@@ -381,17 +404,17 @@ public class RegularUserController {
 	public ModelAndView viewTransaction() {
 		ModelAndView model = new ModelAndView();
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-		if (userName == null) {
-			System.out.println("username is null. requires logger");
-			// logger
-		} else {
-			List<Transaction> listTransaction = transactionService.getTransactionHistory(userName);
-			if (listTransaction != null) {
-				listTransaction = listTransaction.subList(0, listTransaction.size() > 10 ? 10 : listTransaction.size());
-			}
-
-			model.addObject("TransactionList", listTransaction);
+		logger.info(userName);
+		if (userName==null || userName.equals("anonymousUser")) {
+			model.setViewName("login");
+			return model;
 		}
+		List<Transaction> listTransaction = transactionService.getTransactionHistory(userName);
+		if (listTransaction != null) {
+			listTransaction = listTransaction.subList(0, listTransaction.size() > 10 ? 10 : listTransaction.size());
+		}
+
+		model.addObject("TransactionList", listTransaction);
 		model.setViewName("viewTransactions");
 		return model;
 	}
@@ -401,15 +424,15 @@ public class RegularUserController {
 	public void downloadTransaction(HttpServletRequest request, HttpServletResponse response,
 			ServletRequest servletRequest) throws Exception {
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		String filePath="";
 		if (userName == null) {
-			System.out.println("username is null. requires logger");
-			// logger
+			logger.fatal("username is null");
 		} else {
 			List<Transaction> listTransaction = transactionService.getTransactionHistory(userName);
 			if (listTransaction != null) {
 				listTransaction = listTransaction.subList(0, listTransaction.size() > 15 ? 15 : listTransaction.size());
 			}
-			String filePath = pdfCreator.createPdf(listTransaction);
+			filePath = pdfCreator.createPdf(listTransaction);
 			FileSystemResource fsr = new FileSystemResource(filePath);
 			response.setContentType("application/pdf");
 			response.setHeader("Content-Disposition", "attachment; filename=TransactionHistory.pdf");
@@ -423,44 +446,57 @@ public class RegularUserController {
 			inputStream.close();
 			outStream.close();
 		}
-
+		// delete that file
+		try{
+			File file= new File(filePath);
+			//FileUtils.forceDelete(file);
+		} catch(Exception e){
+			logger.error("cannot delete pdf file"+e);
+		}
 	}
 
 	@RequestMapping(value = "/updatePersonalInfo")
 	public String updatePersonalInfo(ModelMap model) {
-		model.addAttribute("personalInfo", new PIIAccessInfoModel());
+		
 		Boolean piiExists = govtRequestsService
 				.isPiiInfoPresent(SecurityContextHolder.getContext().getAuthentication().getName());
 		String result = "n";
 		if (piiExists.equals(true)) {
 			result = "y";
 		}
+		UserInfo user = userService.getUserInfobyUserName(SecurityContextHolder.getContext().getAuthentication().getName());
 		model.addAttribute("piiExists", result);
+		model.addAttribute("accessInfo",user);
 		return "updatePersonalInfo";
 	}
 
 	@Transactional
 	@RequestMapping(value = "/confirmUpdate", method = RequestMethod.POST)
-	public ModelAndView confirmUpdate(ModelMap modelinfo, @ModelAttribute("personalInfo") PIIAccessInfoModel pii) {
+	public ModelAndView confirmUpdate(ModelMap modelinfo, @ModelAttribute("accessInfo") UserInfo pii) {
 		ModelAndView model = new ModelAndView();
 		model.setViewName("updatePersonalInfo");
-		model.addObject("personalInfo", new PIIAccessInfoModel());
 		Boolean piiExists = govtRequestsService
 				.isPiiInfoPresent(SecurityContextHolder.getContext().getAuthentication().getName());
 		String result = "n";
+
+		userService.updateUserInfo(pii);
+		model.addObject("success", "Updated details successfully");
 		if (piiExists.equals(true)) {
 			result = "y";
 		} else if (piiExists.equals(false)) {
-			if (!pii.getPii().isEmpty() && pii.getPii().matches("^(\\d{3}-?\\d{2}-?\\d{4}|XXX-XX-XXXX)$")) {
-				pii.setUserName(SecurityContextHolder.getContext().getAuthentication().getName());
-				;
-				govtRequestsService.insertPersonalInfo(pii);
-				model.addObject("error", "Persnoal Info(SSN) Value has been updated successfully!!!");
+			if (!pii.getSsn().isEmpty() && pii.getSsn().matches("^(\\d{3}-?\\d{2}-?\\d{4}|XXX-XX-XXXX)$")) {
+				PIIAccessInfoModel piiInfo = new PIIAccessInfoModel();				
+				piiInfo.setUserName(SecurityContextHolder.getContext().getAuthentication().getName());
+				piiInfo.setPii(pii.getSsn());
+				govtRequestsService.insertPersonalInfo(piiInfo);
+				model.addObject("success", "Persnoal Info(SSN) Value has been updated successfully!!!");
 			} else {
 				model.addObject("error", "Persnoal Info(SSN) Value is Invalid... Please Try Again!!!");
 			}
 		}
-		model.addObject("piiExists", result);
+		
+		model.addObject("piiExists", result);		
+		
 		return model;
 	}
 	
@@ -521,4 +557,23 @@ public class RegularUserController {
 		return modelAndView;
 	}
 	
+	
+	@RequestMapping(value = "/transactionReviewRequest", method = RequestMethod.GET)
+	public ModelAndView transactionReviewRequest(Model model) {
+		ModelAndView modelView= new ModelAndView();
+		modelView.setViewName("reviewTransactions");
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		List<Useraccounts> userAccounts = transactionService.getUserAccountsInfoByUserName(userName);
+		List<Transaction> listTransaction= new ArrayList<>();
+		for(Useraccounts account: userAccounts){
+			List<Transaction> txn= transactionService.getMerchTransactions(account.getAccountno());
+			if(txn!=null){
+				listTransaction.addAll(txn);
+			}
+		}
+
+		modelView.addObject("trList", listTransaction);
+		modelView.addObject("transactionIdList", new TransactionList());
+		return modelView;
+	}
 }

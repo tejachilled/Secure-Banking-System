@@ -15,6 +15,16 @@
 
 <title>User Home</title>
 </head>
+<script>
+	document.onmousedown = disableclick;
+	status = "Right Click Disabled";
+	function disableclick(event) {
+		if (event.button == 2) {
+			alert(status);
+			return false;
+		}
+	}
+</script>
 <body>
 	<jsp:include page="headExt.jsp"></jsp:include>
 	<div class="btn-group btn-group-justified">
@@ -34,8 +44,24 @@
 				class="btn btn-default">View Transaction History</a>
 		</sec:authorize>
 	</div>
-	<c:if test="${not empty merchantTxnMsg}">
-		<c:out value="${merchantTxnMsg}" />
+	<div style="width: 100%; text-align: center">
+	<br>
+	<c:if test="${not empty accountIdSavings}">
+		<legend><c:out value="${accountIdSavings}" /></legend>
 	</c:if>
+	<br>
+	<c:if test="${not empty accountBalSavings}">
+		<legend><c:out value="${accountBalSavings}" /></legend>
+	</c:if>
+	
+	<br>
+	<c:if test="${not empty accountIdCheckings}">
+		<legend><c:out value="${accountIdCheckings}" /></legend>
+	</c:if>
+	<br>
+	<c:if test="${not empty accountBalCheckings}">
+		<legend><c:out value="${accountBalCheckings}" /></legend>
+	</c:if>
+	</div>
 </body>
 </html>

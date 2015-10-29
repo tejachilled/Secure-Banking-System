@@ -14,7 +14,18 @@
 <title>Insert title here</title>
 <jsp:include page="extHome.jsp"></jsp:include>
 </head>
+<script>
+	document.onmousedown = disableclick;
+	status = "Right Click Disabled";
+	function disableclick(event) {
+		if (event.button == 2) {
+			alert(status);
+			return false;
+		}
+	}
+</script>
 <body>
+
 	<sec:authorize access="hasRole('ROLE_M')">
 		<form:form class="form-horizontal"
 			action="/RichirichBank/initiateMerchTrans" method="post" name="f">
@@ -25,7 +36,7 @@
 			<div class="header"></div>
 			<div class="grad"></div>
 			<div class="body">
-
+				<label> Amount will be debited/credited from/to Checking's Account </label><br><br>
 				<label>Account Number</label><input type="text" name="accountnum"><br>
 				<label>Amount</label><input type="text" name="amount"><br>
 				<label>Remark</label><input type="text" name="remark"><br>

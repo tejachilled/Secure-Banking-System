@@ -14,6 +14,7 @@
 <title>View Recent Transactions</title>
 <jsp:include page="extHome.jsp"></jsp:include>
 <style>
+
 table {
 	width: 100%;
 }
@@ -24,6 +25,16 @@ td {
 }
 </style>
 </head>
+<script>
+	document.onmousedown = disableclick;
+	status = "Right Click Disabled";
+	function disableclick(event) {
+		if (event.button == 2) {
+			alert(status);
+			return false;
+		}
+	}
+</script>
 <body>
 	<table>
 		<tr>

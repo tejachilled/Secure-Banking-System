@@ -15,6 +15,16 @@
 
 <title>Home</title>
 </head>
+<script>
+	document.onmousedown = disableclick;
+	status = "Right Click Disabled";
+	function disableclick(event) {
+		if (event.button == 2) {
+			alert(status);
+			return false;
+		}
+	}
+</script>
 <body>
 	<jsp:include page="head.jsp"></jsp:include>
 	<div class="btn-group btn-group-justified">
@@ -64,7 +74,7 @@
 							</c:if>
 							<td>${trListItem.dateInitiated}</td>
 							<c:if test="${trListItem.isCritical eq 'M'}">
-								<td><form:checkbox path="transactionIdList"
+								<td><form:checkbox path="TidList"
 										value="${trListItem.transactionID}" /></td>
 							</c:if>
 						</tr>

@@ -73,7 +73,7 @@ public class MerchantController {
 
 		Long accountId;
 		Double amountVal;
-		String accountType;
+		String accountType="CHECKING";//default
 		try{
 			accountId= Long.valueOf(request.getParameter("accountnum"));
 			amountVal= Double.valueOf(request.getParameter("amount"));
@@ -93,18 +93,14 @@ public class MerchantController {
 					}
 				}
 				//get appropriate merchAccounts - Savings or checkings
-				Useraccounts merchAccount=null;
 				List<Useraccounts> merchAccounts= merchantService.getUserAccountsInfoByUserName(userName);
 				
-				if(merchAccounts.size()==1){
-					merchAccount =merchAccounts.get(0);
-				}
-				else{
-					for (Useraccounts currUserAcc: merchAccounts){
-						if(currUserAcc.getAccountType().equals(accountType)){
-							merchAccount = currUserAcc;
-							break;
-						}
+				Useraccounts merchAccount =merchAccounts.get(0);//default one
+				
+				for (Useraccounts currUserAcc: merchAccounts){
+					if(currUserAcc.getAccountType().equalsIgnoreCase(accountType)){
+						merchAccount = currUserAcc;
+						break;
 					}
 				}
 				
@@ -162,7 +158,7 @@ public class MerchantController {
 		} catch(Exception e){
 			logger.fatal("something wrong happened in merch controller:: "+e);
 			//e.printStackTrace();
-			//add some error message
+			//may throw some exception
 			modelView.addObject("merchantTxnMsg", "Credit/Debit Transaction not Initiated");
 			return modelView;
 		}
