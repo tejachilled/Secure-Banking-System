@@ -23,13 +23,15 @@ public interface MerchantService {
 	
 	/*
 	 * insertNewTransaction
+	 * should have used map
 	 */
-	public boolean insertNewTransaction(Long accountId, Double amount, String remark, String type, String userName);
+	public boolean insertNewTransaction(Long accountId, Double amount, String remark, String type, 
+			String userName, String accountType, Useraccounts accUserAccount, String isCritical);
 	
 	/*
 	 * get Transaction History
 	 */
 	public List<Transaction> getTransactionHistory(String userName);
 	
-	public Useraccounts getUserAccountsInfoByUserName(String UserName);
+	public List<Useraccounts> getUserAccountsInfoByUserName(String UserName);
 }

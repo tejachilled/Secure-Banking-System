@@ -90,7 +90,7 @@ public class RegularUserController {
 	public ModelAndView submitFormDebit(ModelMap model, @ModelAttribute("debit") Transaction transaction,
 			BindingResult result, SessionStatus status, HttpServletRequest request, HttpServletResponse response,
 			ServletRequest servletRequest) throws Exception {
-		
+
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("debit", new Transaction());
 		modelAndView.setViewName("debit");
@@ -393,6 +393,11 @@ public class RegularUserController {
 	public ModelAndView viewTransaction() {
 		ModelAndView model = new ModelAndView();
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		logger.info(userName);
+		if (userName.equals("anonymousUser")) {
+			model.setViewName("login");
+			return model;
+		}
 		if (userName == null) {
 			System.out.println("username is null. requires logger");
 			// logger
