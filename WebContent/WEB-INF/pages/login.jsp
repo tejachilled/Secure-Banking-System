@@ -236,7 +236,7 @@ body {
 				id="password" class="form-control keyboardInput"
 				placeholder="Password" required /><br>
 			<div class="g-recaptcha"
-				data-sitekey="6LdO2w8TAAAAAKaAmTBWN9KAJrHsmZ2r405oUiVf"></div>
+				data-sitekey="6Lev8g8TAAAAAJ3GeikaTHN4o59Ij2rANfyBPA2U"></div>
 			<br> <input name="submit" type="submit" value="Login" /> <br>
 			<br> <a style="color: white"
 				href="/RichirichBank/forgotpassword">Forgot Password? </a>
