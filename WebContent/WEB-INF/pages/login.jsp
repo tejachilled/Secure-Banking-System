@@ -224,11 +224,11 @@ body {
 		<div class="login">
 
 			<c:if test="${not empty error}">
-				<input type="search" name="error" class="error" value="${error }">
+				<input type="search" name="error" class="error" value="${error }" readonly>
 				<br>
 			</c:if>
 			<c:if test="${not empty success}">
-				<input type="search" name="error" class="msg" value="${success }">
+				<input type="search" name="error" class="msg" value="${success }" readonly>
 				<br>
 			</c:if>
 			<input type="text" name="username" placeholder="Username" required
