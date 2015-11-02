@@ -88,6 +88,7 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">Address line 2</div>
 				<form:input path="address2" />
+				<label style="color: red">${addresserror2}</label>
 			</div>
 			<div class="panel panel-default">
 				<div class="panel-heading">Phone Number</div>

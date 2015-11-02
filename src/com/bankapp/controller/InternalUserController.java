@@ -175,15 +175,24 @@ public class InternalUserController {
 					model.addAttribute("phoneNumber", "Please enter a valid 10 digit phone number");
 					return "editEmpProfile";
 				}
-
-				UserInfo ui = userService.getUserInfobyUserName(UserInfo.getUserName());
-				if (ui.getAddress1() != null) {
-					if (!(ui.getAddress1()).matches("^[a-zA-Z0-9_#]*$")) {
+				if (UserInfo.getAddress1() != null) {
+					if (!(UserInfo.getAddress1()).matches("^[\\d]+[A-Za-z0-9\\s,\\.\\#]+?[\\d\\-]+|^[A-Za-z0-9\\s,\\.\\#]+?$")) {
 						model.addAttribute("addresserror",
 								"Please enter a valid address having characters numbers and #");
 						return "editEmpProfile";
 					}
 				}
+				if (UserInfo.getAddress2() != null) {
+					if (!(UserInfo.getAddress2()).matches("^[\\d]+[A-Za-z0-9\\s,\\.\\#]+?[\\d\\-]+|^[A-Za-z0-9\\s,\\.\\#]+?$")) {
+						model.addAttribute("addresserror2",
+								"Please enter a valid address having characters numbers and #");
+						return "editEmpProfile";
+					}
+				}
+				
+
+				UserInfo ui = userService.getUserInfobyUserName(UserInfo.getUserName());
+			
 				if (UserInfo.getAddress1() != ui.getAddress1()) {
 					ui.setAddress1(UserInfo.getAddress1());
 				}

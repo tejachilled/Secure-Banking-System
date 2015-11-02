@@ -140,7 +140,7 @@
 							<div class="col-lg-10">
 								<select name="accountType" class="form-control" id="select">
 									<option value="SAVINGS">Savings Account</option>
-									<option value="CHECKIN">Checkin Account</option>
+									<option value="CHECKING">Checking Account</option>
 								</select>
 							</div>
 						</div>
