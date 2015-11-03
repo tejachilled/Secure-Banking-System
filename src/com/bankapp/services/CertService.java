@@ -8,6 +8,6 @@ public interface CertService {
 	boolean sendCert(String toEmailAddress, String userName) throws IOException;
 	boolean sendPfx(String toEmailAddress, String userName);
 	boolean verifyCert(String cert_path, String username) throws Exception;
-	
+	String getEncryptedString(String userName, String plainText) throws Exception;
 }
 

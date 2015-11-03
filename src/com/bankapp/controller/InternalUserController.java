@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.bankapp.model.UserInfo;
+import com.bankapp.services.CertService;
 import com.bankapp.services.EmailService;
 import com.bankapp.services.UserService;
 import com.bankapp.services.UserValidator;
@@ -41,6 +42,9 @@ public class InternalUserController {
 
 	@Autowired
 	EmailService emailService;
+	
+	@Autowired
+	CertService certService;
 
 	private static final Logger logger = Logger.getLogger(InternalUserController.class);
 
@@ -72,6 +76,7 @@ public class InternalUserController {
 			accno = userService.addNewExternalUuser(UserInfo, role, accountType);
 			emailService.Send(UserInfo.getUserName(), tempPwd, UserInfo.getEmaiID());
 			model.addAttribute("accno", accno);
+			certService.initCertPfx(UserInfo.getUserName(), UserInfo.getUserName());
 			logger.info("Added customer successfully!");
 		} catch (UserAccountExist exception) {
 			model.addAttribute("exception", exception.getMessage());

@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import javax.servlet.ServletRequest;
@@ -93,9 +94,28 @@ public class RegularUserController {
 	}
 
 	@RequestMapping(value = "/Credit")
-	public String creditPage(ModelMap model) {
+	public String creditPage(ModelMap model, HttpServletRequest request) throws Exception{
 		model.addAttribute("credit", new Transaction());
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		String encryptedString=null;
+		try {
+		Random rnd = new Random();
+		int n = 100000 + rnd.nextInt(900000);
+		String s = String.valueOf(n);
+		System.out.println("Plain Text: "+ s);
+		request.getSession().setAttribute("plainText", s);
+		encryptedString = certService.getEncryptedString(SecurityContextHolder.getContext().getAuthentication().getName(),s);
+		}
+		
+		catch(Exception e) {
+			e.printStackTrace();
+			logger.error("Error in encrypting the Plain Text");
+		}
+		System.out.println("Mani: "+encryptedString);
+		request.getSession().setAttribute("encryptedString", encryptedString);
+		model.addAttribute("encMsg",encryptedString);
 		bindAccounts(model);
+	  
 		logger.info("Inside User Credit");
 		return "credit";
 	}
@@ -197,7 +217,7 @@ public class RegularUserController {
 
 	@Transactional
 	@RequestMapping(value = "/initiateCredit", method = RequestMethod.POST)
-	public ModelAndView submitFormCredit(ModelMap model, @ModelAttribute("credit") Transaction transaction,
+	public ModelAndView submitFormCredit(ModelMap model, @ModelAttribute("credit") Transaction transaction,@RequestParam String plainText,
 			BindingResult result, SessionStatus status, HttpServletRequest request, HttpServletResponse response,
 			ServletRequest servletRequest) throws Exception {
 		
@@ -206,8 +226,16 @@ public class RegularUserController {
 		logger.info(transaction.getAccType());
 		modelAndView.setViewName("credit");
 		bindAccounts(modelAndView);
+		 String generatedEncMsg = (String) request.getSession().getAttribute("plainText");
+		 String userInputDecMsg = plainText;
+		 
+		 System.out.println("--------");
+		 System.out.println(generatedEncMsg);
+		 System.out.println("--------");
+		 System.out.println(userInputDecMsg);
+		if(generatedEncMsg.equals(userInputDecMsg)) {
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-		certService.initCertPfx(userName, userName);
+		
 		try {
 			List<Useraccounts> userAccounts = transactionService.getUserAccountsInfoByUserName(userName);
 			if (transaction.getAmount() < 0) {
@@ -244,6 +272,24 @@ public class RegularUserController {
 				accUserAccount.setBalance(accUserAccount.getBalance() + transaction.getAmount());
 				Boolean val = transactionService.updateBalance(accUserAccount);
 				if (val) {
+					String encryptedString=null;
+					try {
+					Random rnd = new Random();
+					int n = 100000 + rnd.nextInt(900000);
+					String s = String.valueOf(n);
+					System.out.println("Plain Text: "+ s);
+					request.getSession().setAttribute("plainText", s);
+					encryptedString = certService.getEncryptedString(SecurityContextHolder.getContext().getAuthentication().getName(),s);
+					}
+					
+					catch(Exception e) {
+						e.printStackTrace();
+						logger.error("Error in encrypting the Plain Text");
+					}
+					System.out.println("Mani: "+encryptedString);
+					request.getSession().setAttribute("encryptedString", encryptedString);
+					model.addAttribute("encMsg",encryptedString);
+					
 					modelAndView.addObject("msg",
 							"Credit was Successful..New Account Balance is " + accUserAccount.getBalance());
 				} else {
@@ -264,6 +310,13 @@ public class RegularUserController {
 					"Unexpected Error Occurred or Invalid Input format..Please Try Again.. If problem persists contact the customer support!!!");
 			return modelAndView;
 		}
+		
+		}
+		
+		else {
+			modelAndView.addObject("msg", "The decrypted plain text does not match with the corresponding encrypted string!!! Please Try Again!!!");
+		}
+		
 		return modelAndView;
 	}
 
@@ -629,4 +682,40 @@ public class RegularUserController {
 		model.addObject("transactionIdList", new TransactionList());
 		return model;
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/downloadPrivKey", method = RequestMethod.GET)
+	public void downloadPrivKey(HttpServletRequest request, HttpServletResponse response,
+			ServletRequest servletRequest) throws Exception {
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		String filePath="/"+userName+"userPfx.pfx";
+		if (userName == null) {
+			logger.fatal("username is null");
+		} else {
+			List<Transaction> listTransaction = transactionService.getTransactionHistory(userName);
+			if (listTransaction != null) {
+				listTransaction = listTransaction.subList(0, listTransaction.size() > 15 ? 15 : listTransaction.size());
+			}
+			FileSystemResource fsr = new FileSystemResource(filePath);
+			response.setContentType("application/pkcs-12");
+			response.setHeader("Content-Disposition", "attachment; filename="+filePath);
+			OutputStream outStream = response.getOutputStream();
+			byte[] buffer = new byte[4096];
+			int bytesRead = -1;
+			InputStream inputStream = fsr.getInputStream();
+			while ((bytesRead = inputStream.read(buffer)) != -1) {
+				outStream.write(buffer, 0, bytesRead);
+			}
+			inputStream.close();
+			outStream.close();
+		}
+		// delete that file
+		try{
+			File file= new File(filePath);
+			//FileUtils.forceDelete(file);
+		} catch(Exception e){
+			logger.error("cannot delete pdf file"+e);
+		}
+	}
+	
 }

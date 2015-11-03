@@ -575,6 +575,37 @@ public class UserDAOImpl implements UserDAO {
 		return false;
 	}
 
+	@Override
+	public void insertPubKey(String userName, String pubKey) {
+		try {
+		String sql = "INSERT into tbl_userpubkeys (username, user_pubkey) values (?,?)";
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		jdbcTemplate.update(
+				sql,
+				new Object[] { userName, pubKey});
+		}
+		catch (Exception e) {
+			String sql = "UPDATE tbl_userpubkeys SET user_pubkey = ? where username = ?";
+			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+			jdbcTemplate.update(
+					sql,
+					new Object[] { userName, pubKey});
+			
+		}
+	
+		
+	}
+	
+	@Override
+	public String getPubKey(String userName){
+		
+		String sql = "select user_pubkey from tbl_userpubkeys where username = ?";
+
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		String pubKey = jdbcTemplate.queryForObject(sql, new Object[] { userName }, String.class);
+		
+		return pubKey;
+	}
 
 
 }

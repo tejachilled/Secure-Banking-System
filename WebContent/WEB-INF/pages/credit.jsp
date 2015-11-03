@@ -58,7 +58,22 @@
 					<form:input path="amount" id="amount" class="keyboardInput" />
 				</div>
 			</div>
-
+			
+			<div class="form-group">
+				<label class="col-lg-2 control-label">Encrypted String:</label>
+					<div class="col-lg-10">
+					<c:out value="${encMsg}" />
+					</div>
+			
+			</div>
+	
+			<div class="form-group">
+				<label class="col-lg-2 control-label">Enter Decrypted Text (Use your Private Key):</label>
+				<div class="col-lg-10">
+					<input type="text" id="plainText" name="plainText" class="keyboardInput" />
+				</div>
+			</div>
+			
 			<script type="text/javascript"
 				src="<c:url value="/resources/js/keyboard.js"/>"></script>
 			<script

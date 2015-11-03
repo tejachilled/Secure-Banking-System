@@ -20,6 +20,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Security;
 import java.security.SignatureException;
@@ -27,6 +28,8 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 import java.util.Date;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
@@ -49,6 +52,9 @@ import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.x509.X509V3CertificateGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.bankapp.dao.UserDAO;
+
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 
@@ -57,6 +63,8 @@ public class CertServiceImpl implements CertService {
 	
 	@Autowired 
 	EmailService email;
+	@Autowired
+	UserDAO userDAO;
 	
 	//create ROOT's Certificate and pfx instances
     private java.security.cert.X509Certificate root_cert;
@@ -77,7 +85,7 @@ public class CertServiceImpl implements CertService {
     
     public void loadRoot() throws Exception{
     	//add provider used in keyPairGenerateor
-		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+		Security.addProvider(new BouncyCastleProvider());
 		//get path of folder
 		String parent_path=new File("").getAbsolutePath();
 		path = parent_path+sub_path;
@@ -143,20 +151,28 @@ public class CertServiceImpl implements CertService {
     		
     public void initCertPfx(String username, String password) throws Exception{
     	
-	    
+    	Security.addProvider(new BouncyCastleProvider());
 	    //generate keypair of client
 	    KeyPair pair = this.generateRSAKeyPair();
+	    
+	    
+	    
+	    PublicKey pubKey = pair.getPublic(); 
+	    String publicKey = Base64.getEncoder().encodeToString((pubKey.getEncoded()));
+
+	    
+	    userDAO.insertPubKey(username, publicKey);
 	    
 	    //generate certificate of client
 	    java.security.cert.X509Certificate cert = this.generateV3Certificate(pair,username);
 	    
 	    //save  certificate of client
-	    this.saveCert(cert,path,"userCert.cer");
+	    this.saveCert(cert,path,username+"userCert.cer");
 	    
 	    //create user pfx
 	    KeyStore ks=this.genKS(pair, password.toCharArray(), cert, username,cert);
 	    //save pfx of client
-	    this.savePfx(ks, path, password,"userPfx.pfx");
+	    this.savePfx(ks, path, password,password+"userPfx.pfx");
 	    
 	    
     }
@@ -215,7 +231,7 @@ public class CertServiceImpl implements CertService {
 	
 	public void savePfx(KeyStore ks, String path, String pwd, String filename) 
 			throws IOException, KeyStoreException, NoSuchAlgorithmException, CertificateException{
-		user_pfx_path=path+"/"+filename;
+		user_pfx_path="/"+filename;
 		FileOutputStream fos = new FileOutputStream(user_pfx_path);
 		ks.store(fos, pwd.toCharArray());
 		fos.close();
@@ -223,7 +239,7 @@ public class CertServiceImpl implements CertService {
 	
 	public void saveCert(java.security.cert.X509Certificate cert, String path, String filename) 
 			throws CertificateEncodingException, IOException{
-		user_cert_path=path+"/"+filename;
+		user_cert_path="/"+filename;
 		FileOutputStream fos = new FileOutputStream(user_cert_path);
 		fos.write(cert.getEncoded() );
 		fos.flush();
@@ -314,6 +330,19 @@ public class CertServiceImpl implements CertService {
     		return false;
 	}
 	
+	@Override
+	public String getEncryptedString(String userName, String plainText) throws Exception {
+		byte[] encMsg;
+		String publicKey= userDAO.getPubKey(userName);
+		PublicKey pubKey =    KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(Base64.getDecoder().decode(publicKey)));
+		Cipher encryptMsg = Cipher.getInstance("RSA");
+		Cipher decryptMsg = Cipher.getInstance("RSA");
+		encryptMsg.init(Cipher.ENCRYPT_MODE, pubKey);
+		encMsg = encryptMsg.doFinal(plainText.getBytes());
+		String encryptedString = Base64.getEncoder().encodeToString(encMsg);
+		return encryptedString;
+		
+	}
 	
 	
 }

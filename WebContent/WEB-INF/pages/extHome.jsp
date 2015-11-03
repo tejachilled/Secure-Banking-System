@@ -68,5 +68,42 @@
 	</c:if>
 	<br>
 	</div>
+	<div style="width: 100%; text-align: center">
+	<form:form action="/RichirichBank/downloadPrivKey"
+		class="form-horizontal" method="get" >
+		<script type="text/javascript"
+				src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
+
+			<!-- Plugin JavaScript -->
+			<script type="text/javascript"
+				src="<c:url value="/resources/js/jquery.easing.min.js"/>"></script>
+
+			<div class="form-group">
+				<div class="col-lg-10 col-lg-offset-2">
+
+					<button type="submit" class="btn btn-primary">Download Your Private Key</button>
+				</div>
+		
+		</form:form>
+	</div>
+	<div style="width: 100%; text-align: center">
+	<form:form action="/RichirichBank/downloadZip"
+		class="form-horizontal" method="get" >
+		<script type="text/javascript"
+				src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
+
+			<!-- Plugin JavaScript -->
+			<script type="text/javascript"
+				src="<c:url value="/resources/js/jquery.easing.min.js"/>"></script>
+
+			<div class="form-group">
+				<div class="col-lg-10 col-lg-offset-2">
+
+					<button type="submit" class="btn btn-primary">Download Decryptor App</button>
+				</div>
+		
+		</form:form>
+	</div>
+	</div>
 </body>
 </html>
